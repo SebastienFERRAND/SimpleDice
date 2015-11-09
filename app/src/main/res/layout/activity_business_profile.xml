@@ -29,7 +29,7 @@
         />
 
     <TextView
-        android:id="@+id/lattitude"
+        android:id="@+id/latitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
@@ -51,4 +51,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
+
+    <Button
+        android:id="@+id/seeMap"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Voir sur la carte"
+        />
+
 </LinearLayout>

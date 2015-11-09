@@ -3,7 +3,8 @@ package com.rezadiscount.rezadiscount.reza.discount.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.rezadiscount.rezadiscount.R;
@@ -14,10 +15,14 @@ public class BusinessProfile extends FragmentActivity {
     private TextView id;
     private TextView label;
     private TextView longitude;
-    private TextView lattitude;
+    private TextView latitude;
     private TextView distance;
     private TextView picture;
     private TextView adress;
+    private Button seeMap;
+
+    public Double longitudeS;
+    public Double latitudeS;
 
 
 
@@ -29,25 +34,38 @@ public class BusinessProfile extends FragmentActivity {
         id = (TextView) findViewById(R.id.id);
         label = (TextView) findViewById(R.id.label);
         longitude = (TextView) findViewById(R.id.longitude);
-        lattitude = (TextView) findViewById(R.id.lattitude);
+        latitude = (TextView) findViewById(R.id.latitude);
         distance = (TextView) findViewById(R.id.distance);
         picture = (TextView) findViewById(R.id.picture);
         adress = (TextView) findViewById(R.id.adress);
 
-
         // getIntent() is a method from the started activity
         Intent myIntent = getIntent(); // gets the previously created intent
+
+        longitudeS = Double.parseDouble(myIntent.getStringExtra("longitude"));
+        latitudeS = Double.parseDouble(myIntent.getStringExtra("latitude"));
+
         id.setText(myIntent.getStringExtra("id"));
         label.setText(myIntent.getStringExtra("label"));
         longitude.setText(myIntent.getStringExtra("longitude"));
-        lattitude.setText(myIntent.getStringExtra("lattitude"));
+        latitude.setText(myIntent.getStringExtra("latitude"));
         distance.setText(myIntent.getStringExtra("distance"));
         picture.setText(myIntent.getStringExtra("picture"));
         adress.setText(myIntent.getStringExtra("adress"));
 
+        seeMap = (Button) findViewById(R.id.seeMap);
 
-        Log.d("Test", myIntent.getStringExtra("id").toString());
-        Log.d("Test", myIntent.getStringExtra("label").toString());
+        seeMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentToMap = new Intent(BusinessProfile.this, MapBusiness.class);
+
+                intentToMap.putExtra("latitude", latitudeS);
+                intentToMap.putExtra("longitude", longitudeS);
+
+                BusinessProfile.this.startActivity(intentToMap);
+            }
+        });
 
 
     }

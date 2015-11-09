@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,7 +46,7 @@ public class ItemResearch extends AppCompatActivity
     private static final String TAG_OS = "results";
     private static final String TAG_ID = "id";
     private static final String TAG_LABEL = "label";
-    private static final String TAG_LATTITUDE = "lattitude";
+    private static final String TAG_latitude = "latitude";
     private static final String TAG_LONGITUDE = "longitude";
     private static final String TAG_DISTANCE = "distance";
     private static final String TAG_PICTURE = "picture";
@@ -175,7 +174,7 @@ public class ItemResearch extends AppCompatActivity
                     // Storing  JSON item in a Variable
                     String idS = c.getString(TAG_ID);
                     String labelS = c.getString(TAG_LABEL);
-                    String lattitudeS = c.getString(TAG_LATTITUDE);
+                    String latitudeS = c.getString(TAG_latitude);
                     String longitudeS = c.getString(TAG_LONGITUDE);
                     String distanceS = c.getString(TAG_DISTANCE);
                     String pictureS = c.getString(TAG_PICTURE);
@@ -187,7 +186,7 @@ public class ItemResearch extends AppCompatActivity
 
                     map.put(TAG_ID, idS);
                     map.put(TAG_LABEL, labelS);
-                    map.put(TAG_LATTITUDE, lattitudeS);
+                    map.put(TAG_latitude, latitudeS);
                     map.put(TAG_LONGITUDE, longitudeS);
                     map.put(TAG_DISTANCE, distanceS);
                     map.put(TAG_PICTURE, pictureS);
@@ -211,15 +210,11 @@ public class ItemResearch extends AppCompatActivity
 
                             myIntent.putExtra("id", oslist.get(position).get("id"));
                             myIntent.putExtra("label", oslist.get(position).get("label"));
-                            myIntent.putExtra("lattitude", oslist.get(position).get("lattitude"));
+                            myIntent.putExtra("latitude", oslist.get(position).get("latitude"));
                             myIntent.putExtra("longitude", oslist.get(position).get("longitude"));
                             myIntent.putExtra("distance", oslist.get(position).get("distance"));
                             myIntent.putExtra("picture", oslist.get(position).get("picture"));
                             myIntent.putExtra("adress", oslist.get(position).get("adress"));
-
-
-                            Log.d("Test", "hello world");
-                            Log.d("Test", oslist.get(position).get("id").toString());
 
                             ItemResearch.this.startActivity(myIntent);
                         }
