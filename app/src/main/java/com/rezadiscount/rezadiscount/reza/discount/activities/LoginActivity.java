@@ -42,7 +42,7 @@ public class LoginActivity extends FragmentActivity {
         mPlusSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(LoginActivity.this, ItemResearch.class);
+                Intent myIntent = new Intent(LoginActivity.this, BusinessFilterResearch.class);
                 LoginActivity.this.startActivity(myIntent);
             }
         });

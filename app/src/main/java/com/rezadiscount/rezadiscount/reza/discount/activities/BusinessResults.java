@@ -17,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonParser;
@@ -29,23 +28,24 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ItemResearch extends AppCompatActivity
+public class BusinessResults extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
 
     //URL to get JSON Array
-    private static String url = "http://lucas.touratier.fr/api.php";
+    //private static String url = "http://lucas.touratier.fr/api.php";
+    private static String url = "http://api.booking.touratier.fr/merchant";
 
     private ListView list;
-    private TextView id;
-    private TextView label;
-    private TextView distance;
+
+    private double latitude;
+    private double longitude;
 
     //JSON Node Names
     private static final String TAG_OS = "results";
     private static final String TAG_ID = "id";
-    private static final String TAG_LABEL = "label";
+    private static final String TAG_LABEL = "name";
     private static final String TAG_latitude = "latitude";
     private static final String TAG_LONGITUDE = "longitude";
     private static final String TAG_DISTANCE = "distance";
@@ -60,7 +60,7 @@ public class ItemResearch extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         //Menu Navigation
-        setContentView(R.layout.activity_item_research);
+        setContentView(R.layout.activity_business_results);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -74,10 +74,14 @@ public class ItemResearch extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
+        Intent myIntent = getIntent();
+
+        longitude = myIntent.getDoubleExtra("longitude", 0);
+        latitude = myIntent.getDoubleExtra("latitude", 0);
+
         //Populate Businesses items
         oslist = new ArrayList<HashMap<String, String>>();
         new JSONParse().execute();
-
     }
 
     @Override
@@ -142,10 +146,7 @@ public class ItemResearch extends AppCompatActivity
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            id = (TextView)findViewById(R.id.id);
-            label = (TextView)findViewById(R.id.label);
-            distance = (TextView)findViewById(R.id.distance);
-            pDialog = new ProgressDialog(ItemResearch.this);
+            pDialog = new ProgressDialog(BusinessResults.this);
             pDialog.setMessage("Getting Data ...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
@@ -195,10 +196,10 @@ public class ItemResearch extends AppCompatActivity
                     oslist.add(map);
                     list=(ListView)findViewById(R.id.list);
 
-                    ListAdapter adapter = new SimpleAdapter(ItemResearch.this, oslist,
+                    ListAdapter adapter = new SimpleAdapter(BusinessResults.this, oslist,
                             R.layout.business_row_item,
                             new String[] { TAG_ID, TAG_LABEL, TAG_DISTANCE}, new int[] {
-                            R.id.id,R.id.label, R.id.distance});
+                            R.id.id, R.id.label, R.id.distance});
 
                     list.setAdapter(adapter);
                     list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -206,7 +207,7 @@ public class ItemResearch extends AppCompatActivity
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view,
                                                 int position, long id) {
-                            Intent myIntent = new Intent(ItemResearch.this, BusinessProfile.class);
+                            Intent myIntent = new Intent(BusinessResults.this, BusinessProfile.class);
 
                             myIntent.putExtra("id", oslist.get(position).get("id"));
                             myIntent.putExtra("label", oslist.get(position).get("label"));
@@ -216,19 +217,13 @@ public class ItemResearch extends AppCompatActivity
                             myIntent.putExtra("picture", oslist.get(position).get("picture"));
                             myIntent.putExtra("adress", oslist.get(position).get("adress"));
 
-                            ItemResearch.this.startActivity(myIntent);
+                            BusinessResults.this.startActivity(myIntent);
                         }
                     });
-
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
     }
-
-
-
-
 }

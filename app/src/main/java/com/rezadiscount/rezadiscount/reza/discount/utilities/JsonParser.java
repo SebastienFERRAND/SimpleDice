@@ -28,16 +28,34 @@ public class JsonParser {
         try {
 
             URL url = new URL(urlString);
-            HttpURLConnection httpconn = (HttpURLConnection)url.openConnection();
-            if (httpconn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                BufferedReader input = new BufferedReader(new InputStreamReader(httpconn.getInputStream()), 8192);
+            HttpURLConnection httpconn  = (HttpURLConnection)url.openConnection();
+            httpconn.setRequestMethod("GET");
+            httpconn.setRequestProperty("Accept", "application/json");
+            httpconn.setRequestProperty("Content-Type", "application/json");
+            //httpconn.setRequestProperty("lat", "3.0");
+            //httpconn.setRequestProperty("long", "2.0");
+            Log.d("Test", httpconn.getResponseCode() + " test ");
 
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-                while ((line = input.readLine()) != null) {
-                    sb.append(line + "n");
-                }
-                json = sb.toString();
+            BufferedReader input = new BufferedReader(new InputStreamReader(httpconn.getInputStream()), 8192);
+
+            Log.d("Test", "1");
+            StringBuilder sb = new StringBuilder();
+            Log.d("Test", "2");
+            String line = null;
+            Log.d("Test", "3");
+            while ((line = input.readLine()) != null) {
+                Log.d("Test", line + " Ligne ");
+                sb.append(line + "n");
+            }
+            json = sb.toString();
+
+            Log.d("Test", sb.toString() + " String ");
+
+            // Faire un switch case
+            if (httpconn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                Log.d("Test", sb.toString() + " String ");
+            }else{
+                Log.d("Test", sb.toString() + " String ");
             }
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());

@@ -58,7 +58,7 @@ public class BusinessProfile extends FragmentActivity {
         seeMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentToMap = new Intent(BusinessProfile.this, MapBusiness.class);
+                Intent intentToMap = new Intent(BusinessProfile.this, BusinessLocation.class);
 
                 intentToMap.putExtra("latitude", latitudeS);
                 intentToMap.putExtra("longitude", longitudeS);

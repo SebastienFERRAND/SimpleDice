@@ -3,7 +3,6 @@ package com.rezadiscount.rezadiscount.reza.discount.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,14 +12,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rezadiscount.rezadiscount.R;
 
-public class MapBusiness extends FragmentActivity implements OnMapReadyCallback {
+public class BusinessLocation extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_business);
+        setContentView(R.layout.activity_business_location);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -45,11 +44,6 @@ public class MapBusiness extends FragmentActivity implements OnMapReadyCallback 
 
         double longitude = myIntent.getDoubleExtra("longitude", 0);
         double latitude = myIntent.getDoubleExtra("latitude", 0);
-
-
-        if (mMap != null){
-            Log.d("Test", longitude + " " + latitude);
-        }
 
 
         // Add a marker in Sydney and move the camera
