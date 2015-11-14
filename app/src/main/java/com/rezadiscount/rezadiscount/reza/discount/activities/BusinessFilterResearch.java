@@ -37,9 +37,6 @@ public class BusinessFilterResearch extends AppCompatActivity implements
     private LocationRequest mLocationRequest;
 
 
-    ;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
