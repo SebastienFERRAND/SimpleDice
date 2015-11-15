@@ -40,6 +40,7 @@ public class LoginActivity extends FragmentActivity {
         mPlusSignInButton = (SignInButton) findViewById(R.id.plus_sign_in_button);
 
         mPlusSignInButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(LoginActivity.this, BusinessFilterResearch.class);
