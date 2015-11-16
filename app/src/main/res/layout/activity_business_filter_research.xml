@@ -14,7 +14,7 @@
         android:id="@+id/research"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Rechercher"
+        android:text="@string/search_button"
         />
 
 </RelativeLayout>

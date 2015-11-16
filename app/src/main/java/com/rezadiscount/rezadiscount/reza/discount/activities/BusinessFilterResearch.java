@@ -37,9 +37,6 @@ public class BusinessFilterResearch extends AppCompatActivity implements
     private LocationRequest mLocationRequest;
 
 
-    ;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +50,6 @@ public class BusinessFilterResearch extends AppCompatActivity implements
                 if (checkGPSEnabled()){
 
                     Intent intentToMap = new Intent(BusinessFilterResearch.this, BusinessResults.class);
-
-                    intentToMap.putExtra("latitude", latitude);
-                    intentToMap.putExtra("Longitude", longitude);
-
-                    Log.d("Test", latitude + " " + longitude);
-
                     BusinessFilterResearch.this.startActivity(intentToMap);
                 }else{
                     showMessageActivateGPS();
@@ -141,12 +132,12 @@ public class BusinessFilterResearch extends AppCompatActivity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.i("Test", "GoogleApiClient connection has been suspend");
+
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.i("Test", "GoogleApiClient connection has failed");
+
     }
 
     @Override
@@ -197,7 +188,8 @@ public class BusinessFilterResearch extends AppCompatActivity implements
 
     private void showMessageActivateGPS(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("L'application nécessite l'activation du GPS pour pouvoir trouver les commerces à proximité. L'activer ?").setPositiveButton("Oui", dialogClickListener)
+        String activateGPS = getResources().getString(R.string.activate_gps);
+        builder.setMessage(activateGPS).setPositiveButton(getResources().getString(R.string.yes), dialogClickListener)
                 .setNegativeButton("Non", dialogClickListener).show();
     }
 }

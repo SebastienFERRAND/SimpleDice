@@ -10,6 +10,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class JsonParser {
 
@@ -22,41 +25,44 @@ public class JsonParser {
 
     }
 
-    public JSONObject getJSONFromUrl(String urlString) {
+    public JSONObject getJSONFromUrl(String urlString, HashMap<String, String> headers, String method) {
 
         // Making HTTP request
         try {
 
             URL url = new URL(urlString);
             HttpURLConnection httpconn  = (HttpURLConnection)url.openConnection();
-            httpconn.setRequestMethod("GET");
-            httpconn.setRequestProperty("Accept", "application/json");
-            httpconn.setRequestProperty("Content-Type", "application/json");
-            //httpconn.setRequestProperty("lat", "3.0");
-            //httpconn.setRequestProperty("long", "2.0");
-            Log.d("Test", httpconn.getResponseCode() + " test ");
+            httpconn.setRequestMethod(method);
 
-            BufferedReader input = new BufferedReader(new InputStreamReader(httpconn.getInputStream()), 8192);
+            //while(keySetIterator.hasNext()){ Integer key = keySetIterator.next(); System.out.println("key: " + key + " value: " + map.get(key)); }
 
-            Log.d("Test", "1");
-            StringBuilder sb = new StringBuilder();
-            Log.d("Test", "2");
-            String line = null;
-            Log.d("Test", "3");
-            while ((line = input.readLine()) != null) {
-                Log.d("Test", line + " Ligne ");
-                sb.append(line + "n");
+            Iterator<String> keySetIterator = headers.keySet().iterator();
+
+            while (keySetIterator.hasNext()){
+                String key = keySetIterator.next();
+                httpconn.setRequestProperty(key, headers.get(key));
             }
-            json = sb.toString();
+            httpconn.setRequestMethod(method);
 
-            Log.d("Test", sb.toString() + " String ");
+            //Log.d("Test", httpconn.getResponseCode() + " test ");
+            //Log.d("Test", httpconn.getErrorStream() + " test 2");
+            //Log.d("Test", getInputStream() + " test 2");
+
+            BufferedReader input;
 
             // Faire un switch case
             if (httpconn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                Log.d("Test", sb.toString() + " String ");
+                input = new BufferedReader(new InputStreamReader(httpconn.getInputStream()), 8192);
             }else{
-                Log.d("Test", sb.toString() + " String ");
+                input = new BufferedReader(new InputStreamReader(httpconn.getErrorStream()), 8192);
             }
+
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = input.readLine()) != null) {
+                sb.append(line + "n");
+            }
+            json = sb.toString();
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         }
@@ -67,9 +73,7 @@ public class JsonParser {
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }
-
         // return JSON String
         return jObj;
-
     }
 }

@@ -48,7 +48,7 @@ public class BusinessLocation extends FragmentActivity implements OnMapReadyCall
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.addMarker(new MarkerOptions().position(sydney).title(""));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
     }

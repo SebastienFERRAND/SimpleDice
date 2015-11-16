@@ -1,15 +1,18 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonParser;
@@ -39,11 +43,8 @@ public class BusinessResults extends AppCompatActivity
 
     private ListView list;
 
-    private double latitude;
-    private double longitude;
-
     //JSON Node Names
-    private static final String TAG_OS = "results";
+    private static final String TAG_RESULT = "results";
     private static final String TAG_ID = "id";
     private static final String TAG_LABEL = "name";
     private static final String TAG_latitude = "latitude";
@@ -51,6 +52,14 @@ public class BusinessResults extends AppCompatActivity
     private static final String TAG_DISTANCE = "distance";
     private static final String TAG_PICTURE = "picture";
     private static final String TAG_ADRESS = "adress";
+
+    //if error HTTP
+
+    private static final String TAG_TYPE = "type";
+    private static final String TAG_TITLE = "title";
+    private static final String TAG_STATUS = "status";
+    private static final String TAG_DETAIL = "detail";
+
 
     JSONArray android = null;
 
@@ -72,12 +81,6 @@ public class BusinessResults extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
-        Intent myIntent = getIntent();
-
-        longitude = myIntent.getDoubleExtra("longitude", 0);
-        latitude = myIntent.getDoubleExtra("latitude", 0);
 
         //Populate Businesses items
         oslist = new ArrayList<HashMap<String, String>>();
@@ -160,7 +163,16 @@ public class BusinessResults extends AppCompatActivity
             JsonParser jParser = new JsonParser();
 
             // Getting JSON from URL
-            JSONObject json = jParser.getJSONFromUrl(url);
+            HashMap<String, String> headerList = new HashMap<String, String>();
+
+            headerList.put("Accept", "application/json");
+            headerList.put("Content-Type", "application/json");
+            headerList.put("lat", "3.0");
+            headerList.put("long", "2.0");
+            headerList.put("deviceid",  Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+
+            JSONObject json = jParser.getJSONFromUrl(url, headerList, "GET");
+
             return json;
         }
         @Override
@@ -168,60 +180,78 @@ public class BusinessResults extends AppCompatActivity
             pDialog.dismiss();
             try {
                 // Getting JSON Array from URL
-                android = json.getJSONArray(TAG_OS);
-                for(int i = 0; i < android.length(); i++){
-                    JSONObject c = android.getJSONObject(i);
+                if (json.getJSONArray(TAG_RESULT) != null){
 
-                    // Storing  JSON item in a Variable
-                    String idS = c.getString(TAG_ID);
-                    String labelS = c.getString(TAG_LABEL);
-                    String latitudeS = c.getString(TAG_latitude);
-                    String longitudeS = c.getString(TAG_LONGITUDE);
-                    String distanceS = c.getString(TAG_DISTANCE);
-                    String pictureS = c.getString(TAG_PICTURE);
-                    String adressS = c.getString(TAG_ADRESS);
+                    android = json.getJSONArray(TAG_RESULT);
+                    for(int i = 0; i < android.length(); i++){
+                        JSONObject c = android.getJSONObject(i);
 
-                    // Adding value HashMap key => value
+                        // Storing  JSON item in a Variable
+                        String idS = c.getString(TAG_ID);
+                        String labelS = c.getString(TAG_LABEL);
+                        String latitudeS = c.getString(TAG_latitude);
+                        String longitudeS = c.getString(TAG_LONGITUDE);
+                        String distanceS = c.getString(TAG_DISTANCE);
+                        String pictureS = c.getString(TAG_PICTURE);
+                        String adressS = c.getString(TAG_ADRESS);
 
-                    HashMap<String, String> map = new HashMap<String, String>();
+                        // Adding value HashMap key => value
 
-                    map.put(TAG_ID, idS);
-                    map.put(TAG_LABEL, labelS);
-                    map.put(TAG_latitude, latitudeS);
-                    map.put(TAG_LONGITUDE, longitudeS);
-                    map.put(TAG_DISTANCE, distanceS);
-                    map.put(TAG_PICTURE, pictureS);
-                    map.put(TAG_ADRESS, adressS);
+                        HashMap<String, String> map = new HashMap<String, String>();
 
-                    oslist.add(map);
-                    list=(ListView)findViewById(R.id.list);
+                        map.put(TAG_ID, idS);
+                        map.put(TAG_LABEL, labelS);
+                        map.put(TAG_latitude, latitudeS);
+                        map.put(TAG_LONGITUDE, longitudeS);
+                        map.put(TAG_DISTANCE, distanceS);
+                        map.put(TAG_PICTURE, pictureS);
+                        map.put(TAG_ADRESS, adressS);
 
-                    ListAdapter adapter = new SimpleAdapter(BusinessResults.this, oslist,
-                            R.layout.business_row_item,
-                            new String[] { TAG_ID, TAG_LABEL, TAG_DISTANCE}, new int[] {
-                            R.id.id, R.id.label, R.id.distance});
+                        oslist.add(map);
+                        list=(ListView)findViewById(R.id.list);
 
-                    list.setAdapter(adapter);
-                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        ListAdapter adapter = new SimpleAdapter(BusinessResults.this, oslist,
+                                R.layout.business_row_item,
+                                new String[] { TAG_ID, TAG_LABEL, TAG_DISTANCE}, new int[] {
+                                R.id.id, R.id.label, R.id.distance});
 
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view,
-                                                int position, long id) {
-                            Intent myIntent = new Intent(BusinessResults.this, BusinessProfile.class);
+                        list.setAdapter(adapter);
+                        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                            myIntent.putExtra("id", oslist.get(position).get("id"));
-                            myIntent.putExtra("label", oslist.get(position).get("label"));
-                            myIntent.putExtra("latitude", oslist.get(position).get("latitude"));
-                            myIntent.putExtra("longitude", oslist.get(position).get("longitude"));
-                            myIntent.putExtra("distance", oslist.get(position).get("distance"));
-                            myIntent.putExtra("picture", oslist.get(position).get("picture"));
-                            myIntent.putExtra("adress", oslist.get(position).get("adress"));
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view,
+                                                    int position, long id) {
+                                Intent myIntent = new Intent(BusinessResults.this, BusinessProfile.class);
 
-                            BusinessResults.this.startActivity(myIntent);
-                        }
-                    });
+                                myIntent.putExtra("id", oslist.get(position).get("id"));
+                                myIntent.putExtra("label", oslist.get(position).get("label"));
+                                myIntent.putExtra("latitude", oslist.get(position).get("latitude"));
+                                myIntent.putExtra("longitude", oslist.get(position).get("longitude"));
+                                myIntent.putExtra("distance", oslist.get(position).get("distance"));
+                                myIntent.putExtra("picture", oslist.get(position).get("picture"));
+                                myIntent.putExtra("adress", oslist.get(position).get("adress"));
+
+                                BusinessResults.this.startActivity(myIntent);
+                            }
+                        });
+                    }
+                }else{
+                    Log.d("Test", " BUG test ");
                 }
+
             } catch (JSONException e) {
+
+
+                try {
+                    String status = json.getString(TAG_STATUS);
+                    String details = json.getString(TAG_DETAIL);
+
+                    Toast.makeText(getApplicationContext(), "There was an error " + status + " : " + details, Toast.LENGTH_LONG).show();
+
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+
                 e.printStackTrace();
             }
         }
