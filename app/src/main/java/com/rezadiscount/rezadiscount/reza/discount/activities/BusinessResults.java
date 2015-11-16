@@ -43,9 +43,6 @@ public class BusinessResults extends AppCompatActivity
 
     private ListView list;
 
-    private double latitude;
-    private double longitude;
-
     //JSON Node Names
     private static final String TAG_RESULT = "results";
     private static final String TAG_ID = "id";
@@ -84,12 +81,6 @@ public class BusinessResults extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
-        Intent myIntent = getIntent();
-
-        longitude = myIntent.getDoubleExtra("longitude", 0);
-        latitude = myIntent.getDoubleExtra("latitude", 0);
 
         //Populate Businesses items
         oslist = new ArrayList<HashMap<String, String>>();

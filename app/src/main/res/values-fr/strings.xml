@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Nebulis</string>
+    <string name="title_activity_location_business">Carte</string>
+    <string name="title_item_list">Items</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="title_activity_item_list">ItemListActivity</string>
+
+    <string name="navigation_drawer_open">Ouvrir le menu de navigation</string>
+    <string name="navigation_drawer_close">Fermer le menu de navigation</string>
+
+    <string name="action_settings">Réglages</string>
+    <string name="title_activity_item_list_view">Nebulis</string>
+    <string name="title_activity_map_business">Carte</string>
+    <string name="title_activity_drawer">Menu deroulant</string>
+
+
+    <string name="connexion_button">Connexion</string>
+    <string name="subscribe_button">s\'inscrire</string>
+    <string name="or_subscribe_with">Ou s\'inscrire avec :</string>
+    <string name="search_button">Rechercher</string>
+    <string name="activate_gps">L\'application nécessite l\'activation du GPS pour pouvoir trouver les commerces à proximité. L\'activer ?</string>
+    <string name="yes">Oui</string>
+    <string name="error">Une erreur s'est produite :</string>
+
+</resources>
