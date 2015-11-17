@@ -24,4 +24,6 @@
     <string name="yes">Oui</string>
     <string name="error">Une erreur s\'est produite :</string>
 
+    <string name="url_api">http://api.booking.touratier.fr/app_dev.php/</string>
+
 </resources>

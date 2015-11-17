@@ -8,8 +8,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
 
-public class BusinessProfile extends AppCompatActivity {
+public class BusinessProfile extends BaseDrawerActivity {
 
 
     private TextView id;

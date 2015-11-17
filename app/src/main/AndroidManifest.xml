@@ -16,7 +16,8 @@
             android:name=".reza.discount.activities.BusinessResults"
             android:label="@string/title_activity_item_list_view"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".reza.discount.activities.BusinessProfile" />
+        <activity android:name=".reza.discount.activities.BusinessProfile"
+            android:theme="@style/AppTheme.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -31,8 +32,11 @@
 
         <activity
             android:name=".reza.discount.activities.BusinessLocation"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_map_business" />
-        <activity android:name=".reza.discount.activities.BusinessFilterResearch" />
+        <activity
+            android:name=".reza.discount.activities.BusinessFilterResearch"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".reza.discount.activities.SignInUp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

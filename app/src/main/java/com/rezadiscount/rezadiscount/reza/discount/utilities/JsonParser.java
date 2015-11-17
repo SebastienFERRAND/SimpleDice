@@ -43,10 +43,7 @@ public class JsonParser {
                 httpconn.setRequestProperty(key, headers.get(key));
             }
             httpconn.setRequestMethod(method);
-
-            //Log.d("Test", httpconn.getResponseCode() + " test ");
-            //Log.d("Test", httpconn.getErrorStream() + " test 2");
-            //Log.d("Test", getInputStream() + " test 2");
+            httpconn.setRequestMethod(method);
 
             BufferedReader input;
 
@@ -61,6 +58,7 @@ public class JsonParser {
             String line = null;
             while ((line = input.readLine()) != null) {
                 sb.append(line + "n");
+                Log.d("Test", line);
             }
             json = sb.toString();
         } catch (Exception e) {
