@@ -16,7 +16,6 @@
     <string name="title_activity_drawer">Drawer</string>
 
 
-
     <string name="connexion_button">Connection</string>
     <string name="subscribe_button">Subscribe</string>
     <string name="or_subscribe_with">Or subscribe with :</string>
@@ -24,7 +23,6 @@
     <string name="activate_gps">The application needs GPS activation to detect nearby shops. Activate ?</string>
     <string name="yes">Yes</string>
     <string name="error">There was an error :</string>
-
 
 
 </resources>

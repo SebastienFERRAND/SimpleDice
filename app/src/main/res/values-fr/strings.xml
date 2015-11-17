@@ -22,6 +22,6 @@
     <string name="search_button">Rechercher</string>
     <string name="activate_gps">L\'application nécessite l\'activation du GPS pour pouvoir trouver les commerces à proximité. L\'activer ?</string>
     <string name="yes">Oui</string>
-    <string name="error">Une erreur s'est produite :</string>
+    <string name="error">Une erreur s\'est produite :</string>
 
 </resources>
