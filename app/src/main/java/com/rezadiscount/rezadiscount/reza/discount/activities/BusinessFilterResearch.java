@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,6 +21,7 @@ import com.google.android.gms.location.LocationServices;
 import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
 
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
 public class BusinessFilterResearch extends BaseDrawerActivity implements
         GoogleApiClient.ConnectionCallbacks,

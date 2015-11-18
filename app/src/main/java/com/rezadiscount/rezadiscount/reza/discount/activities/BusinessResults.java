@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonHTTP;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -92,7 +93,8 @@ public class BusinessResults extends BaseDrawerActivity {
             headerList.put("Content-Type", "application/json");
             headerList.put("lat", "3.0");
             headerList.put("long", "2.0");
-            headerList.put("token", "123123qdsq");
+            SharedPreferencesModule.initialise(getApplicationContext());
+            headerList.put("token", SharedPreferencesModule.getToken());
             headerList.put("deviceid",  Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
 
             JSONObject json = jParser.getJSONFromUrl(getResources().getString(R.string.url_api) + url, headerList, "GET");

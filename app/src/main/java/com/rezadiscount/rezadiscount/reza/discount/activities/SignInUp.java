@@ -1,8 +1,12 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,9 +14,13 @@ import android.widget.EditText;
 import com.rezadiscount.rezadiscount.R;
 
 
-import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonParserLogin;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonHTTP;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class SignInUp extends AppCompatActivity {
 
@@ -45,9 +53,6 @@ public class SignInUp extends AppCompatActivity {
 
                 new JsonParserLogin().execute(connexionField.getText().toString(), passwordField.getText().toString(), url_merc);
 
-                Intent myIntent = new Intent(SignInUp.this, BusinessFilterResearch.class);
-                SignInUp.this.startActivity(myIntent);
-
             }
         });
 
@@ -61,4 +66,74 @@ public class SignInUp extends AppCompatActivity {
 
     }
 
+
+    private class JsonParserLogin extends AsyncTask<String, String, JSONObject>
+
+    {
+        private ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(SignInUp.this);
+            pDialog.setMessage("Getting Data ...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... args) {
+
+            JsonHTTP jParser = new JsonHTTP();
+
+            // Getting JSON from URL
+            HashMap<String, String> headerList = new HashMap<String, String>();
+
+            headerList.put("Accept", "application/json");
+            headerList.put("Content-Type", "application/json");
+            headerList.put("lat", "3.0");
+            headerList.put("long", "2.0");
+            headerList.put("login", args[0]);
+            headerList.put("password", args[1]);
+            headerList.put("deviceid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+
+            Log.d("Test", "Device ID : " + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+            Log.d("Test", getResources().getString(R.string.url_api) + url_merc);
+
+            JSONObject json = jParser.getJSONFromUrl(getResources().getString(R.string.url_api) + args[2], headerList, "GET");
+
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject json) {
+            pDialog.dismiss();
+            try {
+                // Getting JSON Array from URL
+                if (json.getJSONObject(TAG_RESULT) != null) {
+
+                    android = json.getJSONObject(TAG_RESULT);
+
+                    // Storing  JSON item in a Variable
+                    String token = android.getString(TAG_TOKEN);
+
+                    SharedPreferencesModule.initialise(getApplicationContext());
+                    SharedPreferencesModule.setToken(token);
+
+                    Intent myIntent = new Intent(SignInUp.this, BusinessFilterResearch.class);
+                    SignInUp.this.startActivity(myIntent);
+
+                } else {
+                    Log.d("Test", " BUG test ");
+                }
+
+            } catch (JSONException e) {
+
+                e.printStackTrace();
+            }
+        }
+
+
+    }
 }
