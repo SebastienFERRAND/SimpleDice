@@ -50,7 +50,8 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements
                 if (checkGPSEnabled()) {
 
                     Intent intentToMap = new Intent(BusinessFilterResearch.this, BusinessResults.class);
-
+                    intentToMap.putExtra("latitude", latitude);
+                    intentToMap.putExtra("longitude", longitude);
                     BusinessFilterResearch.this.startActivity(intentToMap);
                 } else {
                     showMessageActivateGPS();
@@ -108,8 +109,7 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements
             }
         }else{
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    1);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
     }
 
@@ -143,9 +143,10 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements
 
     @Override
     public void onLocationChanged(Location location) {
-
         latitude = location.getLatitude();
+        Log.d("token", "latitude latitude : " + longitude);
         longitude = location.getLongitude();
+        Log.d("token", "longitude longitude : " + longitude);
     }
 
     public boolean checkLocationPermission()

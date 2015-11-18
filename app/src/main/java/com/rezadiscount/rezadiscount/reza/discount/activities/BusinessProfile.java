@@ -1,8 +1,15 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTabHost;
+
+import android.support.v4.app.FragmentActivity;
+
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,20 +17,16 @@ import android.widget.TextView;
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
 
-public class BusinessProfile extends BaseDrawerActivity {
-
-
-    private TextView id;
-    private TextView label;
-    private TextView longitude;
-    private TextView latitude;
-    private TextView distance;
-    private TextView picture;
-    private TextView adress;
-    private Button seeMap;
+public class BusinessProfile extends BaseDrawerActivity  implements
+        FragmentProfile.OnFragmentInteractionListener,
+        FragmentReviews.OnFragmentInteractionListener,
+        FragmentMap.OnFragmentInteractionListener {
 
     public Double longitudeS;
     public Double latitudeS;
+
+
+    private FragmentTabHost mTabHost;
 
 
 
@@ -32,42 +35,31 @@ public class BusinessProfile extends BaseDrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_profile);
 
-        id = (TextView) findViewById(R.id.id);
-        label = (TextView) findViewById(R.id.label);
-        longitude = (TextView) findViewById(R.id.longitude);
-        latitude = (TextView) findViewById(R.id.latitude);
-        distance = (TextView) findViewById(R.id.distance);
-        picture = (TextView) findViewById(R.id.picture);
-        adress = (TextView) findViewById(R.id.adress);
 
         // getIntent() is a method from the started activity
         Intent myIntent = getIntent(); // gets the previously created intent
 
-        longitudeS = Double.parseDouble(myIntent.getStringExtra("longitude"));
         latitudeS = Double.parseDouble(myIntent.getStringExtra("latitude"));
+        longitudeS = Double.parseDouble(myIntent.getStringExtra("longitude"));
+        Log.d("map", latitudeS + " activity lat");
+        Log.d("map", longitudeS + "activity long ");
 
-        id.setText(myIntent.getStringExtra("id"));
-        label.setText(myIntent.getStringExtra("label"));
-        longitude.setText(myIntent.getStringExtra("longitude"));
-        latitude.setText(myIntent.getStringExtra("latitude"));
-        distance.setText(myIntent.getStringExtra("distance"));
-        picture.setText(myIntent.getStringExtra("picture"));
-        adress.setText(myIntent.getStringExtra("adress"));
+        FragmentMap.newInstance(latitudeS, longitudeS);
 
-        seeMap = (Button) findViewById(R.id.seeMap);
+        mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
+        mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
 
-        seeMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentToMap = new Intent(BusinessProfile.this, BusinessLocation.class);
+        mTabHost.addTab(mTabHost.newTabSpec("Profile").setIndicator("Profile"),
+                FragmentProfile.class, null);
+        mTabHost.addTab(mTabHost.newTabSpec("Reviews").setIndicator("Reviews"),
+                FragmentReviews.class, null);
+        mTabHost.addTab(mTabHost.newTabSpec("Map").setIndicator("Map"),
+                FragmentMap.class, null);
 
-                intentToMap.putExtra("latitude", latitudeS);
-                intentToMap.putExtra("longitude", longitudeS);
+    }
 
-                BusinessProfile.this.startActivity(intentToMap);
-            }
-        });
-
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }

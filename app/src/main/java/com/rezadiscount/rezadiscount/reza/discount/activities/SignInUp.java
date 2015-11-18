@@ -47,6 +47,14 @@ public class SignInUp extends AppCompatActivity {
         connexionField = (EditText) findViewById(R.id.email_field);
         passwordField = (EditText) findViewById(R.id.passwd_field);
 
+
+        //if a token already exist, no need to sign in
+        SharedPreferencesModule.initialise(getApplicationContext());
+        if (!SharedPreferencesModule.getToken().equals("")){
+            Intent myIntent = new Intent(SignInUp.this, BusinessFilterResearch.class);
+            SignInUp.this.startActivity(myIntent);
+        }
+
         connexion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +68,7 @@ public class SignInUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(SignInUp.this, SubscribeActivity.class);
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 SignInUp.this.startActivity(myIntent);
             }
         });

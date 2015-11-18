@@ -55,6 +55,9 @@ public class BusinessResults extends BaseDrawerActivity {
 
     JSONArray android = null;
 
+    private double latitude;
+    private double longitude;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,10 @@ public class BusinessResults extends BaseDrawerActivity {
 
         //Menu Navigation
         setContentView(R.layout.activity_business_results);
+
+        Intent intent = getIntent();
+        latitude = intent.getDoubleExtra("latitude", 0.0);
+        longitude = intent.getDoubleExtra("longitude", 0.0);
 
         //Populate Businesses items
         oslist = new ArrayList<HashMap<String, String>>();
@@ -91,11 +98,15 @@ public class BusinessResults extends BaseDrawerActivity {
 
             headerList.put("Accept", "application/json");
             headerList.put("Content-Type", "application/json");
-            headerList.put("lat", "3.0");
-            headerList.put("long", "2.0");
+            Log.d("token", "latitude : " + latitude);
+            headerList.put("lat", latitude + "");
+            Log.d("token", "longitude : " + longitude);
+            headerList.put("long", longitude + "");
             SharedPreferencesModule.initialise(getApplicationContext());
+            Log.d("token", "Token before research : " + SharedPreferencesModule.getToken());
             headerList.put("token", SharedPreferencesModule.getToken());
-            headerList.put("deviceid",  Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+            headerList.put("deviceid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+            Log.d("token", "device id : " + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
 
             JSONObject json = jParser.getJSONFromUrl(getResources().getString(R.string.url_api) + url, headerList, "GET");
 

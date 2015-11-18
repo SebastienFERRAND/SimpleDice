@@ -34,9 +34,9 @@ public final class SharedPreferencesModule {
 
     public static String getToken(){
         if (sharedPref == null){
-            return "shared pref null";
+            return "null";
         }else{
-            return sharedPref.getString("token", "no values");
+            return sharedPref.getString("token", "");
         }
     }
 
