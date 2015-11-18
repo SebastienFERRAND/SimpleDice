@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class JsonParser {
+public class JsonHTTP {
 
     static InputStream is = null;
     static JSONObject jObj = null;
     static String json = "";
 
     // constructor
-    public JsonParser() {
+    public JsonHTTP() {
 
     }
 

@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonParser;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonHTTP;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,7 +83,7 @@ public class BusinessResults extends BaseDrawerActivity {
         @Override
         protected JSONObject doInBackground(String... args) {
 
-            JsonParser jParser = new JsonParser();
+            JsonHTTP jParser = new JsonHTTP();
 
             // Getting JSON from URL
             HashMap<String, String> headerList = new HashMap<String, String>();
