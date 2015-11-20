@@ -52,6 +52,7 @@ public class SignInUp extends AppCompatActivity {
         SharedPreferencesModule.initialise(getApplicationContext());
         if (!SharedPreferencesModule.getToken().equals("")){
             Intent myIntent = new Intent(SignInUp.this, BusinessFilterResearch.class);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             SignInUp.this.startActivity(myIntent);
         }
 
@@ -120,7 +121,7 @@ public class SignInUp extends AppCompatActivity {
             pDialog.dismiss();
             try {
                 // Getting JSON Array from URL
-                if (json.getJSONObject(TAG_RESULT) != null) {
+                if (json != null) {
 
                     android = json.getJSONObject(TAG_RESULT);
 
@@ -131,6 +132,7 @@ public class SignInUp extends AppCompatActivity {
                     SharedPreferencesModule.setToken(token);
 
                     Intent myIntent = new Intent(SignInUp.this, BusinessFilterResearch.class);
+                    myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     SignInUp.this.startActivity(myIntent);
 
                 } else {

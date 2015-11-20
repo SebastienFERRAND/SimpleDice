@@ -34,10 +34,12 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     private static final String ARG_PARAM2 = "longi";
 
     // TODO: Rename and change types of parameters
-    private Double latitude;
-    private Double longitude;
+    private static Double latitude;
+    private static Double longitude;
 
     private GoogleMap mMap;
+
+    private View v;
 
 
     private OnFragmentInteractionListener mListener;
@@ -54,6 +56,8 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     public static FragmentMap newInstance(Double lat, Double longi) {
         FragmentMap fragment = new FragmentMap();
         Bundle args = new Bundle();
+        latitude = lat;
+        longitude = longi;
         args.putDouble(ARG_PARAM1, lat);
         args.putDouble(ARG_PARAM2, longi);
         Log.d("map", lat + " set lat");
@@ -70,11 +74,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            latitude = getArguments().getDouble(ARG_PARAM1);
-            longitude = getArguments().getDouble(ARG_PARAM2);
 
-            Log.d("map", latitude + " get lat");
-            Log.d("map", longitude + "get long ");
         }
     }
 
@@ -82,8 +82,16 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_map, container, false);
 
+        if (v == null){
+
+            v = inflater.inflate(R.layout.fragment_map, container, false);
+
+            SupportMapFragment mapFragment = ((SupportMapFragment) getChildFragmentManager()
+                    .findFragmentById(R.id.map));
+
+            mapFragment.getMapAsync(this);
+        }
         return v;
     }
 
