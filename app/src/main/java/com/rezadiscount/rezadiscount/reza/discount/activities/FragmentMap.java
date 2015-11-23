@@ -152,6 +152,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         Log.d("map", longitude + "show long ");
         mMap.addMarker(new MarkerOptions().position(sydney).title(""));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
 
     }
 

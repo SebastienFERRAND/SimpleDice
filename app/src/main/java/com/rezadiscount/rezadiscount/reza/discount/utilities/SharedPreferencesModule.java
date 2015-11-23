@@ -40,4 +40,23 @@ public final class SharedPreferencesModule {
         }
     }
 
+    public static void setGCMToken(boolean token){
+        if (sharedPref == null){
+
+        }else{
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean("tokenGCM", token);
+            editor.commit();
+        }
+    }
+
+    public static boolean getGCMToken(){
+        if (sharedPref == null){
+            return false;
+        }else{
+            return sharedPref.getBoolean("tokenGCM", false);
+        }
+    }
+
+
 }
