@@ -53,7 +53,7 @@ public class BusinessResults extends BaseDrawerActivity {
     private static final String TAG_DETAIL = "detail";
 
 
-    JSONArray android = null;
+    private JSONArray android = null;
 
     private double latitude;
     private double longitude;
@@ -77,6 +77,7 @@ public class BusinessResults extends BaseDrawerActivity {
 
     private class JSONParse extends AsyncTask<String, String, JSONObject> {
         private ProgressDialog pDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -98,85 +99,78 @@ public class BusinessResults extends BaseDrawerActivity {
 
             headerList.put("Accept", "application/json");
             headerList.put("Content-Type", "application/json");
-            Log.d("token", "latitude : " + latitude);
             headerList.put("lat", latitude + "");
-            Log.d("token", "longitude : " + longitude);
             headerList.put("long", longitude + "");
             SharedPreferencesModule.initialise(getApplicationContext());
-            Log.d("token", "Token before research : " + SharedPreferencesModule.getToken());
             headerList.put("token", SharedPreferencesModule.getToken());
             headerList.put("deviceid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
-            Log.d("token", "device id : " + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
 
             JSONObject json = jParser.getJSONFromUrl(getResources().getString(R.string.url_api) + url, headerList, "GET");
 
             return json;
         }
+
         @Override
         protected void onPostExecute(JSONObject json) {
             pDialog.dismiss();
             try {
-                // Getting JSON Array from URL
-                if (json.getJSONArray(TAG_RESULT) != null){
 
-                    android = json.getJSONArray(TAG_RESULT);
-                    for(int i = 0; i < android.length(); i++){
-                        JSONObject c = android.getJSONObject(i);
+                android = json.getJSONArray(TAG_RESULT);
+                for (int i = 0; i < android.length(); i++) {
+                    JSONObject c = android.getJSONObject(i);
 
-                        // Storing  JSON item in a Variable
-                        String idS = c.getString(TAG_ID);
-                        String labelS = c.getString(TAG_LABEL);
-                        String latitudeS = c.getString(TAG_latitude);
-                        String longitudeS = c.getString(TAG_LONGITUDE);
-                        String distanceS = c.getString(TAG_DISTANCE);
-                        String pictureS = c.getString(TAG_PICTURE);
-                        String adressS = c.getString(TAG_ADRESS);
+                    // Storing  JSON item in a Variable
+                    String idS = c.getString(TAG_ID);
+                    String labelS = c.getString(TAG_LABEL);
+                    String latitudeS = c.getString(TAG_latitude);
+                    String longitudeS = c.getString(TAG_LONGITUDE);
+                    String distanceS = c.getString(TAG_DISTANCE);
+                    String pictureS = c.getString(TAG_PICTURE);
+                    String adressS = c.getString(TAG_ADRESS);
 
-                        // Adding value HashMap key => value
+                    // Adding value HashMap key => value
 
-                        HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap<String, String>();
 
-                        map.put(TAG_ID, idS);
-                        map.put(TAG_LABEL, labelS);
-                        map.put(TAG_latitude, latitudeS);
-                        map.put(TAG_LONGITUDE, longitudeS);
-                        map.put(TAG_DISTANCE, distanceS);
-                        map.put(TAG_PICTURE, pictureS);
-                        map.put(TAG_ADRESS, adressS);
+                    map.put(TAG_ID, idS);
+                    map.put(TAG_LABEL, labelS);
+                    map.put(TAG_latitude, latitudeS);
+                    map.put(TAG_LONGITUDE, longitudeS);
+                    map.put(TAG_DISTANCE, distanceS);
+                    map.put(TAG_PICTURE, pictureS);
+                    map.put(TAG_ADRESS, adressS);
 
-                        oslist.add(map);
-                        list=(ListView)findViewById(R.id.list);
+                    oslist.add(map);
+                    list = (ListView) findViewById(R.id.list);
 
-                        ListAdapter adapter = new SimpleAdapter(BusinessResults.this, oslist,
-                                R.layout.business_row_item,
-                                new String[] { TAG_ID, TAG_LABEL, TAG_DISTANCE}, new int[] {
-                                R.id.id, R.id.label, R.id.distance});
+                    ListAdapter adapter = new SimpleAdapter(BusinessResults.this, oslist,
+                            R.layout.business_row_item,
+                            new String[]{TAG_ID, TAG_LABEL, TAG_DISTANCE}, new int[]{
+                            R.id.id, R.id.label, R.id.distance});
 
-                        list.setAdapter(adapter);
-                        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    list.setAdapter(adapter);
+                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view,
-                                                    int position, long id) {
-                                Intent myIntent = new Intent(BusinessResults.this, BusinessProfile.class);
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view,
+                                                int position, long id) {
+                            Intent myIntent = new Intent(BusinessResults.this, BusinessProfile.class);
 
-                                myIntent.putExtra("id", oslist.get(position).get("id"));
-                                myIntent.putExtra("label", oslist.get(position).get("label"));
-                                myIntent.putExtra("latitude", oslist.get(position).get("latitude"));
-                                myIntent.putExtra("longitude", oslist.get(position).get("longitude"));
-                                myIntent.putExtra("distance", oslist.get(position).get("distance"));
-                                myIntent.putExtra("picture", oslist.get(position).get("picture"));
-                                myIntent.putExtra("adress", oslist.get(position).get("adress"));
+                            myIntent.putExtra("id", oslist.get(position).get("id"));
+                            myIntent.putExtra("label", oslist.get(position).get("label"));
+                            myIntent.putExtra("latitude", oslist.get(position).get("latitude"));
+                            myIntent.putExtra("longitude", oslist.get(position).get("longitude"));
+                            myIntent.putExtra("distance", oslist.get(position).get("distance"));
+                            myIntent.putExtra("picture", oslist.get(position).get("picture"));
+                            myIntent.putExtra("adress", oslist.get(position).get("adress"));
 
-                                BusinessResults.this.startActivity(myIntent);
-                            }
-                        });
-                    }
-                }else{
-                    Log.d("Test", " BUG test ");
+                            BusinessResults.this.startActivity(myIntent);
+                        }
+                    });
                 }
 
-            } catch (JSONException e) {
+
+            } catch (Exception e) {
 
 
                 try {
@@ -185,11 +179,9 @@ public class BusinessResults extends BaseDrawerActivity {
 
                     Toast.makeText(getApplicationContext(), "There was an error " + status + " : " + details, Toast.LENGTH_LONG).show();
 
-                } catch (JSONException e1) {
+                } catch (Exception e1) {
                     e1.printStackTrace();
                 }
-
-                e.printStackTrace();
             }
         }
     }

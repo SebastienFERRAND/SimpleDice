@@ -1,22 +1,37 @@
+<<<<<<< Original
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rezadiscount.rezadiscount">
+    package="com.rezadiscount.rezadiscount" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="23" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission
+        android:name="com.rezadiscount.rezadiscount.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.rezadiscount.rezadiscount.permission.C2D_MESSAGE" />
+
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".reza.discount.activities.BusinessResults"
             android:label="@string/title_activity_item_list_view"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".reza.discount.activities.BusinessProfile"
+        <activity
+            android:name=".reza.discount.activities.BusinessProfile"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -32,20 +47,71 @@
 
         <activity
             android:name=".reza.discount.activities.BusinessLocation"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_map_business" />
+            android:label="@string/title_activity_map_business"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".reza.discount.activities.BusinessFilterResearch"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".reza.discount.activities.SignInUp">
+        <activity android:name=".reza.discount.activities.SignInUp" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".reza.discount.activities.SubscribeActivity"></activity>
-        <activity android:name=".reza.discount.components.BaseDrawerActivity"></activity>
+        <activity android:name=".reza.discount.activities.SubscribeActivity" />
+        <activity android:name=".reza.discount.components.BaseDrawerActivity" />
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.example.gcm" />
+
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.rezadiscount.rezadiscount.reza.discount.services.GcmListenerServiceTest"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.rezadiscount.rezadiscount.reza.discount.services.InstanceIDListenerServiceTest"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".reza.discount.services.GcmListenerServiceTest"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name=".reza.discount.services.InstanceIDListenerServiceTest"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>
+
+=======
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <application>
+        <service android:name="com.rezadiscount.rezadiscount.reza.discount.services.RegistrationIntentService"
+            android:exported="true"
+            android:enabled="true" >
+        </service>
+    </application>
+
+</manifest>
+>>>>>>> Added
