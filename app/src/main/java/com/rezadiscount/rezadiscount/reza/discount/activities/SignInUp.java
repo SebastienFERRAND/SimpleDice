@@ -110,7 +110,7 @@ public class SignInUp extends AppCompatActivity {
             Log.d("Test", "Device ID : " + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
             Log.d("Test", getResources().getString(R.string.url_api) + url_merc);
 
-            JSONObject json = jParser.getJSONFromUrl(getResources().getString(R.string.url_api) + args[2], headerList, "GET");
+            JSONObject json = jParser.getJSONFromUrl(getResources().getString(R.string.url_api) + url_merc, headerList, "GET");
 
             return json;
         }

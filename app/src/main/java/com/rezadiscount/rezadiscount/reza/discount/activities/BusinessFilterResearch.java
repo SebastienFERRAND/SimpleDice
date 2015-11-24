@@ -18,10 +18,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
-
 import com.rezadiscount.rezadiscount.R;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
+import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
 
 public class BusinessFilterResearch extends BaseDrawerActivity implements
         GoogleApiClient.ConnectionCallbacks,
