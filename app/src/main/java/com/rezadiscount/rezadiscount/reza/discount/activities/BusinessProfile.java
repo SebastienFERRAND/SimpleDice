@@ -22,8 +22,14 @@ public class BusinessProfile extends BaseDrawerActivity  implements
         FragmentReviews.OnFragmentInteractionListener,
         FragmentMap.OnFragmentInteractionListener {
 
-    public Double longitudeS;
-    public Double latitudeS;
+    private Double longitudeS;
+    private Double latitudeS;
+
+    private String id;
+    private String label;
+    private String distance;
+    private String picture;
+    private String adress;
 
 
     private FragmentTabHost mTabHost;
@@ -39,12 +45,21 @@ public class BusinessProfile extends BaseDrawerActivity  implements
         // getIntent() is a method from the started activity
         Intent myIntent = getIntent(); // gets the previously created intent
 
+
+        id =myIntent.getStringExtra("id");
+        label = myIntent.getStringExtra("label");
+        distance = myIntent.getStringExtra("distance");
+        picture = myIntent.getStringExtra("picture");
+        adress = myIntent.getStringExtra("adress");
         latitudeS = Double.parseDouble(myIntent.getStringExtra("latitude"));
         longitudeS = Double.parseDouble(myIntent.getStringExtra("longitude"));
         Log.d("map", latitudeS + " activity lat");
         Log.d("map", longitudeS + "activity long ");
 
-        FragmentMap.newInstance(latitudeS, longitudeS);
+
+
+        FragmentMap.newInstance(latitudeS, latitudeS);
+        FragmentProfile.newInstance(id, label, latitudeS, latitudeS, distance, picture, adress);
 
         mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);

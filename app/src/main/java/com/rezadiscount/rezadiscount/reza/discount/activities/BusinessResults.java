@@ -1,10 +1,17 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +20,11 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonHTTP;
@@ -25,7 +37,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class BusinessResults extends BaseDrawerActivity {
+
+public class BusinessResults extends BaseDrawerActivity  implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
 
@@ -54,9 +69,14 @@ public class BusinessResults extends BaseDrawerActivity {
 
 
     private JSONArray android = null;
+    private LocationRequest mLocationRequest;
 
     private double latitude;
     private double longitude;
+
+    private GoogleApiClient mGoogleApiClient;
+
+    private boolean isUrlRequested = false;
 
 
     @Override
@@ -71,8 +91,13 @@ public class BusinessResults extends BaseDrawerActivity {
         longitude = intent.getDoubleExtra("longitude", 0.0);
 
         //Populate Businesses items
-        oslist = new ArrayList<HashMap<String, String>>();
-        new JSONParse().execute();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
     }
 
     private class JSONParse extends AsyncTask<String, String, JSONObject> {
@@ -104,6 +129,7 @@ public class BusinessResults extends BaseDrawerActivity {
             SharedPreferencesModule.initialise(getApplicationContext());
             headerList.put("token", SharedPreferencesModule.getToken());
             headerList.put("deviceid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+            headerList.put("tokenG", SharedPreferencesModule.getGCMToken());
 
             JSONObject json = jParser.getJSONFromUrl(getResources().getString(R.string.url_api) + url, headerList, "GET");
 
@@ -172,7 +198,7 @@ public class BusinessResults extends BaseDrawerActivity {
 
             } catch (Exception e) {
 
-
+                Log.d("Test", e.getMessage());
                 try {
                     String status = json.getString(TAG_STATUS);
                     String details = json.getString(TAG_DETAIL);
@@ -184,5 +210,143 @@ public class BusinessResults extends BaseDrawerActivity {
                 }
             }
         }
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    if (checkGPSEnabled()) {
+                        mGoogleApiClient.connect();
+                    }else{
+                        showMessageActivateGPS();
+                    }
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (checkLocationPermission()){
+            if (checkGPSEnabled()) {
+                mGoogleApiClient.connect();
+            }else{
+                showMessageActivateGPS();
+            }
+        }else{
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        // Disconnecting the client invalidates it.
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(1000); // Update location every second
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        if (!isUrlRequested){
+        latitude = location.getLatitude();
+        Log.d("token", "latitude latitude : " + longitude);
+        longitude = location.getLongitude();
+        Log.d("token", "longitude longitude : " + longitude);
+
+            oslist = new ArrayList<HashMap<String, String>>();
+            new JSONParse().execute();
+            isUrlRequested = true;
+        }
+
+    }
+
+    public boolean checkLocationPermission()
+    {
+        String permission = "android.permission.ACCESS_FINE_LOCATION";
+        int res = this.checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
+    }
+
+
+    public boolean checkGPSEnabled() {
+
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    //Yes button clicked
+
+                    Intent callGPSSettingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(callGPSSettingIntent);
+
+                    mGoogleApiClient.connect();
+
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    //No button clicked
+                    break;
+            }
+        }
+    };
+
+    private void showMessageActivateGPS(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String activateGPS = getResources().getString(R.string.activate_gps);
+        builder.setMessage(activateGPS).setPositiveButton(getResources().getString(R.string.yes), dialogClickListener)
+                .setNegativeButton("Non", dialogClickListener).show();
     }
 }

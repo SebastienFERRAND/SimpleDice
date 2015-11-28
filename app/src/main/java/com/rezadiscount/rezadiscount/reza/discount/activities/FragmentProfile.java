@@ -1,6 +1,7 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,25 +24,35 @@ import com.rezadiscount.rezadiscount.R;
 public class FragmentProfile extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1 = "id";
+    private static final String ARG_PARAM2 = "label";
+    private static final String ARG_PARAM3 = "latitude";
+    private static final String ARG_PARAM4 = "longitude";
+    private static final String ARG_PARAM5 = "distance";
+    private static final String ARG_PARAM6 = "adress";
+    private static final String ARG_PARAM7 = "picture";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
 
-    private TextView id;
-    private TextView label;
-    private TextView longitude;
-    private TextView latitude;
-    private TextView distance;
-    private TextView picture;
-    private TextView adress;
-    private Button seeMap;
+    private TextView idT;
+    private TextView labelT;
+    private TextView longitudeT;
+    private TextView latitudeT;
+    private TextView distanceT;
+    private TextView pictureT;
+    private TextView adressT;
 
-    public Double longitudeS;
-    public Double latitudeS;
+
+    private static String idS;
+    private static String labelS;
+    private static Double longitudeS;
+    private static Double latitudeS;
+    private static String distanceS;
+    private static String pictureS;
+    private static String adressS;
 
     private OnFragmentInteractionListener mListener;
 
@@ -54,11 +65,26 @@ public class FragmentProfile extends Fragment {
      * @return A new instance of fragment FragmentProfile.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentProfile newInstance(String param1, String param2) {
+    public static FragmentProfile newInstance(String id, String label, double latitude, double longitude,
+                                              String distance, String picture, String adress) {
         FragmentProfile fragment = new FragmentProfile();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, id);
+        args.putString(ARG_PARAM2, label);
+        args.putDouble(ARG_PARAM3, latitude);
+        args.putDouble(ARG_PARAM4, longitude);
+        args.putString(ARG_PARAM5, distance);
+        args.putString(ARG_PARAM6, picture);
+        args.putString(ARG_PARAM7, adress);
+
+        idS = id;
+        labelS = label;
+        latitudeS = latitude;
+        longitudeS = longitude;
+        distanceS = distance;
+        pictureS = picture;
+        adressS = adress;
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,22 +110,22 @@ public class FragmentProfile extends Fragment {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
 
-        id = (TextView) v.findViewById(R.id.id);
-        label = (TextView) v.findViewById(R.id.label);
-        longitude = (TextView) v.findViewById(R.id.longitude);
-        latitude = (TextView) v.findViewById(R.id.latitude);
-        distance = (TextView) v.findViewById(R.id.distance);
-        picture = (TextView) v.findViewById(R.id.picture);
-        adress = (TextView) v.findViewById(R.id.adress);
+        idT = (TextView) v.findViewById(R.id.id);
+        labelT = (TextView) v.findViewById(R.id.label);
+        longitudeT = (TextView) v.findViewById(R.id.longitude);
+        latitudeT = (TextView) v.findViewById(R.id.latitude);
+        distanceT = (TextView) v.findViewById(R.id.distance);
+        pictureT = (TextView) v.findViewById(R.id.picture);
+        adressT = (TextView) v.findViewById(R.id.adress);
 
 
-        id.setText("id");
-        label.setText("label");
-        longitude.setText("longitude");
-        latitude.setText("latitude");
-        distance.setText("distance");
-        picture.setText("picture");
-        adress.setText("adress");
+        idT.setText(idS);
+        labelT.setText(labelS);
+        latitudeT.setText(latitudeS +"");
+        longitudeT.setText(longitudeS +"");
+        distanceT.setText(distanceS);
+        pictureT.setText(pictureS);
+        adressT.setText(adressS);
 
         return v;
     }

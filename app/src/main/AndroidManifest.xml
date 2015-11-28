@@ -1,4 +1,3 @@
-<<<<<<< Original
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rezadiscount.rezadiscount" >
@@ -39,7 +38,7 @@
              Note that the API key is linked to the encryption key used to sign the APK.
              You need a different API key for each encryption key, including the release key that is used to
              sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -76,42 +75,27 @@
         </receiver>
 
         <service
-            android:name="com.rezadiscount.rezadiscount.reza.discount.services.GcmListenerServiceTest"
+            android:name=".reza.discount.services.MyGcmListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
+        <!-- [END gcm_listener] -->
+        <!-- [START instanceId_listener] -->
         <service
-            android:name="com.rezadiscount.rezadiscount.reza.discount.services.InstanceIDListenerServiceTest"
-            android:exported="false" >
+            android:name=".reza.discount.services.MyInstanceIDListenerService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
             </intent-filter>
         </service>
+        <!-- [END instanceId_listener] -->
         <service
-            android:name=".reza.discount.services.GcmListenerServiceTest"
-            android:enabled="true"
-            android:exported="true" >
+            android:name=".reza.discount.services.RegistrationIntentService"
+            android:exported="false">
         </service>
-        <service
-            android:name=".reza.discount.services.InstanceIDListenerServiceTest"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
+
     </application>
 
 </manifest>
-
-=======
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <application>
-        <service android:name="com.rezadiscount.rezadiscount.reza.discount.services.RegistrationIntentService"
-            android:exported="true"
-            android:enabled="true" >
-        </service>
-    </application>
-
-</manifest>
->>>>>>> Added

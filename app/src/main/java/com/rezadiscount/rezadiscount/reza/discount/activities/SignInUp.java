@@ -11,9 +11,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.rezadiscount.rezadiscount.R;
 
 
+import com.rezadiscount.rezadiscount.reza.discount.services.RegistrationIntentService;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonHTTP;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
@@ -34,6 +37,8 @@ public class SignInUp extends AppCompatActivity {
     private static final String TAG_RESULT = "results";
     private static final String TAG_TOKEN = "token";
     private JSONObject android = null;
+
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +79,17 @@ public class SignInUp extends AppCompatActivity {
             }
         });
 
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            //Intent intent = new Intent(this, RegistrationIntentService.class);
+            //startService(intent);
+            Log.d("Test", "1");
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            Log.d("Test", "2");
+            startService(intent);
+            Log.d("Test", "3");
+        }
+
     }
 
 
@@ -107,6 +123,8 @@ public class SignInUp extends AppCompatActivity {
             headerList.put("login", args[0]);
             headerList.put("password", args[1]);
             headerList.put("deviceid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+            SharedPreferencesModule.initialise(getApplicationContext());
+            headerList.put("tokenG", SharedPreferencesModule.getGCMToken());
 
             Log.d("Test", "Device ID : " + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
             Log.d("Test", getResources().getString(R.string.url_api) + url_merc);
@@ -144,8 +162,24 @@ public class SignInUp extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
 
-
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i("Test", "This device is not supported.");
+                finish();
+            }
+            Log.i("Test", "This device is not supported.");
+            return false;
+        }
+        Log.i("Test", "This device is supported.");
+        return true;
     }
 
 
