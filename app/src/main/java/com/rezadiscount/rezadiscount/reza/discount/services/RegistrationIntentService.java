@@ -27,6 +27,7 @@ import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
 import java.io.IOException;

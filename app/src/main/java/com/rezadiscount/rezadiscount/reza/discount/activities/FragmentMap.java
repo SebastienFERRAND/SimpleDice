@@ -15,6 +15,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rezadiscount.rezadiscount.R;
@@ -151,8 +152,10 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         Log.d("map", latitude + " show lat");
         Log.d("map", longitude + "show long ");
         mMap.addMarker(new MarkerOptions().position(sydney).title(""));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 18.0f), 4000, null);
 
     }
 

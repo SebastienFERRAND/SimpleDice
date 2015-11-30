@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.rezadiscount.rezadiscount.reza.discount.services;
+package com.rezadiscount.rezadiscount.reza.discount.utilities;
 
 public class QuickstartPreferences {
 

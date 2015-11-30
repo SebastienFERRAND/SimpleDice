@@ -83,11 +83,8 @@ public class SignInUp extends AppCompatActivity {
             // Start IntentService to register this application with GCM.
             //Intent intent = new Intent(this, RegistrationIntentService.class);
             //startService(intent);
-            Log.d("Test", "1");
             Intent intent = new Intent(this, RegistrationIntentService.class);
-            Log.d("Test", "2");
             startService(intent);
-            Log.d("Test", "3");
         }
 
     }

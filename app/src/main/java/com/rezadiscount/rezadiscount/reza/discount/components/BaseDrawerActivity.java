@@ -66,4 +66,6 @@ public class BaseDrawerActivity extends AppCompatActivity implements NavigationV
         super.setContentView(layoutResID);
         onCreateBaseDrawerActivity();
     }
+
+
 }

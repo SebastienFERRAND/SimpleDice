@@ -58,8 +58,8 @@ public class BusinessProfile extends BaseDrawerActivity  implements
 
 
 
-        FragmentMap.newInstance(latitudeS, latitudeS);
-        FragmentProfile.newInstance(id, label, latitudeS, latitudeS, distance, picture, adress);
+        FragmentMap.newInstance(latitudeS, longitudeS);
+        FragmentProfile.newInstance(id, label, latitudeS, longitudeS, distance, picture, adress);
 
         mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
