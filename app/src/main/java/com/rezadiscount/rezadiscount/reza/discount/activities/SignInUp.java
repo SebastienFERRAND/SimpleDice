@@ -1,8 +1,11 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
+import android.app.Application;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +20,8 @@ import com.rezadiscount.rezadiscount.R;
 
 
 import com.rezadiscount.rezadiscount.reza.discount.services.RegistrationIntentService;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonListener;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonResult;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonHTTP;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
@@ -25,7 +30,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class SignInUp extends AppCompatActivity {
+public class SignInUp extends AppCompatActivity implements GetJsonListener{
 
     private Button connexion;
     private Button inscription;
@@ -33,10 +38,16 @@ public class SignInUp extends AppCompatActivity {
     private EditText connexionField;
     private EditText passwordField;
 
-    private static String url_merc = "auth";
+    private static String url_auth = "auth";
     private static final String TAG_RESULT = "results";
     private static final String TAG_TOKEN = "token";
-    private JSONObject android = null;
+    private JSONObject androidV = null;
+
+    private Context context;
+
+    private GetJsonListener jsonListener;
+
+    private GetJsonResult jsonResult;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -44,6 +55,9 @@ public class SignInUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        context = this;
+        jsonListener = this;
+
         setContentView(R.layout.activity_sign_in_up);
 
         connexion = (Button) findViewById(R.id.connexion);
@@ -65,7 +79,22 @@ public class SignInUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                new JsonParserLogin().execute(connexionField.getText().toString(), passwordField.getText().toString(), url_merc);
+                // Getting JSON from URL
+                HashMap<String, String> headerList = new HashMap<String, String>();
+
+                headerList.put("Accept", "application/json");
+                headerList.put("Content-Type", "application/json");
+                headerList.put("login", connexionField.getText().toString());
+                headerList.put("password", passwordField.getText().toString());
+                headerList.put("deviceid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+                SharedPreferencesModule.initialise(getApplicationContext());
+                headerList.put("tokenG", SharedPreferencesModule.getGCMToken());
+                headerList.put("devicemodel", Build.MANUFACTURER + " " + Build.MODEL);
+
+                jsonResult = new GetJsonResult();
+                jsonResult.setParams(context, headerList, url_auth, "GET");
+                jsonResult.addListener(jsonListener);
+                jsonResult.execute();
 
             }
         });
@@ -89,76 +118,24 @@ public class SignInUp extends AppCompatActivity {
 
     }
 
+    @Override
+    public void getJsonObject() {
+        try {
+            androidV = jsonResult.getJson().getJSONObject(TAG_RESULT);
 
-    private class JsonParserLogin extends AsyncTask<String, String, JSONObject>
+            // Storing  JSON item in a Variable
+            String token = androidV.getString(TAG_TOKEN);
 
-    {
-        private ProgressDialog pDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(SignInUp.this);
-            pDialog.setMessage("Getting Data ...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
-        }
-
-        @Override
-        protected JSONObject doInBackground(String... args) {
-
-            JsonHTTP jParser = new JsonHTTP();
-
-            // Getting JSON from URL
-            HashMap<String, String> headerList = new HashMap<String, String>();
-
-            headerList.put("Accept", "application/json");
-            headerList.put("Content-Type", "application/json");
-            headerList.put("lat", "3.0");
-            headerList.put("long", "2.0");
-            headerList.put("login", args[0]);
-            headerList.put("password", args[1]);
-            headerList.put("deviceid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
             SharedPreferencesModule.initialise(getApplicationContext());
-            headerList.put("tokenG", SharedPreferencesModule.getGCMToken());
+            SharedPreferencesModule.setToken(token);
 
-            Log.d("Test", "Device ID : " + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
-            Log.d("Test", getResources().getString(R.string.url_api) + url_merc);
-
-            JSONObject json = jParser.getJSONFromUrl(getResources().getString(R.string.url_api) + url_merc, headerList, "GET");
-
-            return json;
+            Intent myIntent = new Intent(SignInUp.this, BusinessFilterResearch.class);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            SignInUp.this.startActivity(myIntent);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        @Override
-        protected void onPostExecute(JSONObject json) {
-            pDialog.dismiss();
-            try {
-                // Getting JSON Array from URL
-                if (json != null) {
-
-                    android = json.getJSONObject(TAG_RESULT);
-
-                    // Storing  JSON item in a Variable
-                    String token = android.getString(TAG_TOKEN);
-
-                    SharedPreferencesModule.initialise(getApplicationContext());
-                    SharedPreferencesModule.setToken(token);
-
-                    Intent myIntent = new Intent(SignInUp.this, BusinessFilterResearch.class);
-                    myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    SignInUp.this.startActivity(myIntent);
-
-                } else {
-                    Log.d("Test", " BUG test ");
-                }
-
-            } catch (JSONException e) {
-
-                e.printStackTrace();
-            }
-        }
     }
 
     private boolean checkPlayServices() {

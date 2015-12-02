@@ -102,8 +102,6 @@ public class LocationUtility implements
         if (!isUrlRequested) {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
-            Log.d("Testu", latitude + " U");
-            Log.d("Testu", longitude + " U");
             isUrlRequested = true;
             for (GetLocationListener hl : listeners)
                 hl.getLaglong();

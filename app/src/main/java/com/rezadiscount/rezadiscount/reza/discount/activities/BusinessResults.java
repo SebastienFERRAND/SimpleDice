@@ -20,25 +20,28 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonListener;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonResult;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetLocationListener;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonHTTP;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.LocationUtility;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class BusinessResults extends BaseDrawerActivity implements GetLocationListener {
+public class BusinessResults extends BaseDrawerActivity implements GetLocationListener, GetJsonListener {
 
     ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
 
     //URL to get JSON Array
     //private static String url = "http://lucas.touratier.fr/api.php";
-    private static String url = "merchant";
+    private static String url_merc = "merchant";
 
     private ListView list;
 
@@ -52,21 +55,17 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
     private static final String TAG_PICTURE = "picture";
     private static final String TAG_ADRESS = "adress";
 
-    //if error HTTP
-
     private static final String TAG_STATUS = "status";
     private static final String TAG_DETAIL = "detail";
 
-
     private JSONArray android = null;
-    private LocationRequest mLocationRequest;
 
     private String latitude;
     private String longitude;
 
-    private GoogleApiClient mGoogleApiClient;
+    private LocationUtility loc;
 
-    LocationUtility loc = new LocationUtility();
+    private GetJsonResult jsonResult;
 
 
     @Override
@@ -75,125 +74,74 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
 
         //Menu Navigation
         setContentView(R.layout.activity_business_results);
+        loc = new LocationUtility();
         loc.initialise(this);
         loc.addListener(this);
 
     }
 
-    private class JSONParse extends AsyncTask<String, String, JSONObject> {
-        private ProgressDialog pDialog;
+    @Override
+    public void getJsonObject() {
+        try {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(BusinessResults.this);
-            pDialog.setMessage("Getting Data ...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
+            android = jsonResult.getJson().getJSONArray(TAG_RESULT);
+            for (int i = 0; i < android.length(); i++) {
+                JSONObject c = android.getJSONObject(i);
 
-        }
+                // Adding value HashMap key => value
 
-        @Override
-        protected JSONObject doInBackground(String... args) {
+                HashMap<String, String> map = new HashMap<String, String>();
 
-            JsonHTTP jParser = new JsonHTTP();
+                map.put(TAG_ID, c.getString(TAG_ID));
+                map.put(TAG_LABEL, c.getString(TAG_LABEL));
+                map.put(TAG_latitude, c.getString(TAG_latitude));
+                map.put(TAG_LONGITUDE, c.getString(TAG_LONGITUDE));
+                map.put(TAG_DISTANCE, c.getString(TAG_DISTANCE));
+                map.put(TAG_PICTURE, c.getString(TAG_PICTURE));
+                map.put(TAG_ADRESS, c.getString(TAG_ADRESS));
 
-            // Getting JSON from URL
-            HashMap<String, String> headerList = new HashMap<String, String>();
+                oslist.add(map);
+                list = (ListView) findViewById(R.id.list);
 
-            headerList.put("Accept", "application/json");
-            headerList.put("Content-Type", "application/json");
-            headerList.put("lat", latitude + "");
-            headerList.put("long", longitude + "");
-            SharedPreferencesModule.initialise(getApplicationContext());
-            headerList.put("token", SharedPreferencesModule.getToken());
-            headerList.put("deviceid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
-            headerList.put("tokenG", SharedPreferencesModule.getGCMToken());
+                ListAdapter adapter = new SimpleAdapter(BusinessResults.this, oslist,
+                        R.layout.business_row_item,
+                        new String[]{TAG_ID, TAG_LABEL, TAG_DISTANCE}, new int[]{
+                        R.id.id, R.id.label, R.id.distance});
 
-            JSONObject json = jParser.getJSONFromUrl(getResources().getString(R.string.url_api) + url, headerList, "GET");
+                list.setAdapter(adapter);
+                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            return json;
-        }
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            int position, long id) {
+                        Intent myIntent = new Intent(BusinessResults.this, BusinessProfile.class);
 
-        @Override
-        protected void onPostExecute(JSONObject json) {
-            pDialog.dismiss();
-            try {
+                        myIntent.putExtra("id", oslist.get(position).get("id"));
+                        myIntent.putExtra("label", oslist.get(position).get("label"));
+                        myIntent.putExtra("latitude", oslist.get(position).get("latitude"));
+                        myIntent.putExtra("longitude", oslist.get(position).get("longitude"));
+                        myIntent.putExtra("distance", oslist.get(position).get("distance"));
+                        myIntent.putExtra("picture", oslist.get(position).get("picture"));
+                        myIntent.putExtra("adress", oslist.get(position).get("adress"));
 
-                android = json.getJSONArray(TAG_RESULT);
-                for (int i = 0; i < android.length(); i++) {
-                    JSONObject c = android.getJSONObject(i);
-
-                    // Storing  JSON item in a Variable
-                    String idS = c.getString(TAG_ID);
-                    String labelS = c.getString(TAG_LABEL);
-                    String latitudeS = c.getString(TAG_latitude);
-                    String longitudeS = c.getString(TAG_LONGITUDE);
-                    String distanceS = c.getString(TAG_DISTANCE);
-                    String pictureS = c.getString(TAG_PICTURE);
-                    String adressS = c.getString(TAG_ADRESS);
-
-                    // Adding value HashMap key => value
-
-                    HashMap<String, String> map = new HashMap<String, String>();
-
-                    map.put(TAG_ID, idS);
-                    map.put(TAG_LABEL, labelS);
-                    map.put(TAG_latitude, latitudeS);
-                    map.put(TAG_LONGITUDE, longitudeS);
-                    map.put(TAG_DISTANCE, distanceS);
-                    map.put(TAG_PICTURE, pictureS);
-                    map.put(TAG_ADRESS, adressS);
-
-                    oslist.add(map);
-                    list = (ListView) findViewById(R.id.list);
-
-                    ListAdapter adapter = new SimpleAdapter(BusinessResults.this, oslist,
-                            R.layout.business_row_item,
-                            new String[]{TAG_ID, TAG_LABEL, TAG_DISTANCE}, new int[]{
-                            R.id.id, R.id.label, R.id.distance});
-
-                    list.setAdapter(adapter);
-                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view,
-                                                int position, long id) {
-                            Intent myIntent = new Intent(BusinessResults.this, BusinessProfile.class);
-
-                            myIntent.putExtra("id", oslist.get(position).get("id"));
-                            myIntent.putExtra("label", oslist.get(position).get("label"));
-                            myIntent.putExtra("latitude", oslist.get(position).get("latitude"));
-                            myIntent.putExtra("longitude", oslist.get(position).get("longitude"));
-                            myIntent.putExtra("distance", oslist.get(position).get("distance"));
-                            myIntent.putExtra("picture", oslist.get(position).get("picture"));
-                            myIntent.putExtra("adress", oslist.get(position).get("adress"));
-
-                            BusinessResults.this.startActivity(myIntent);
-                        }
-                    });
-                }
-
-
-            } catch (Exception e) {
-
-                Log.d("Test", e.getMessage());
-                try {
-                    String status = json.getString(TAG_STATUS);
-                    String details = json.getString(TAG_DETAIL);
-
-                    Toast.makeText(getApplicationContext(), "There was an error " + status + " : " + details, Toast.LENGTH_LONG).show();
-
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
+                        BusinessResults.this.startActivity(myIntent);
+                    }
+                });
             }
+
+
+        } catch (Exception e) {
+            try {
+                String status = jsonResult.getJson().getString(TAG_STATUS);
+                String details = jsonResult.getJson().getString(TAG_DETAIL);
+                Toast.makeText(getApplicationContext(), "There was an error " + status + " : " + details, Toast.LENGTH_LONG).show();
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+
         }
+
     }
-
-
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -215,19 +163,28 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
         }
     }
 
-
-
     @Override
     public void getLaglong() {
 
         String[] latlong = loc.getLocation();
         latitude = latlong[0];
-        Log.d("token", "latitude latitude : " + longitude);
         longitude = latlong[1];
-        Log.d("token", "longitude longitude : " + longitude);
 
-        oslist = new ArrayList<HashMap<String, String>>();
-        new JSONParse().execute();
+        HashMap<String, String> headerList = new HashMap<String, String>();
+
+        headerList.put("Accept", "application/json");
+        headerList.put("Content-Type", "application/json");
+        headerList.put("lat", latitude + "");
+        headerList.put("long", longitude + "");
+        SharedPreferencesModule.initialise(getApplicationContext());
+        headerList.put("token", SharedPreferencesModule.getToken());
+        headerList.put("deviceid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+
+
+        jsonResult = new GetJsonResult();
+        jsonResult.setParams(this, headerList, url_merc, "GET");
+        jsonResult.addListener(this);
+        jsonResult.execute();
     }
 
     @Override

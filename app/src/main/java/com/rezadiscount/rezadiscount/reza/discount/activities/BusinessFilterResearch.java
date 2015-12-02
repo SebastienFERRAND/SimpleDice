@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
 
+import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonListener;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonResult;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetLocationListener;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonHTTP;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.LocationUtility;
@@ -31,14 +33,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class BusinessFilterResearch extends BaseDrawerActivity implements GetLocationListener {
+public class BusinessFilterResearch extends BaseDrawerActivity implements GetLocationListener, GetJsonListener {
 
     private Button research;
 
     private String latitude;
     private String longitude;
 
-    private JSONArray android = null;
+    private JSONArray androidV = null;
 
     private ListView listCategories;
 
@@ -47,14 +49,17 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
     private static final String TAG_ID = "id";
     private static final String TAG_LABEL = "name";
 
-    private static String url = "category";
+    private static String url_cat = "category";
 
     private static final String TAG_STATUS = "status";
     private static final String TAG_DETAIL = "detail";
 
     ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
 
-    LocationUtility loc = new LocationUtility();
+    private LocationUtility loc;
+
+
+    private GetJsonResult jsonResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,93 +76,58 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
 
             }
         });
-
+        loc = new LocationUtility();
         loc.initialise(this);
         loc.addListener(this);
 
     }
 
+    @Override
+    public void getJsonObject() {
 
-    private class JSONParse extends AsyncTask<String, String, JSONObject> {
-        private ProgressDialog pDialog;
+        Log.d("Test1", "get return " + jsonResult.getJson().toString());
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(BusinessFilterResearch.this);
-            pDialog.setMessage("Getting Data ...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
+        try {
 
-        }
+            androidV = jsonResult.getJson().getJSONArray(TAG_RESULT);
+            for (int i = 0; i < androidV.length(); i++) {
+                JSONObject c = androidV.getJSONObject(i);
 
-        @Override
-        protected JSONObject doInBackground(String... args) {
+                // Storing  JSON item in a Variable
+                String idS = c.getString(TAG_ID);
+                String labelS = c.getString(TAG_LABEL);
 
-            JsonHTTP jParser = new JsonHTTP();
+                // Adding value HashMap key => value
 
-            // Getting JSON from URL
-            HashMap<String, String> headerList = new HashMap<String, String>();
+                HashMap<String, String> map = new HashMap<String, String>();
 
-            headerList.put("Accept", "application/json");
-            headerList.put("Content-Type", "application/json");
-            headerList.put("lat", latitude);
-            headerList.put("long", longitude);
-            SharedPreferencesModule.initialise(getApplicationContext());
-            headerList.put("token", SharedPreferencesModule.getToken());
-            headerList.put("deviceid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+                map.put(TAG_ID, idS);
+                map.put(TAG_LABEL, labelS);
 
-            JSONObject json = jParser.getJSONFromUrl(getResources().getString(R.string.url_api) + url, headerList, "GET");
+                oslist.add(map);
+                listCategories = (ListView) findViewById(R.id.list_categories);
 
-            return json;
-        }
+                ListAdapter adapter = new SimpleAdapter(BusinessFilterResearch.this, oslist,
+                        R.layout.category_row_item,
+                        new String[]{TAG_ID, TAG_LABEL}, new int[]{
+                        R.id.id, R.id.label});
 
-        @Override
-        protected void onPostExecute(JSONObject json) {
-            pDialog.dismiss();
+                listCategories.setAdapter(adapter);
+
+            }
+
+
+        } catch (Exception e) {
+
+            Log.d("Test", e.getMessage());
             try {
+                String status = jsonResult.getJson().getString(TAG_STATUS);
+                String details = jsonResult.getJson().getString(TAG_DETAIL);
 
-                android = json.getJSONArray(TAG_RESULT);
-                for (int i = 0; i < android.length(); i++) {
-                    JSONObject c = android.getJSONObject(i);
+                Toast.makeText(getApplicationContext(), "There was an error " + status + " : " + details, Toast.LENGTH_LONG).show();
 
-                    // Storing  JSON item in a Variable
-                    String idS = c.getString(TAG_ID);
-                    String labelS = c.getString(TAG_LABEL);
-
-                    // Adding value HashMap key => value
-
-                    HashMap<String, String> map = new HashMap<String, String>();
-
-                    map.put(TAG_ID, idS);
-                    map.put(TAG_LABEL, labelS);
-
-                    oslist.add(map);
-                    listCategories = (ListView) findViewById(R.id.list_categories);
-
-                    ListAdapter adapter = new SimpleAdapter(BusinessFilterResearch.this, oslist,
-                            R.layout.category_row_item,
-                            new String[]{TAG_ID, TAG_LABEL}, new int[]{
-                            R.id.id, R.id.label});
-
-                    listCategories.setAdapter(adapter);
-
-                }
-
-
-            } catch (Exception e) {
-
-                Log.d("Test", e.getMessage());
-                try {
-                    String status = json.getString(TAG_STATUS);
-                    String details = json.getString(TAG_DETAIL);
-
-                    Toast.makeText(getApplicationContext(), "There was an error " + status + " : " + details, Toast.LENGTH_LONG).show();
-
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
         }
     }
@@ -191,12 +161,25 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
         String[] latlong = loc.getLocation();
 
         latitude = latlong[0];
-        Log.d("token", "latitude latitude : " + longitude);
         longitude = latlong[1];
-        Log.d("token", "longitude longitude : " + longitude);
 
-        oslist = new ArrayList<HashMap<String, String>>();
-        new JSONParse().execute();
+
+        // Getting JSON from URL
+        HashMap<String, String> headerList = new HashMap<String, String>();
+
+        headerList.put("Accept", "application/json");
+        headerList.put("Content-Type", "application/json");
+        headerList.put("lat", latitude);
+        headerList.put("long", longitude);
+        SharedPreferencesModule.initialise(getApplicationContext());
+        headerList.put("token", SharedPreferencesModule.getToken());
+        headerList.put("deviceid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+
+
+        jsonResult = new GetJsonResult();
+        jsonResult.setParams(this, headerList, url_cat, "GET");
+        jsonResult.addListener(this);
+        jsonResult.execute();
     }
 
     @Override

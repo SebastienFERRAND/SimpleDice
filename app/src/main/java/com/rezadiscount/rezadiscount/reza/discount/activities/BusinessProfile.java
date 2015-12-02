@@ -31,16 +31,12 @@ public class BusinessProfile extends BaseDrawerActivity  implements
     private String picture;
     private String adress;
 
-
     private FragmentTabHost mTabHost;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_profile);
-
 
         // getIntent() is a method from the started activity
         Intent myIntent = getIntent(); // gets the previously created intent
