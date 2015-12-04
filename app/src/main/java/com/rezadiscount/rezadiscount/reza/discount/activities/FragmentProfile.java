@@ -1,17 +1,16 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,13 +23,6 @@ import com.rezadiscount.rezadiscount.R;
 public class FragmentProfile extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "id";
-    private static final String ARG_PARAM2 = "label";
-    private static final String ARG_PARAM3 = "latitude";
-    private static final String ARG_PARAM4 = "longitude";
-    private static final String ARG_PARAM5 = "distance";
-    private static final String ARG_PARAM6 = "adress";
-    private static final String ARG_PARAM7 = "picture";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -69,13 +61,13 @@ public class FragmentProfile extends Fragment {
                                               String distance, String picture, String adress) {
         FragmentProfile fragment = new FragmentProfile();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, id);
-        args.putString(ARG_PARAM2, label);
-        args.putDouble(ARG_PARAM3, latitude);
-        args.putDouble(ARG_PARAM4, longitude);
-        args.putString(ARG_PARAM5, distance);
-        args.putString(ARG_PARAM6, picture);
-        args.putString(ARG_PARAM7, adress);
+        args.putString(QuickstartPreferences.TAG_ID, id);
+        args.putString(QuickstartPreferences.TAG_LABEL, label);
+        args.putDouble(QuickstartPreferences.TAG_LATITUDE, latitude);
+        args.putDouble(QuickstartPreferences.TAG_LONGITUDE, longitude);
+        args.putString(QuickstartPreferences.TAG_DISTANCE, distance);
+        args.putString(QuickstartPreferences.TAG_PICTURE, picture);
+        args.putString(QuickstartPreferences.TAG_ADRESS, adress);
 
         idS = id;
         labelS = label;
@@ -97,8 +89,8 @@ public class FragmentProfile extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam1 = getArguments().getString(QuickstartPreferences.TAG_ID);
+            mParam2 = getArguments().getString(QuickstartPreferences.TAG_LABEL);
         }
     }
 

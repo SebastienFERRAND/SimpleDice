@@ -3,19 +3,11 @@ package com.rezadiscount.rezadiscount.reza.discount.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
-
-import android.support.v4.app.FragmentActivity;
-
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 
 public class BusinessProfile extends BaseDrawerActivity  implements
         FragmentProfile.OnFragmentInteractionListener,
@@ -24,7 +16,6 @@ public class BusinessProfile extends BaseDrawerActivity  implements
 
     private Double longitudeS;
     private Double latitudeS;
-
     private String id;
     private String label;
     private String distance;
@@ -42,17 +33,13 @@ public class BusinessProfile extends BaseDrawerActivity  implements
         Intent myIntent = getIntent(); // gets the previously created intent
 
 
-        id =myIntent.getStringExtra("id");
-        label = myIntent.getStringExtra("label");
-        distance = myIntent.getStringExtra("distance");
-        picture = myIntent.getStringExtra("picture");
-        adress = myIntent.getStringExtra("adress");
-        latitudeS = Double.parseDouble(myIntent.getStringExtra("latitude"));
-        longitudeS = Double.parseDouble(myIntent.getStringExtra("longitude"));
-        Log.d("map", latitudeS + " activity lat");
-        Log.d("map", longitudeS + "activity long ");
-
-
+        id = myIntent.getStringExtra(QuickstartPreferences.TAG_ID);
+        label = myIntent.getStringExtra(QuickstartPreferences.TAG_LABEL);
+        distance = myIntent.getStringExtra(QuickstartPreferences.TAG_DISTANCE);
+        picture = myIntent.getStringExtra(QuickstartPreferences.TAG_PICTURE);
+        adress = myIntent.getStringExtra(QuickstartPreferences.TAG_ADRESS);
+        latitudeS = Double.parseDouble(myIntent.getStringExtra(QuickstartPreferences.TAG_LATITUDE));
+        longitudeS = Double.parseDouble(myIntent.getStringExtra(QuickstartPreferences.TAG_LONGITUDE));
 
         FragmentMap.newInstance(latitudeS, longitudeS);
         FragmentProfile.newInstance(id, label, latitudeS, longitudeS, distance, picture, adress);

@@ -1,7 +1,6 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,13 +11,12 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,8 +29,6 @@ import com.rezadiscount.rezadiscount.R;
 public class FragmentMap extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "lat";
-    private static final String ARG_PARAM2 = "longi";
 
     // TODO: Rename and change types of parameters
     private static Double latitude;
@@ -59,8 +55,8 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         Bundle args = new Bundle();
         latitude = lat;
         longitude = longi;
-        args.putDouble(ARG_PARAM1, lat);
-        args.putDouble(ARG_PARAM2, longi);
+        args.putDouble(QuickstartPreferences.TAG_LATITUDE, lat);
+        args.putDouble(QuickstartPreferences.TAG_LONGITUDE, longi);
         Log.d("map", lat + " set lat");
         Log.d("map", longi + "set long ");
         fragment.setArguments(args);

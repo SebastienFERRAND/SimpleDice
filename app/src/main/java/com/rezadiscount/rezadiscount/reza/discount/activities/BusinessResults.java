@@ -1,12 +1,9 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
@@ -15,16 +12,13 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
-
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonListener;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonResult;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetLocationListener;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonHTTP;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.LocationUtility;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
 import org.json.JSONArray;
@@ -39,25 +33,7 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
 
     ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
 
-    //URL to get JSON Array
-    //private static String url = "http://lucas.touratier.fr/api.php";
-    private static String url_merc = "merchant";
-
     private ListView list;
-
-    //JSON Node Names
-    private static final String TAG_RESULT = "results";
-    private static final String TAG_ID = "id";
-    private static final String TAG_LABEL = "name";
-    private static final String TAG_latitude = "latitude";
-    private static final String TAG_LONGITUDE = "longitude";
-    private static final String TAG_DISTANCE = "distance";
-    private static final String TAG_PICTURE = "picture";
-    private static final String TAG_ADRESS = "adress";
-
-    private static final String TAG_STATUS = "status";
-    private static final String TAG_DETAIL = "detail";
-
     private JSONArray android = null;
 
     private String latitude;
@@ -84,7 +60,7 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
     public void getJsonObject() {
         try {
 
-            android = jsonResult.getJson().getJSONArray(TAG_RESULT);
+            android = jsonResult.getJson().getJSONArray(QuickstartPreferences.TAG_RESULT);
             for (int i = 0; i < android.length(); i++) {
                 JSONObject c = android.getJSONObject(i);
 
@@ -92,20 +68,20 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
 
                 HashMap<String, String> map = new HashMap<String, String>();
 
-                map.put(TAG_ID, c.getString(TAG_ID));
-                map.put(TAG_LABEL, c.getString(TAG_LABEL));
-                map.put(TAG_latitude, c.getString(TAG_latitude));
-                map.put(TAG_LONGITUDE, c.getString(TAG_LONGITUDE));
-                map.put(TAG_DISTANCE, c.getString(TAG_DISTANCE));
-                map.put(TAG_PICTURE, c.getString(TAG_PICTURE));
-                map.put(TAG_ADRESS, c.getString(TAG_ADRESS));
+                map.put(QuickstartPreferences.TAG_ID, c.getString(QuickstartPreferences.TAG_ID));
+                map.put(QuickstartPreferences.TAG_NAME, c.getString(QuickstartPreferences.TAG_NAME));
+                map.put(QuickstartPreferences.TAG_LATITUDE, c.getString(QuickstartPreferences.TAG_LATITUDE));
+                map.put(QuickstartPreferences.TAG_LONGITUDE, c.getString(QuickstartPreferences.TAG_LONGITUDE));
+                map.put(QuickstartPreferences.TAG_DISTANCE, c.getString(QuickstartPreferences.TAG_DISTANCE));
+                map.put(QuickstartPreferences.TAG_PICTURE, c.getString(QuickstartPreferences.TAG_PICTURE));
+                map.put(QuickstartPreferences.TAG_ADRESS, c.getString(QuickstartPreferences.TAG_ADRESS));
 
                 oslist.add(map);
                 list = (ListView) findViewById(R.id.list);
 
                 ListAdapter adapter = new SimpleAdapter(BusinessResults.this, oslist,
                         R.layout.business_row_item,
-                        new String[]{TAG_ID, TAG_LABEL, TAG_DISTANCE}, new int[]{
+                        new String[]{QuickstartPreferences.TAG_ID, QuickstartPreferences.TAG_NAME, QuickstartPreferences.TAG_DISTANCE}, new int[]{
                         R.id.id, R.id.label, R.id.distance});
 
                 list.setAdapter(adapter);
@@ -116,24 +92,23 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
                                             int position, long id) {
                         Intent myIntent = new Intent(BusinessResults.this, BusinessProfile.class);
 
-                        myIntent.putExtra("id", oslist.get(position).get("id"));
-                        myIntent.putExtra("label", oslist.get(position).get("label"));
-                        myIntent.putExtra("latitude", oslist.get(position).get("latitude"));
-                        myIntent.putExtra("longitude", oslist.get(position).get("longitude"));
-                        myIntent.putExtra("distance", oslist.get(position).get("distance"));
-                        myIntent.putExtra("picture", oslist.get(position).get("picture"));
-                        myIntent.putExtra("adress", oslist.get(position).get("adress"));
+                        myIntent.putExtra(QuickstartPreferences.TAG_ID, oslist.get(position).get(QuickstartPreferences.TAG_ID));
+                        myIntent.putExtra(QuickstartPreferences.TAG_NAME, oslist.get(position).get(QuickstartPreferences.TAG_NAME));
+                        myIntent.putExtra(QuickstartPreferences.TAG_LATITUDE, oslist.get(position).get(QuickstartPreferences.TAG_LATITUDE));
+                        myIntent.putExtra(QuickstartPreferences.TAG_LONGITUDE, oslist.get(position).get(QuickstartPreferences.TAG_LONGITUDE));
+                        myIntent.putExtra(QuickstartPreferences.TAG_DISTANCE, oslist.get(position).get(QuickstartPreferences.TAG_DISTANCE));
+                        myIntent.putExtra(QuickstartPreferences.TAG_PICTURE, oslist.get(position).get(QuickstartPreferences.TAG_PICTURE));
+                        myIntent.putExtra(QuickstartPreferences.TAG_ADRESS, oslist.get(position).get(QuickstartPreferences.TAG_ADRESS));
 
                         BusinessResults.this.startActivity(myIntent);
                     }
                 });
             }
-
-
         } catch (Exception e) {
             try {
-                String status = jsonResult.getJson().getString(TAG_STATUS);
-                String details = jsonResult.getJson().getString(TAG_DETAIL);
+                Log.d("debug", e.getMessage());
+                String status = jsonResult.getJson().getString(QuickstartPreferences.TAG_STATUS);
+                String details = jsonResult.getJson().getString(QuickstartPreferences.TAG_DETAIL);
                 Toast.makeText(getApplicationContext(), "There was an error " + status + " : " + details, Toast.LENGTH_LONG).show();
             } catch (JSONException e1) {
                 e1.printStackTrace();
@@ -170,19 +145,17 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
         latitude = latlong[0];
         longitude = latlong[1];
 
+        Intent myIntent = getIntent();
+
         HashMap<String, String> headerList = new HashMap<String, String>();
-
-        headerList.put("Accept", "application/json");
-        headerList.put("Content-Type", "application/json");
-        headerList.put("lat", latitude + "");
-        headerList.put("long", longitude + "");
+        headerList.put(QuickstartPreferences.TAG_LATITUDE, latitude + "");
+        headerList.put(QuickstartPreferences.TAG_LONGITUDE, longitude + "");
+        headerList.put(QuickstartPreferences.TAG_CATEGORIES, myIntent.getStringExtra(QuickstartPreferences.TAG_ID));
         SharedPreferencesModule.initialise(getApplicationContext());
-        headerList.put("token", SharedPreferencesModule.getToken());
-        headerList.put("deviceid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
-
+        headerList.put(QuickstartPreferences.TAG_TOKEN, SharedPreferencesModule.getToken());
 
         jsonResult = new GetJsonResult();
-        jsonResult.setParams(this, headerList, url_merc, "GET");
+        jsonResult.setParams(this, headerList, QuickstartPreferences.url_merc, "GET");
         jsonResult.addListener(this);
         jsonResult.execute();
     }

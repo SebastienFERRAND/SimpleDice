@@ -1,12 +1,8 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
-import android.app.Application;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,11 +14,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.rezadiscount.rezadiscount.R;
 
-
 import com.rezadiscount.rezadiscount.reza.discount.services.RegistrationIntentService;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonListener;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonResult;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.JsonHTTP;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
 import org.json.JSONException;
@@ -37,10 +32,6 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener{
 
     private EditText connexionField;
     private EditText passwordField;
-
-    private static String url_auth = "auth";
-    private static final String TAG_RESULT = "results";
-    private static final String TAG_TOKEN = "token";
     private JSONObject androidV = null;
 
     private Context context;
@@ -81,18 +72,16 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener{
 
                 // Getting JSON from URL
                 HashMap<String, String> headerList = new HashMap<String, String>();
-
-                headerList.put("Accept", "application/json");
-                headerList.put("Content-Type", "application/json");
-                headerList.put("login", connexionField.getText().toString());
-                headerList.put("password", passwordField.getText().toString());
-                headerList.put("deviceid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+                headerList.put(QuickstartPreferences.TAG_LOGIN, connexionField.getText().toString());
+                headerList.put(QuickstartPreferences.TAG_PASSWD, passwordField.getText().toString());
+                headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
+                headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
                 SharedPreferencesModule.initialise(getApplicationContext());
-                headerList.put("tokenG", SharedPreferencesModule.getGCMToken());
-                headerList.put("devicemodel", Build.MANUFACTURER + " " + Build.MODEL);
+                headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
+                headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
 
                 jsonResult = new GetJsonResult();
-                jsonResult.setParams(context, headerList, url_auth, "GET");
+                jsonResult.setParams(context, headerList, QuickstartPreferences.url_auth, "GET");
                 jsonResult.addListener(jsonListener);
                 jsonResult.execute();
 
@@ -121,10 +110,10 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener{
     @Override
     public void getJsonObject() {
         try {
-            androidV = jsonResult.getJson().getJSONObject(TAG_RESULT);
+            androidV = jsonResult.getJson().getJSONObject(QuickstartPreferences.TAG_RESULT);
 
             // Storing  JSON item in a Variable
-            String token = androidV.getString(TAG_TOKEN);
+            String token = androidV.getString(QuickstartPreferences.TAG_TOKEN);
 
             SharedPreferencesModule.initialise(getApplicationContext());
             SharedPreferencesModule.setToken(token);

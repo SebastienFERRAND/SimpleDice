@@ -36,6 +36,9 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
     public void setParams(Context con, HashMap<String, String> listHeadersP, String urlP, String methodP){
         context = con;
         listHeaders = listHeadersP;
+        listHeaders.put("Accept", "application/json");
+        listHeaders.put("Content-Type", "application/json");
+        listHeaders.put("deviceid", Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
         url = urlP;
         method = methodP;
 
