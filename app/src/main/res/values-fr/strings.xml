@@ -32,4 +32,11 @@
         running the sample again.</string>
     <string name="book">Réserver</string>
 
+    <string name="lastname">Nom</string>
+    <string name="firstname">Prenom</string>
+    <string name="email">Email</string>
+    <string name="password">Mot de passe</string>
+    <string name="birthday">Date de naissance</string>
+    <string name="gender">Sexe</string>
+
 </resources>

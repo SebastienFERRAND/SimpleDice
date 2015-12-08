@@ -157,7 +157,7 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
         headerList.put(QuickstartPreferences.TAG_TOKEN, SharedPreferencesModule.getToken());
 
         jsonResult = new GetJsonResult();
-        jsonResult.setParams(this, headerList, QuickstartPreferences.url_cat, "GET");
+        jsonResult.setParams(this, headerList, QuickstartPreferences.url_cat, "GET", null);
         jsonResult.addListener(this);
         jsonResult.execute();
     }

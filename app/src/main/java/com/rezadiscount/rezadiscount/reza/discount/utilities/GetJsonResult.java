@@ -30,10 +30,11 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
     private String url;
     private String method;
     private JSONObject json;
+    private JSONObject bodyJson;
 
     private List<GetJsonListener> listeners = new ArrayList<GetJsonListener>();
 
-    public void setParams(Context con, HashMap<String, String> listHeadersP, String urlP, String methodP){
+    public void setParams(Context con, HashMap<String, String> listHeadersP, String urlP, String methodP, JSONObject body){
         context = con;
         listHeaders = listHeadersP;
         listHeaders.put("Accept", "application/json");
@@ -41,6 +42,7 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
         listHeaders.put("deviceid", Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
         url = urlP;
         method = methodP;
+        bodyJson = body;
 
     }
 
@@ -64,7 +66,7 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
         JsonHTTP jParser = new JsonHTTP();
 
         // Getting JSON from URL
-        JSONObject json = jParser.getJSONFromUrl(QuickstartPreferences.URL_MERC + url, listHeaders, method);
+        JSONObject json = jParser.getJSONFromUrl(QuickstartPreferences.URL_MERC + url, listHeaders, method, bodyJson);
 
         return json;
     }

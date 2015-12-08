@@ -41,6 +41,12 @@ public class QuickstartPreferences {
     public static final String TAG_DEVICEMODEL = "devicemodel";
     public static final String TAG_LOGIN = "login";
     public static final String TAG_PASSWD = "password";
+    public static final String TAG_LASTNAME = "lastname";
+    public static final String TAG_FIRSTNAME = "firstname";
+    public static final String TAG_EMAIL = "email";
+    public static final String TAG_BIRTHDAY = "birthday";
+    public static final String TAG_GENDER = "gender";
+
 
 
     /////// URL ///////
@@ -48,6 +54,7 @@ public class QuickstartPreferences {
     public static String url_cat = "category";
     public static String url_merc = "merchant";
     public static String url_auth = "auth";
+    public static String url_reg = "register";
 
 
 

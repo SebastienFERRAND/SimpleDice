@@ -19,6 +19,8 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -70,7 +72,27 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
-                        Log.d("Tokenfb:", loginResult.getAccessToken().getToken());
+
+                        /*new GraphRequest(
+                                loginResult.getAccessToken().getCurrentAccessToken(),
+                                loginResult.getAccessToken().getUserId(),
+                                null,
+                                HttpMethod.GET,
+                                new GraphRequest.Callback() {
+                                    public void onCompleted(GraphResponse response) {
+                                        *//* handle the result *//*
+                                        try {
+                                            response.getJSONObject().getString("email");
+                                            response.getJSONObject().getString("first_name");
+                                            Log.d("first_name:", response.getJSONObject().getString("first_name"));
+                                            Log.d("email:", response.getJSONObject().getString("email"));
+                                        } catch (JSONException e) {
+                                            Log.d("Test", e.getMessage().toString());
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                        ).executeAsync();*/
 
                         GraphRequest request = GraphRequest.newMeRequest(
                                 loginResult.getAccessToken(),
@@ -80,24 +102,41 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                                             JSONObject object,
                                             GraphResponse response) {
                                         // Application code
-                                        Log.v("LoginActivity", response.toString());
+                                        try {
+                                            Log.d("LoginActivity", response.getJSONObject().getString("name"));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
                                     }
                                 });
                         Bundle parameters = new Bundle();
-                        parameters.putString("fields", "id,name,email,gender, birthday");
+                        parameters.putString("fields", "id, name, email, gender, birthday");
                         request.setParameters(parameters);
                         request.executeAsync();
+
+                        /*Log.d("Tokenfb:", loginResult.getAccessToken().getToken());
+                        Log.d("id:", loginResult.getAccessToken().getUserId());
+                        Profile profile = Profile.getCurrentProfile();
+                        Log.d("first name:", profile.getFirstName());
+                        Log.d("last name:", profile.getLastName());*/
+
+
 
                     }
 
                     @Override
                     public void onCancel() {
                         // App code
+                        Log.d("Test", "Cancel");
+
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         // App code
+                        Log.d("Test", "Error" + exception.getMessage().toString());
+
                     }
                 });
 
@@ -151,7 +190,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                 headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
 
                 jsonResult = new GetJsonResult();
-                jsonResult.setParams(context, headerList, QuickstartPreferences.url_auth, "GET");
+                jsonResult.setParams(context, headerList, QuickstartPreferences.url_auth, "GET", null);
                 jsonResult.addListener(jsonListener);
                 jsonResult.execute();
 
@@ -179,7 +218,10 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+        Log.d("Test", "Activity result");
+
     }
 
     @Override

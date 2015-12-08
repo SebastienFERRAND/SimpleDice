@@ -155,7 +155,7 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
         headerList.put(QuickstartPreferences.TAG_TOKEN, SharedPreferencesModule.getToken());
 
         jsonResult = new GetJsonResult();
-        jsonResult.setParams(this, headerList, QuickstartPreferences.url_merc, "GET");
+        jsonResult.setParams(this, headerList, QuickstartPreferences.url_merc, "GET", null);
         jsonResult.addListener(this);
         jsonResult.execute();
     }
