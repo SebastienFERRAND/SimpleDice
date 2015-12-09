@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.rezadiscount.rezadiscount.R;
@@ -39,6 +41,9 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
 
     private Activity act;
 
+    private RadioGroup genderRb;
+    private RadioButton genderSelected;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
         password = (EditText) findViewById(R.id.password);
         birthday = (EditText) findViewById(R.id.birthday);
         gender = (EditText) findViewById(R.id.gender);
+        genderRb = (RadioGroup) findViewById(R.id.gender_radio);
 
         subscribe = (Button) findViewById(R.id.subscribe);
 
@@ -66,13 +72,19 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
                 JSONObject bodyAuth = new JSONObject();
                 JSONObject parent=new JSONObject();
 
+                // get selected radio button from radioGroup
+                int selectedId = genderRb.getCheckedRadioButtonId();
+
+                // find the radiobutton by returned id
+                genderSelected = (RadioButton) findViewById(selectedId);
+
                 try {
                     bodyAuth.put(QuickstartPreferences.TAG_LASTNAME, lastName.getText().toString());
                     bodyAuth.put(QuickstartPreferences.TAG_FIRSTNAME, firstName.getText().toString());
                     bodyAuth.put(QuickstartPreferences.TAG_EMAIL, email.getText().toString());
                     bodyAuth.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
                     bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, birthday.getText().toString());
-                    bodyAuth.put(QuickstartPreferences.TAG_GENDER, gender.getText().toString());
+                    bodyAuth.put(QuickstartPreferences.TAG_GENDER, genderSelected.getText());
                     parent.put("register", bodyAuth);
                 } catch (JSONException e) {
                     e.printStackTrace();

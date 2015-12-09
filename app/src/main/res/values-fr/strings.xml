@@ -38,5 +38,7 @@
     <string name="password">Mot de passe</string>
     <string name="birthday">Date de naissance</string>
     <string name="gender">Sexe</string>
+    <string name="male">Homme</string>
+    <string name="female">Femme</string>
 
 </resources>

@@ -44,6 +44,8 @@
     <string name="password">Password</string>
     <string name="birthday">Birthday</string>
     <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
 
 
 </resources>
