@@ -36,9 +36,6 @@ public class JsonHTTP {
             HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
             httpconn.setRequestMethod(method);
 
-            //while(keySetIterator.hasNext()){ Integer key = keySetIterator.next(); System.out.println("key: " + key + " value: " + map.get(key)); }
-
-
             Iterator<String> keySetIterator = headers.keySet().iterator();
 
             while (keySetIterator.hasNext()) {

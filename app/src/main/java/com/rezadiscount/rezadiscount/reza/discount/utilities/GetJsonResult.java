@@ -34,7 +34,7 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
 
     private List<GetJsonListener> listeners = new ArrayList<GetJsonListener>();
 
-    public void setParams(Context con, HashMap<String, String> listHeadersP, String urlP, String methodP, JSONObject body){
+    public void setParams(Context con, HashMap<String, String> listHeadersP, String urlP, String methodP, JSONObject body) {
         context = con;
         listHeaders = listHeadersP;
         listHeaders.put("Accept", "application/json");
@@ -46,7 +46,7 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
 
     }
 
-    public JSONObject getJson(){
+    public JSONObject getJson() {
         return json;
     }
 
@@ -66,7 +66,7 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
         JsonHTTP jParser = new JsonHTTP();
 
         // Getting JSON from URL
-        JSONObject json = jParser.getJSONFromUrl(QuickstartPreferences.URL_MERC + url, listHeaders, method, bodyJson);
+        JSONObject json = jParser.getJSONFromUrl(QuickstartPreferences.URL_SERV + url, listHeaders, method, bodyJson);
 
         return json;
     }

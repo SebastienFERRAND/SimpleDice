@@ -9,51 +9,51 @@ import android.util.Log;
  */
 public final class SharedPreferencesModule {
 
-    private static String sharedPrefName= "sharedPrefFile";
+    private static String sharedPrefName = "sharedPrefFile";
     private static Context con;
     private static SharedPreferences sharedPref;
 
-    private SharedPreferencesModule(){
+    private SharedPreferencesModule() {
 
     }
 
-    public static void initialise(Context context){
+    public static void initialise(Context context) {
         sharedPref = context.getSharedPreferences(sharedPrefName, Context.MODE_PRIVATE);
         con = context;
     }
 
-    public static void setToken(String token){
-        if (sharedPref == null){
+    public static void setToken(String token) {
+        if (sharedPref == null) {
 
-        }else{
+        } else {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("token", token);
             editor.commit();
         }
     }
 
-    public static String getToken(){
-        if (sharedPref == null){
+    public static String getToken() {
+        if (sharedPref == null) {
             return "null";
-        }else{
+        } else {
             return sharedPref.getString("token", "");
         }
     }
 
-    public static void setGCMToken(String token){
-        if (sharedPref == null){
+    public static void setGCMToken(String token) {
+        if (sharedPref == null) {
 
-        }else{
+        } else {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("tokenGCM", token);
             editor.commit();
         }
     }
 
-    public static String getGCMToken(){
-        if (sharedPref == null){
+    public static String getGCMToken() {
+        if (sharedPref == null) {
             return "";
-        }else{
+        } else {
             return sharedPref.getString("tokenGCM", "");
         }
     }

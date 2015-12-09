@@ -91,7 +91,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
                 }
 
                 jsonResult = new GetJsonResult();
-                jsonResult.setParams(act, headerList, QuickstartPreferences.url_reg, "POST", parent);
+                jsonResult.setParams(act, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
                 jsonResult.addListener(jsonListener);
                 jsonResult.execute();
             }

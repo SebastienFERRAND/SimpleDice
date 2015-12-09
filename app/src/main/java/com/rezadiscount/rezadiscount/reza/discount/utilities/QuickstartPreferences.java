@@ -23,7 +23,7 @@ public class QuickstartPreferences {
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
 
-    /////// headers name //////
+    /////// headers/body attributes name //////
     public static final String TAG_RESULT = "results";
     public static final String TAG_ID = "id";
     public static final String TAG_NAME = "name";
@@ -50,11 +50,19 @@ public class QuickstartPreferences {
 
 
     /////// URL ///////
-    public static final String URL_MERC = "http://api.booking.touratier.fr/app_dev.php/";
-    public static String url_cat = "category";
-    public static String url_merc = "merchant";
-    public static String url_auth = "auth";
-    public static String url_reg = "register";
+    public static final String URL_SERV = "http://api.booking.touratier.fr/app_dev.php/";
+    public static final String URL_CAT = "category";
+    public static final String URL_MERC = "merchant";
+    public static final String URL_AUTH = "auth";
+    public static final String URL_REG = "register";
+
+
+
+
+    //////// METHODS ///////
+
+    public static final String TAG_GET = "GET";
+    public static final String TAG_POST = "POST";
 
 
 

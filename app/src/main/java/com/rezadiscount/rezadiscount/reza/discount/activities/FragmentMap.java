@@ -80,7 +80,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        if (v == null){
+        if (v == null) {
 
             v = inflater.inflate(R.layout.fragment_map, container, false);
 
