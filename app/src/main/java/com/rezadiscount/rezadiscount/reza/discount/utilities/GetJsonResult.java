@@ -2,15 +2,10 @@ package com.rezadiscount.rezadiscount.reza.discount.utilities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.rezadiscount.rezadiscount.R;
-import com.rezadiscount.rezadiscount.reza.discount.activities.BusinessFilterResearch;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -77,6 +72,8 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
         Log.d("Test1", "get return " + jsonP.toString());
         // Getting JSON Array from URL
         if (jsonP != null) {
+
+
 
             json = jsonP;
             for (GetJsonListener hl : listeners)

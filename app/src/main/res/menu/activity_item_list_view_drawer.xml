@@ -2,18 +2,39 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+
+
         <item
-            android:id="@+id/find"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Trouver" />
+            android:id="@+id/profil"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Profil" />
+
+
+        <item
+            android:id="@+id/magasin"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/profile" />
+
+
         <item
             android:id="@+id/agenda"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Agenda" />
+            android:title="@string/agenda" />
+
         <item
-            android:id="@+id/tools"
+            android:id="@+id/find"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/find" />
+
+        <item
+            android:id="@+id/deal"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/deal" />
+
+        <item
+            android:id="@+id/settings"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="@string/settings" />
     </group>
 
 

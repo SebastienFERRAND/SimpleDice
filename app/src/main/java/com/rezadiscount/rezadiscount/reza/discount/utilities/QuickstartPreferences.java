@@ -16,6 +16,10 @@
 
 package com.rezadiscount.rezadiscount.reza.discount.utilities;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class QuickstartPreferences {
 
 
@@ -26,18 +30,20 @@ public class QuickstartPreferences {
     /////// headers/body attributes name //////
     public static final String TAG_RESULT = "results";
     public static final String TAG_ID = "id";
+    public static final String TAG_FBUID = "fbuid";
     public static final String TAG_NAME = "name";
     public static final String TAG_LABEL = "label";
     public static final String TAG_LATITUDE = "latitude";
     public static final String TAG_LONGITUDE = "longitude";
     public static final String TAG_DISTANCE = "distance";
     public static final String TAG_PICTURE = "picture";
-    public static final String TAG_ADRESS = "adress";
+    public static final String TAG_ADRESS = "address";
     public static final String TAG_STATUS = "status";
     public static final String TAG_DETAIL = "detail";
     public static final String TAG_CATEGORIES = "categories";
     public static final String TAG_TOKEN = "token";
     public static final String TAG_TOKENG = "tokenG";
+    public static final String TAG_TOKENFB = "tokenFb";
     public static final String TAG_DEVICEMODEL = "devicemodel";
     public static final String TAG_LOGIN = "login";
     public static final String TAG_PASSWD = "password";
@@ -46,6 +52,7 @@ public class QuickstartPreferences {
     public static final String TAG_EMAIL = "email";
     public static final String TAG_BIRTHDAY = "birthday";
     public static final String TAG_GENDER = "gender";
+    public static final String TAG_HTTPCODE = "httpCode";
 
 
 
@@ -63,6 +70,31 @@ public class QuickstartPreferences {
 
     public static final String TAG_GET = "GET";
     public static final String TAG_POST = "POST";
+
+
+    public static String convertToDate(String dateP) {
+
+        if (dateP!=null) {
+            String inputPattern = "MM/dd/yyyy";
+            String outputPattern = "yyyy-MM-dd hh:mm:ss";
+            SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+            SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+
+            Date date = null;
+            String str = null;
+
+            try {
+                date = inputFormat.parse(dateP);
+                str = outputFormat.format(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return str;
+        } else {
+            return null;
+        }
+
+    }
 
 
 

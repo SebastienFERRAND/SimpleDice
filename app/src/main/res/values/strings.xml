@@ -48,4 +48,13 @@
     <string name="female">Female</string>
 
 
+
+    <string name="profile">Profile</string>
+    <string name="shops">Favorite shops</string>
+    <string name="agenda">Agenda</string>
+    <string name="find">Find...</string>
+    <string name="deal">Deal</string>
+    <string name="settings">Settings</string>
+
+
 </resources>

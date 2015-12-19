@@ -51,7 +51,7 @@ public class BaseDrawerActivity extends AppCompatActivity implements NavigationV
             BaseDrawerActivity.this.startActivity(myIntent);
         } else if (id == R.id.agenda) {
 
-        } else if (id == R.id.tools) {
+        } else if (id == R.id.settings) {
 
         }
 

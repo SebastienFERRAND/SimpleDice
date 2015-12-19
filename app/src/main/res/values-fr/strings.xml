@@ -40,5 +40,11 @@
     <string name="gender">Sexe</string>
     <string name="male">Homme</string>
     <string name="female">Femme</string>
+    <string name="shops">Commerces favoris</string>
+    <string name="settings">Reglages</string>
+    <string name="deal">Promotions</string>
+    <string name="agenda">Agenda</string>
+    <string name="find">Chercher...</string>
+    <string name="profile">Profil</string>
 
 </resources>

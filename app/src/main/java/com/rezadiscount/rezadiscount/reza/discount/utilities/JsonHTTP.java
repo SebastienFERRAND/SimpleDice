@@ -9,10 +9,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -44,7 +42,6 @@ public class JsonHTTP {
             }
 
             if (jsonBody != null) {
-                Log.d("Test 1", jsonBody.toString() + "THIS IS THE JSON");
                 OutputStream os = httpconn.getOutputStream();
                 os.write(jsonBody.toString().getBytes("UTF-8"));
                 os.close();
@@ -69,14 +66,14 @@ public class JsonHTTP {
 
 
         } catch (Exception e) {
-            Log.e("Buffer Error", "Error converting result " + e.toString());
+            Log.e("Error", "Error converting result " + e.toString());
         }
 
         // try parse the string to a JSON object
         try {
             jObj = new JSONObject(json);
         } catch (JSONException e) {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
+            Log.e("Error", "Error parsing data " + e.toString());
         }
         // return JSON String
         return jObj;

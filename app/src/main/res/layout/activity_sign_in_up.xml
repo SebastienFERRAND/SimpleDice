@@ -8,122 +8,48 @@
     tools:context="com.rezadiscount.rezadiscount.reza.discount.activities.SignInUp"
     android:background="#6070a7">
 
-    <ImageView
-        android:layout_width="wrap_content"
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView2"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/logo" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp" />
+
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/email_field"
         android:hint="username"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_below="@+id/login_button"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/passwd_field"
         android:hint="password"
-        android:layout_below="@+id/email_field"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_below="@+id/email_field"/>
 
 
     <Button
         android:id="@+id/connexion"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/connexion_button"
-        android:layout_below="@+id/passwd_field"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_below="@+id/passwd_field"/>
 
     <Button
         android:id="@+id/inscription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/subscribe_button"
-        android:layout_below="@+id/connexion"
-        android:layout_alignRight="@+id/connexion"
-        android:layout_alignEnd="@+id/connexion"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/or_subscribe_with"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/inscription"
-        android:layout_centerHorizontal="true"
-        android:textColor="#ffffff"
-        android:textStyle="bold" />
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp" />
-
-
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_centerInParent="true"
-        tools:context="com.rezadiscount.rezadiscount.reza.discount.activities.SignInUp"
-        android:id="@+id/linearLayout">
-
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/google"
-            android:layout_weight="1"
-            android:src="@drawable/googleplus" />
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/email"
-            android:layout_weight="1"
-            android:src="@drawable/email" />
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/facebook"
-            android:layout_weight="1"
-            android:src="@drawable/facebook" />
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/twitter"
-            android:src="@drawable/twitter" />
-    </LinearLayout>
+        android:text="@string/subscribe_button"
+        android:layout_below="@+id/connexion"/>
 
 
 </RelativeLayout>

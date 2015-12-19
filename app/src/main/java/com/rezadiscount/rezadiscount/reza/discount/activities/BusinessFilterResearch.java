@@ -64,6 +64,7 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
         try {
 
             androidV = jsonResult.getJson().getJSONArray(QuickstartPreferences.TAG_RESULT);
+
             for (int i = 0; i < androidV.length(); i++) {
                 JSONObject c = androidV.getJSONObject(i);
 
