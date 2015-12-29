@@ -35,12 +35,13 @@
         android:inputType="textPassword"
         android:id="@+id/password" />
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/birthday"
-        android:inputType="datetime"
-        android:id="@+id/birthday" />
+        android:id="@+id/birthday"
+        style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+        android:inputType="date" />
 
 
     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"

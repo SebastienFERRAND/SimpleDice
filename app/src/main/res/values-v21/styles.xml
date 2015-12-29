@@ -9,11 +9,35 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Main theme colors -->
+
+        <item name="actionBarStyle">@style/MyActionBar</item>
+
+        <item name="android:datePickerStyle">@style/MyDatePicker</item>
+
         <!--   your app branding color for the app bar -->
-        <item name="android:colorPrimary">@color/darkorange</item>
+        <item name="android:colorPrimary">@color/blue</item>
         <!--   darker variant for the status bar and contextual app bars -->
-        <item name="android:colorPrimaryDark">@color/orange</item>
+        <item name="android:colorPrimaryDark">@color/com_facebook_blue</item>
         <!--   theme UI controls like checkboxes and text fields -->
-        <item name="android:colorAccent">@color/red</item>
+        <item name="android:colorAccent">@color/darkblue</item>
     </style>
+
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar.Solid">
+        <item name="background">@color/blue</item>
+        <item name="titleTextStyle">@style/MyTitleTextStyle</item>
+    </style>
+
+    <style name="MyTitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
+    <style name="MyDialogTheme" parent="android:Theme.Material.Dialog">
+        <item name="android:datePickerStyle">@style/MyDatePicker</item>
+    </style>
+
+    <style name="MyDatePicker" parent="android:Widget.Material.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
+    </style>
+
 </resources>

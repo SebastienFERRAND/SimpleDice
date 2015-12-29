@@ -69,17 +69,15 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
     @Override
     protected void onPostExecute(JSONObject jsonP) {
         pDialog.dismiss();
-        Log.d("Test1", "get return " + jsonP.toString());
+        Log.d("JSON", "get return " + jsonP.toString());
         // Getting JSON Array from URL
         if (jsonP != null) {
-
-
-
             json = jsonP;
             for (GetJsonListener hl : listeners)
                 hl.getJsonObject();
         } else {
-            Log.d("Test", " BUG test ");
+            json = null;
+            Log.d("JSON", "Null");
         }
 
     }

@@ -161,4 +161,9 @@ public class FragmentProfile extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
+
+    private void findViewsById(){
+
+    }
+
 }

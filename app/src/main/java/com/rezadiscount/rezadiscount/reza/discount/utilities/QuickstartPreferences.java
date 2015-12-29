@@ -67,9 +67,12 @@ public class QuickstartPreferences {
 
 
     //////// METHODS ///////
-
     public static final String TAG_GET = "GET";
     public static final String TAG_POST = "POST";
+
+    ////// TIME CONSTANTS //////
+    public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
 
 
     public static String convertToDate(String dateP) {

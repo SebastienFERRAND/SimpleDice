@@ -154,7 +154,7 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
         HashMap<String, String> headerList = new HashMap<String, String>();
         headerList.put(QuickstartPreferences.TAG_LATITUDE, latitude);
         headerList.put(QuickstartPreferences.TAG_LONGITUDE, longitude);
-        SharedPreferencesModule.initialise(getApplicationContext());
+        SharedPreferencesModule.initialise(this);
         headerList.put(QuickstartPreferences.TAG_TOKEN, SharedPreferencesModule.getToken());
 
         jsonResult = new GetJsonResult();

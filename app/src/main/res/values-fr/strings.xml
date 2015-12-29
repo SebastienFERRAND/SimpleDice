@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Nebulis</string>
+    <string name="app_name">Proximity</string>
     <string name="title_activity_location_business">Carte</string>
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
@@ -11,7 +11,6 @@
     <string name="navigation_drawer_close">Fermer le menu de navigation</string>
 
     <string name="action_settings">Réglages</string>
-    <string name="title_activity_item_list_view">Nebulis</string>
     <string name="title_activity_map_business">Carte</string>
     <string name="title_activity_drawer">Menu deroulant</string>
 
@@ -46,5 +45,9 @@
     <string name="agenda">Agenda</string>
     <string name="find">Chercher...</string>
     <string name="profile">Profil</string>
+    <string name="error_field_required">Ce champ est obligatoire</string>
+    <string name="error_incorrect_password">Le mot de passe est incorrect</string>
+    <string name="error_invalid_email">L\'adresse email est invalide</string>
+    <string name="error_invalid_password">Le mot de passe est trop court</string>
 
 </resources>

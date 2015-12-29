@@ -28,11 +28,26 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <activity
             android:name=".reza.discount.activities.BusinessResults"
-            android:label="@string/title_activity_item_list_view"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".reza.discount.activities.BusinessProfile"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".reza.discount.activities.BusinessLocation"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".reza.discount.activities.BusinessFilterResearch"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".reza.discount.components.BaseDrawerActivity" />
+        <activity android:name=".reza.discount.activities.SignInUp" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".reza.discount.activities.SubscribeActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -49,23 +64,6 @@
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" />
-
-        <activity
-            android:name=".reza.discount.activities.BusinessLocation"
-            android:label="@string/title_activity_map_business"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".reza.discount.activities.BusinessFilterResearch"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".reza.discount.activities.SignInUp" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".reza.discount.activities.SubscribeActivity" />
-        <activity android:name=".reza.discount.components.BaseDrawerActivity" />
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"

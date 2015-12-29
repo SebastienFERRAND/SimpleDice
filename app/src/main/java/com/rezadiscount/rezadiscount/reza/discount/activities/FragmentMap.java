@@ -155,4 +155,8 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
 
     }
 
+    private void findViewsById(){
+
+    }
+
 }
