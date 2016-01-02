@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.rezadiscount.rezadiscount.reza.discount.activities.SubscribeActivity"
     android:id="@+id/linearLayout"
-    android:orientation="vertical"
-    android:weightSum="1">
+    android:orientation="vertical">
 
 
     <EditText
@@ -35,13 +34,16 @@
         android:inputType="textPassword"
         android:id="@+id/password" />
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/birthday"
         android:id="@+id/birthday"
         style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-        android:inputType="date" />
+        android:inputType="date"
+        android:clickable="true"
+        android:onClick="showDatePicker" />
 
 
     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"

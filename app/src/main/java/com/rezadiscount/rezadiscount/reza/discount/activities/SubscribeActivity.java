@@ -1,15 +1,12 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -24,10 +21,7 @@ import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferenc
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Locale;
 
 public class SubscribeActivity extends AppCompatActivity implements GetJsonListener, GetDateSpinnerListener {
 
@@ -51,10 +45,8 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
 
     private View.OnClickListener subscribeClick;
 
-    private DatePickerDialog datePickerDialog;
-
-    private SimpleDateFormat dateFormatter;
-
+    private FragmentDatePickerDialog dateFragment;
+    private GetDateSpinnerListener datePickerListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,11 +57,6 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
         setValues();
 
         subscribe.setOnClickListener(subscribeClick);
-
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-
-        setDateTimeField();
-
 
     }
 
@@ -92,6 +79,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
 
         act = this;
         jsonListener = this;
+        datePickerListener = this;
 
         lastName = (EditText) findViewById(R.id.lastname);
         firstName = (EditText) findViewById(R.id.firstname);
@@ -101,6 +89,19 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
         genderRb = (RadioGroup) findViewById(R.id.gender_radio);
 
         subscribe = (Button) findViewById(R.id.subscribe);
+
+        /*birthday.setOnClickListener(showDatePicker);
+
+
+        showDatePicker = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(v);
+                Log.d("Test", "Click !");
+            }
+        };*/
+
+
 
         subscribeClick = new View.OnClickListener() {
             @Override
@@ -125,7 +126,8 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
                     bodyAuth.put(QuickstartPreferences.TAG_FIRSTNAME, firstName.getText().toString());
                     bodyAuth.put(QuickstartPreferences.TAG_EMAIL, email.getText().toString());
                     bodyAuth.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
-                    bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDate(birthday.getText().toString()));
+                    bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDate(dateFragment.getDate() + "/" +
+                            dateFragment.getMonth() + "/" + dateFragment.getYear(), "dd/MM/yyyy"));
                     bodyAuth.put(QuickstartPreferences.TAG_GENDER, genderSelected.getText());
                     parent.put("register", bodyAuth);
                 } catch (JSONException e) {
@@ -147,37 +149,22 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
 
     }
 
-
-    private void setDateTimeField() {
-        birthday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Date", "Click ! ");
-                showDatePickerDialog(v);
-            }
-        });
-
-        Calendar newCalendar = Calendar.getInstance();
-        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Log.d("Date", "date results " + year + monthOfYear + dayOfMonth);
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                birthday.setText(dateFormatter.format(newDate.getTime()));
-            }
-
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-
-    }
-
     private void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new FragmentDatePickerDialog();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
+        dateFragment = new FragmentDatePickerDialog();
+        dateFragment.addListener(datePickerListener);
+        dateFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     @Override
     public void getDateSpinner() {
 
+        birthday.setText(dateFragment.getDate() + " " +
+                QuickstartPreferences.getMonth(dateFragment.getMonth()) + " " + dateFragment.getYear());
     }
+
+    public void showDatePicker(View v){
+        showDatePickerDialog(v);
+        Log.d("Test", "Click !");
+    }
+
 }

@@ -16,6 +16,7 @@
 
 package com.rezadiscount.rezadiscount.reza.discount.utilities;
 
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -75,10 +76,13 @@ public class QuickstartPreferences {
 
 
 
-    public static String convertToDate(String dateP) {
+    public static String getMonth(int month) {
+        return new DateFormatSymbols().getMonths()[month];
+    }
+
+    public static String convertToDate(String dateP, String inputPattern) {
 
         if (dateP!=null) {
-            String inputPattern = "MM/dd/yyyy";
             String outputPattern = "yyyy-MM-dd hh:mm:ss";
             SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
             SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);

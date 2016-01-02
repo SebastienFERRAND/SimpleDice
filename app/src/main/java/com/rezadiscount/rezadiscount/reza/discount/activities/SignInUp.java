@@ -255,7 +255,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
                     Intent myIntent = new Intent(SignInUp.this, SubscribeActivity.class);
 
-                    myIntent.putExtra(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDate(birthday));
+                    myIntent.putExtra(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDate(birthday, "MM/dd/yyyy"));
                     myIntent.putExtra(QuickstartPreferences.TAG_LASTNAME, lastName);
                     myIntent.putExtra(QuickstartPreferences.TAG_FIRSTNAME, firstName);
                     myIntent.putExtra(QuickstartPreferences.TAG_EMAIL, email);
@@ -279,7 +279,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
         context = this;
         jsonListener = this;
 
-        loginButton = (LoginButton) this.findViewById(R.id.login_button);
+        loginButton = (LoginButton) findViewById(R.id.login_button);
         connexion = (Button) findViewById(R.id.connexion);
         register = (Button) findViewById(R.id.inscription);
         connexionField = (EditText) findViewById(R.id.email_field);
