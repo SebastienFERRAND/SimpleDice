@@ -50,5 +50,7 @@
     <string name="find">Find...</string>
     <string name="deal">Deal</string>
     <string name="settings">Settings</string>
+    <string name="discount">Discount</string>
+
 
 </resources>

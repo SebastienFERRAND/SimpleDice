@@ -63,9 +63,10 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     private void setValues() {
         Intent intent = this.getIntent();
 
-        if(intent.getStringExtra(QuickstartPreferences.TAG_LASTNAME)==null){
+
+        /*if(intent.getStringExtra(QuickstartPreferences.TAG_LASTNAME)==null){
             password.setVisibility(View.GONE);
-        }
+        }*/
 
         lastName.setText(intent.getStringExtra(QuickstartPreferences.TAG_LASTNAME));
         firstName.setText(intent.getStringExtra(QuickstartPreferences.TAG_FIRSTNAME));
@@ -89,19 +90,6 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
         genderRb = (RadioGroup) findViewById(R.id.gender_radio);
 
         subscribe = (Button) findViewById(R.id.subscribe);
-
-        /*birthday.setOnClickListener(showDatePicker);
-
-
-        showDatePicker = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog(v);
-                Log.d("Test", "Click !");
-            }
-        };*/
-
-
 
         subscribeClick = new View.OnClickListener() {
             @Override
@@ -128,7 +116,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
                     bodyAuth.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
                     bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDate(dateFragment.getDate() + "/" +
                             dateFragment.getMonth() + "/" + dateFragment.getYear(), "dd/MM/yyyy"));
-                    bodyAuth.put(QuickstartPreferences.TAG_GENDER, genderSelected.getText());
+                    bodyAuth.put(QuickstartPreferences.TAG_GENDER, radioToValue());
                     parent.put("register", bodyAuth);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -165,6 +153,18 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     public void showDatePicker(View v){
         showDatePickerDialog(v);
         Log.d("Test", "Click !");
+    }
+
+    public String radioToValue(){
+        if (genderSelected.getText().equals(this.getResources().getString(R.string.female))){
+            return "F";
+        }
+        if (genderSelected.getText().equals(this.getResources().getString(R.string.male))){
+            return "M";
+        }
+
+        return null;
+
     }
 
 }

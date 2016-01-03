@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by sebastienferrand on 12/2/15.
@@ -38,6 +39,16 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
         url = urlP;
         method = methodP;
         bodyJson = body;
+
+        for(Map.Entry<String, String> entry : listHeadersP.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            Log.d("Header", key + " " + value);
+
+            // do what you have to do here
+            // In your case, an other loop.
+        }
 
     }
 

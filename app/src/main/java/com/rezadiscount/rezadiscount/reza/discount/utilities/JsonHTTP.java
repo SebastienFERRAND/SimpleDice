@@ -39,12 +39,16 @@ public class JsonHTTP {
             while (keySetIterator.hasNext()) {
                 String key = keySetIterator.next();
                 httpconn.setRequestProperty(key, headers.get(key));
+
+                Log.d("Header", key + " " + headers.get(key));
             }
 
             if (jsonBody != null) {
                 OutputStream os = httpconn.getOutputStream();
                 os.write(jsonBody.toString().getBytes("UTF-8"));
                 os.close();
+
+                Log.d("Body", "Body : " + jsonBody.toString());
             }
 
             BufferedReader input;

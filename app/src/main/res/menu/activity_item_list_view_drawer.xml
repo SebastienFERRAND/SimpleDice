@@ -5,9 +5,9 @@
 
 
         <item
-            android:id="@+id/profil"
+            android:id="@+id/discount"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Profil" />
+            android:title="@string/discount" />
 
 
         <item
