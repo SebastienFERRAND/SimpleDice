@@ -49,5 +49,9 @@
     <string name="error_incorrect_password">Le mot de passe est incorrect</string>
     <string name="error_invalid_email">L\'adresse email est invalide</string>
     <string name="error_invalid_password">Le mot de passe est trop court</string>
+    <string name="limited_deal">Offre limitee</string>
+    <string name="custom_deal">Offre personalisee</string>
+    <string name="closest_deal">Offre proche</string>
+    <string name="best_deal">Meilleures offres</string>
 
 </resources>

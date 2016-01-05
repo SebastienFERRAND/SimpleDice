@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rezadiscount.rezadiscount" >
+    package="com.rezadiscount.rezadiscount">
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -12,35 +12,38 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.rezadiscount.rezadiscount.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <permission
         android:name="com.rezadiscount.rezadiscount.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.rezadiscount.rezadiscount.permission.C2D_MESSAGE" />
-
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-        <activity
-            android:name=".reza.discount.activities.BusinessResults"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name=".reza.discount.activities.BusinessProfile"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        android:theme="@style/MyMaterialTheme">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity
+            android:name=".reza.discount.activities.BusinessResults"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".reza.discount.activities.BusinessProfile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".reza.discount.activities.BusinessLocation"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".reza.discount.activities.BusinessFilterResearch"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".reza.discount.components.BaseDrawerActivity" />
-        <activity android:name=".reza.discount.activities.SignInUp" >
+        <activity android:name=".reza.discount.activities.SignInUp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,16 +62,17 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:label="@string/app_name" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
@@ -80,7 +84,7 @@
 
         <service
             android:name=".reza.discount.services.MyGcmListenerService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
@@ -91,15 +95,18 @@
             android:name=".reza.discount.services.MyInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID"/>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
         <!-- [END instanceId_listener] -->
         <service
             android:name=".reza.discount.services.RegistrationIntentService"
-            android:exported="false">
-        </service>
+            android:exported="false" />
 
+        <activity
+            android:name=".reza.discount.activities.DealActivity"
+            android:label="@string/title_activity_deal"
+            android:theme="@style/MyMaterialTheme"></activity>
     </application>
 
 </manifest>

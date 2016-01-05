@@ -31,7 +31,7 @@
         sending the fetched token to the server or subscribing to the PubSub topic. Please try
         running the sample again.</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="book">Book</string>
     <string name="facebook_app_id" translatable="false">1518479935118372</string>
 
@@ -47,10 +47,17 @@
     <string name="profile">Profile</string>
     <string name="shops">Favorite shops</string>
     <string name="agenda">Agenda</string>
-    <string name="find">Find...</string>
-    <string name="deal">Deal</string>
+    <string name="find">Find</string>
+    <string name="deal">Deals</string>
     <string name="settings">Settings</string>
-    <string name="discount">Discount</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_deal">DealActivity</string>
+    <string name="limited_deal">Limited deal</string>
+    <string name="custom_deal">Custom deal</string>
+    <string name="closest_deal">Closest deal</string>
+    <string name="best_deal">Best deal</string>
 
 
 </resources>

@@ -5,36 +5,20 @@
 
 
         <item
-            android:id="@+id/discount"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/discount" />
-
-
-        <item
-            android:id="@+id/magasin"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/profile" />
-
-
-        <item
-            android:id="@+id/agenda"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/agenda" />
-
-        <item
-            android:id="@+id/find"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/find" />
-
-        <item
             android:id="@+id/deal"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_shopping_cart_black_24dp"
             android:title="@string/deal" />
 
         <item
-            android:id="@+id/settings"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/settings" />
+            android:id="@+id/find"
+            android:icon="@drawable/ic_store_black_24dp"
+            android:title="@string/find" />
+
+        <item
+            android:id="@+id/agenda"
+            android:icon="@drawable/ic_today_black_24dp"
+            android:title="@string/agenda" />
+
     </group>
 
 
