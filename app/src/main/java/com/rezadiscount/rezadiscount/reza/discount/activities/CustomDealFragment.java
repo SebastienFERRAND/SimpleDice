@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.rezadiscount.rezadiscount.R;
 
-
 public class CustomDealFragment extends Fragment{
 
     public CustomDealFragment() {
