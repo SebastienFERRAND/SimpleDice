@@ -25,23 +25,19 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/MyMaterialTheme">
+        android:theme="@style/AppTheme.NoActionBar">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".reza.discount.activities.BusinessResults"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".reza.discount.activities.BusinessResults" />
         <activity
-            android:name=".reza.discount.activities.BusinessProfile"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".reza.discount.activities.BusinessProfile" />
         <activity
-            android:name=".reza.discount.activities.BusinessLocation"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".reza.discount.activities.BusinessLocation"/>
         <activity
-            android:name=".reza.discount.activities.BusinessFilterResearch"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".reza.discount.activities.BusinessFilterResearch"/>
         <activity android:name=".reza.discount.components.BaseDrawerActivity" />
         <activity android:name=".reza.discount.activities.SignInUp">
             <intent-filter>
@@ -105,8 +101,7 @@
 
         <activity
             android:name=".reza.discount.activities.DealActivity"
-            android:label="@string/title_activity_deal"
-            android:theme="@style/MyMaterialTheme"></activity>
+            android:label="@string/title_activity_deal"/>
     </application>
 
 </manifest>
