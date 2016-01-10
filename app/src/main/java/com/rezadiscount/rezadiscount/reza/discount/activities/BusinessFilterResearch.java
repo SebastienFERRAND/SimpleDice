@@ -38,7 +38,7 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
 
     private ListView listCategories;
 
-    ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
+    private ArrayList<HashMap<String, String>> oslist = new ArrayList<>();
 
     private LocationUtility loc;
 
@@ -74,7 +74,7 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
 
                 // Adding value HashMap key => value
 
-                HashMap<String, String> map = new HashMap<String, String>();
+                HashMap<String, String> map = new HashMap<>();
 
                 map.put(QuickstartPreferences.TAG_ID, idS);
                 map.put(QuickstartPreferences.TAG_NAME, labelS);
@@ -131,10 +131,8 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     loc.connectMapAPI();
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+                    Log.e("Permission error", "Missing permission authorization");
                 }
-                return;
             }
 
             // other 'case' lines to check for other
@@ -151,7 +149,7 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
         latitude = latlong[0];
         longitude = latlong[1];
 
-        HashMap<String, String> headerList = new HashMap<String, String>();
+        HashMap<String, String> headerList = new HashMap<>();
         headerList.put(QuickstartPreferences.TAG_LATITUDE, latitude);
         headerList.put(QuickstartPreferences.TAG_LONGITUDE, longitude);
         SharedPreferencesModule.initialise(this);
