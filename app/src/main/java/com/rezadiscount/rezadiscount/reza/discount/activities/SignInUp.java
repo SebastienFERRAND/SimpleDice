@@ -78,7 +78,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
         //if a token already exist, no need to sign in
         SharedPreferencesModule.initialise(this);
         if (!SharedPreferencesModule.getToken().equals("")) {
-            Intent myIntent = new Intent(SignInUp.this, BusinessFilterResearch.class);
+            Intent myIntent = new Intent(SignInUp.this, DealActivity.class);
             SignInUp.this.startActivity(myIntent);
         }
 
@@ -94,7 +94,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
         if (token != null) {
             Log.d("facebook", "Token facebook " + token);
         } else {
-            Log.d("facebook", "no token " + token);
+            Log.d("facebook", "no token ");
         }
 
         loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday, user_friends"));
@@ -135,7 +135,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                                             birthday = object.optString("birthday", null);
                                             genderSelected = object.getString("gender");
 
-                                            HashMap<String, String> headerList = new HashMap<String, String>();
+                                            HashMap<String, String> headerList = new HashMap<>();
                                             headerList.put(QuickstartPreferences.TAG_FBUID, id);
                                             headerList.put(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
                                             // TODO Remove Lat and Long from this query
@@ -171,7 +171,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                     @Override
                     public void onError(FacebookException exception) {
                         // App code
-                        Log.d("Facebook", "Error" + exception.getMessage().toString());
+                        Log.d("Facebook", "Error" + exception.getMessage());
 
                     }
                 });
@@ -241,7 +241,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                 // Subscription
 
                 //TODO Ask for return code and perform else if
-                String code_retour = null;
+                String code_retour = "";
                 try {
                     code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
                 } catch (JSONException e) {
@@ -268,10 +268,6 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                 }
 
             }
-        } else {
-
-
-
         }
     }
 
@@ -299,7 +295,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
             public void onClick(View v) {
 
                 // Getting JSON from URL
-                HashMap<String, String> headerList = new HashMap<String, String>();
+                HashMap<String, String> headerList = new HashMap<>();
                 headerList.put(QuickstartPreferences.TAG_LOGIN, connexionField.getText().toString());
                 headerList.put(QuickstartPreferences.TAG_PASSWD, passwordField.getText().toString());
                 // TODO Remove Lat and Long from this query

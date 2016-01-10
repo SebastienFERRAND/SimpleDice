@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.activities.BusinessFilterResearch;
 import com.rezadiscount.rezadiscount.reza.discount.activities.DealActivity;
+import com.rezadiscount.rezadiscount.reza.discount.activities.FindActivity;
 
 public class BaseDrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -51,7 +52,7 @@ public class BaseDrawerActivity extends AppCompatActivity implements NavigationV
             myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             BaseDrawerActivity.this.startActivity(myIntent);
         } else if (id == R.id.find) {
-            Intent myIntent = new Intent(BaseDrawerActivity.this, BusinessFilterResearch.class);
+            Intent myIntent = new Intent(BaseDrawerActivity.this, FindActivity.class);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             BaseDrawerActivity.this.startActivity(myIntent);
 

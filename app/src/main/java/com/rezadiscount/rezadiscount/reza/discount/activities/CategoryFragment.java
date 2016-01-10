@@ -1,21 +1,20 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
-import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
+import com.rezadiscount.rezadiscount.reza.discount.adapter.CategoryAdapter;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonListener;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonResult;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetLocationListener;
@@ -29,33 +28,58 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+public class CategoryFragment extends Fragment implements GetLocationListener, GetJsonListener {
 
-public class BusinessFilterResearch extends BaseDrawerActivity implements GetLocationListener, GetJsonListener {
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
-    private Button research;
-
-    private String latitude;
-    private String longitude;
-
-    private JSONArray androidV = null;
-
-    private ListView listCategories;
-
-    private ArrayList<HashMap<String, String>> oslist = new ArrayList<>();
+    private ArrayList<HashMap<String, String>> shopList;
 
     private LocationUtility loc;
 
     private GetJsonResult jsonResult;
 
+    private String latitude;
+    private String longitude;
+
+    private JSONArray jsonReturn;
+
+    public CategoryFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business_filter_research);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        shopList = new ArrayList<>();
 
         loc = new LocationUtility();
-        loc.initialise(this);
+        loc.initialise(getActivity());
         loc.addListener(this);
 
+        View rootView = inflater.inflate(R.layout.find_fragment, container, false);
+
+        //Create the list of Deals
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // Inflate the layout for this fragment
+        return rootView;
     }
 
     @Override
@@ -65,10 +89,10 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
 
         try {
 
-            androidV = jsonResult.getJson().getJSONArray(QuickstartPreferences.TAG_RESULT);
+            jsonReturn = jsonResult.getJson().getJSONArray(QuickstartPreferences.TAG_RESULT);
 
-            for (int i = 0; i < androidV.length(); i++) {
-                JSONObject c = androidV.getJSONObject(i);
+            for (int i = 0; i < jsonReturn.length(); i++) {
+                JSONObject c = jsonReturn.getJSONObject(i);
 
                 // Storing  JSON item in a Variable
                 String idS = c.getString(QuickstartPreferences.TAG_ID);
@@ -81,30 +105,26 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
                 map.put(QuickstartPreferences.TAG_ID, idS);
                 map.put(QuickstartPreferences.TAG_NAME, labelS);
 
-                oslist.add(map);
-                listCategories = (ListView) findViewById(R.id.list_categories);
+                shopList.add(map);
 
-                ListAdapter adapter = new SimpleAdapter(BusinessFilterResearch.this, oslist,
-                        R.layout.category_row_item,
-                        new String[]{QuickstartPreferences.TAG_ID, QuickstartPreferences.TAG_NAME}, new int[]{
-                        R.id.id, R.id.label});
 
-                listCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                /*mRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view,
                                             int position, long id) {
-                        Intent myIntent = new Intent(BusinessFilterResearch.this, BusinessResults.class);
+                        Intent myIntent = new Intent(getActivity(), BusinessResults.class);
 
-                        myIntent.putExtra(QuickstartPreferences.TAG_ID, oslist.get(position).get(QuickstartPreferences.TAG_ID));
+                        myIntent.putExtra(QuickstartPreferences.TAG_ID, shopList.get(position).get(QuickstartPreferences.TAG_ID));
 
-                        BusinessFilterResearch.this.startActivity(myIntent);
+                        getActivity().startActivity(myIntent);
                     }
-                });
-
-                listCategories.setAdapter(adapter);
+                });*/
 
             }
+
+            mAdapter = new CategoryAdapter(shopList);
+            mRecyclerView.setAdapter(mAdapter);
 
 
         } catch (Exception e) {
@@ -114,7 +134,7 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
                 String status = jsonResult.getJson().getString(QuickstartPreferences.TAG_STATUS);
                 String details = jsonResult.getJson().getString(QuickstartPreferences.TAG_DETAIL);
 
-                Toast.makeText(getApplicationContext(), "There was an error " + status + " : " + details, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "There was an error " + status + " : " + details, Toast.LENGTH_LONG).show();
 
             } catch (Exception e1) {
                 e1.printStackTrace();
@@ -142,10 +162,9 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
         }
     }
 
-
-
     @Override
     public void getLaglong() {
+
         String[] latlong = loc.getLocation();
 
         latitude = latlong[0];
@@ -154,20 +173,21 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
         HashMap<String, String> headerList = new HashMap<>();
         headerList.put(QuickstartPreferences.TAG_LATITUDE, latitude);
         headerList.put(QuickstartPreferences.TAG_LONGITUDE, longitude);
-        SharedPreferencesModule.initialise(this);
+        SharedPreferencesModule.initialise(getActivity());
         headerList.put(QuickstartPreferences.TAG_TOKEN, SharedPreferencesModule.getToken());
 
         jsonResult = new GetJsonResult();
-        jsonResult.setParams(this, headerList, QuickstartPreferences.URL_CAT, QuickstartPreferences.TAG_GET, null);
+        jsonResult.setParams(getActivity(), headerList, QuickstartPreferences.URL_CAT, QuickstartPreferences.TAG_GET, null);
         jsonResult.addListener(this);
         jsonResult.execute();
+
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         if (!loc.checkLocationPermission()) {
-            ActivityCompat.requestPermissions(this,
+            ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         } else {
             loc.connectMapAPI();
@@ -175,11 +195,9 @@ public class BusinessFilterResearch extends BaseDrawerActivity implements GetLoc
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         // Disconnecting the client invalidates it.
         loc.disconnectMapAPI();
         super.onStop();
     }
-
-
 }

@@ -30,14 +30,10 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity
-            android:name=".reza.discount.activities.BusinessResults" />
-        <activity
-            android:name=".reza.discount.activities.BusinessProfile" />
-        <activity
-            android:name=".reza.discount.activities.BusinessLocation"/>
-        <activity
-            android:name=".reza.discount.activities.BusinessFilterResearch"/>
+        <activity android:name=".reza.discount.activities.BusinessResults" />
+        <activity android:name=".reza.discount.activities.BusinessProfile" />
+        <activity android:name=".reza.discount.activities.BusinessLocation" />
+        <activity android:name=".reza.discount.activities.BusinessFilterResearch" />
         <activity android:name=".reza.discount.components.BaseDrawerActivity" />
         <activity android:name=".reza.discount.activities.SignInUp">
             <intent-filter>
@@ -101,7 +97,10 @@
 
         <activity
             android:name=".reza.discount.activities.DealActivity"
-            android:label="@string/title_activity_deal"/>
+            android:label="@string/title_activity_deal" />
+        <activity
+            android:name=".reza.discount.activities.FindActivity"
+            android:label="@string/title_activity_find"></activity>
     </application>
 
 </manifest>

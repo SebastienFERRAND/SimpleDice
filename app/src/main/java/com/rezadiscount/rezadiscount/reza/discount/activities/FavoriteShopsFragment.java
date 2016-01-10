@@ -15,7 +15,7 @@ import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferenc
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class BestDealFragment extends Fragment{
+public class FavoriteShopsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -23,7 +23,7 @@ public class BestDealFragment extends Fragment{
 
     private ArrayList<HashMap<String, String>> dealList;
 
-    public BestDealFragment() {
+    public FavoriteShopsFragment() {
         // Required empty public constructor
     }
 
@@ -37,7 +37,7 @@ public class BestDealFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.best_deal_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.find_fragment, container, false);
 
         dealList = new ArrayList<>();
 

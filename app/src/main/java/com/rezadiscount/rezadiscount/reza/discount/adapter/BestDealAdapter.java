@@ -18,32 +18,18 @@ import java.util.HashMap;
 /**
  * Created by sebastienferrand on 1/9/16.
  */
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class BestDealAdapter extends RecyclerView.Adapter<BestDealAdapter.ViewHolder> {
     private ArrayList<HashMap<String, String>> mDataset;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public ImageView imageView;
-        public TextView mTextView;
-        public ViewHolder(LinearLayout v) {
-            super(v);
-            imageView = (ImageView)  v.findViewById(R.id.image);
-            mTextView =  (TextView) v.findViewById(R.id.info_text);
-        }
-    }
-
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(ArrayList<HashMap<String, String>> myDataset) {
+    public BestDealAdapter(ArrayList<HashMap<String, String>> myDataset) {
         mDataset = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+    public BestDealAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                         int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_view, parent, false);
@@ -66,5 +52,20 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    // Provide a reference to the views for each data item
+    // Complex data items may need more than one view per item, and
+    // you provide access to all the views for a data item in a view holder
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        public ImageView imageView;
+        public TextView mTextView;
+
+        public ViewHolder(LinearLayout v) {
+            super(v);
+            imageView = (ImageView) v.findViewById(R.id.image);
+            mTextView = (TextView) v.findViewById(R.id.info_text);
+        }
     }
 }

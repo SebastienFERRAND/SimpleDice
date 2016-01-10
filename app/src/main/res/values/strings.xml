@@ -58,6 +58,7 @@
     <string name="custom_deal">Custom deal</string>
     <string name="closest_deal">Closest deal</string>
     <string name="best_deal">Best deal</string>
+    <string name="title_activity_find">FindActivity</string>
 
 
 </resources>
