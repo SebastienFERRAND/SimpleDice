@@ -80,14 +80,14 @@ public class QuickstartPreferences {
         return new DateFormatSymbols().getMonths()[month];
     }
 
-    public static String convertToDate(String dateP, String inputPattern) {
+
+    public static String convertToDateFormat(String dateP, String inputPattern, String outputPattern) {
 
         if (dateP!=null) {
-            String outputPattern = "yyyy-MM-dd hh:mm:ss";
             SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
             SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
 
-            Date date = null;
+            Date date;
             String str = null;
 
             try {

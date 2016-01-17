@@ -59,6 +59,9 @@
     <string name="closest_deal">Closest deal</string>
     <string name="best_deal">Best deal</string>
     <string name="title_activity_find">FindActivity</string>
+    <string name="password_repeat">Repeat password</string>
+    <string name="password_problem_match">Passwords won\'t match</string>
+    <string name="password_problem_empty">Password can\'t be empty</string>
 
 
 </resources>

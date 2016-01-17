@@ -255,7 +255,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
                     Intent myIntent = new Intent(SignInUp.this, SubscribeActivity.class);
 
-                    myIntent.putExtra(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDate(birthday, "MM/dd/yyyy"));
+                    myIntent.putExtra(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday, "MM/dd/yyyy", "yyyy-MM-dd hh:mm:ss"));
                     myIntent.putExtra(QuickstartPreferences.TAG_LASTNAME, lastName);
                     myIntent.putExtra(QuickstartPreferences.TAG_FIRSTNAME, firstName);
                     myIntent.putExtra(QuickstartPreferences.TAG_EMAIL, email);

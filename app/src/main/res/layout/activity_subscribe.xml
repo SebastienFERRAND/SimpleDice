@@ -1,61 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.rezadiscount.rezadiscount.reza.discount.activities.SubscribeActivity"
-    android:id="@+id/linearLayout"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.rezadiscount.rezadiscount.reza.discount.activities.SubscribeActivity">
 
 
     <EditText
+        android:id="@+id/lastname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/lastname"
-        android:id="@+id/lastname" />
+        android:hint="@string/lastname" />
 
     <EditText
+        android:id="@+id/firstname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/firstname"
-        android:id="@+id/firstname" />
+        android:hint="@string/firstname" />
 
     <EditText
+        android:id="@+id/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/email"
-        android:id="@+id/email"
         android:inputType="textEmailAddress" />
 
     <EditText
+        android:id="@+id/password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/password"
-        android:id="@+id/password"
         android:inputType="textPassword" />
 
     <EditText
+        android:id="@+id/passwd_repeat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/password"
-        android:id="@+id/passwd_repeat"
+        android:hint="@string/password_repeat"
         android:inputType="textPassword" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/birthday"
         android:id="@+id/birthday"
         style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-        android:inputType="date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:clickable="true"
+        android:hint="@string/birthday"
+        android:inputType="date"
         android:onClick="showDatePicker" />
 
 
     <RadioGroup
+        android:id="@+id/gender_radio"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/gender_radio"
         android:orientation="horizontal">
         <RadioButton android:id="@+id/radio_male"
             android:layout_width="wrap_content"
@@ -68,10 +68,10 @@
     </RadioGroup>
 
     <Button
+        android:id="@+id/subscribe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/subscribe_button"
-        android:id="@+id/subscribe"/>
+        android:text="@string/subscribe_button" />
 
 
 </LinearLayout>

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetDateSpinnerListener;
@@ -30,8 +31,8 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     private EditText firstName;
     private EditText email;
     private EditText password;
+    private EditText passwordRepeat;
     private TextView birthday;
-
 
     private Button subscribe;
 
@@ -40,7 +41,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
 
     private Activity act;
 
-    private RadioGroup genderRb;
+    private RadioGroup genderRg;
     private RadioButton genderSelected;
 
     private View.OnClickListener subscribeClick;
@@ -63,17 +64,24 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     private void setValues() {
         Intent intent = this.getIntent();
 
+        // If facebook sub, no password needed.
+        if (intent.getStringExtra(QuickstartPreferences.TAG_LASTNAME) != null) {
+//            password.setVisibility(View.GONE);
+//            passwordRepeat.setVisibility(View.GONE);
 
-        /*if(intent.getStringExtra(QuickstartPreferences.TAG_LASTNAME)==null){
-            password.setVisibility(View.GONE);
-        }*/
+            // Pre-setting of user data from facebook
+            lastName.setText(intent.getStringExtra(QuickstartPreferences.TAG_LASTNAME));
+            firstName.setText(intent.getStringExtra(QuickstartPreferences.TAG_FIRSTNAME));
+            email.setText(intent.getStringExtra(QuickstartPreferences.TAG_EMAIL));
+            birthday.setText(QuickstartPreferences.convertToDateFormat(intent.getStringExtra(QuickstartPreferences.TAG_BIRTHDAY), "yyyy-MM-dd hh:mm:ss", "dd/MM/yyyy"));
 
-        lastName.setText(intent.getStringExtra(QuickstartPreferences.TAG_LASTNAME));
-        firstName.setText(intent.getStringExtra(QuickstartPreferences.TAG_FIRSTNAME));
-        email.setText(intent.getStringExtra(QuickstartPreferences.TAG_EMAIL));
-        password.setText(intent.getStringExtra(QuickstartPreferences.TAG_PASSWD));
-        birthday.setText(intent.getStringExtra(QuickstartPreferences.TAG_BIRTHDAY));
 
+            if (intent.getStringExtra(QuickstartPreferences.TAG_GENDER).equals("male")) {
+                ((RadioButton) genderRg.getChildAt(0)).setChecked(true);
+            } else if (intent.getStringExtra(QuickstartPreferences.TAG_GENDER).equals("female")) {
+                ((RadioButton) genderRg.getChildAt(1)).setChecked(true);
+            }
+        }
     }
 
     public void findViewsById() {
@@ -86,46 +94,58 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
         firstName = (EditText) findViewById(R.id.firstname);
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
+        passwordRepeat = (EditText) findViewById(R.id.passwd_repeat);
         birthday = (TextView) findViewById(R.id.birthday);
-        genderRb = (RadioGroup) findViewById(R.id.gender_radio);
+        genderRg = (RadioGroup) findViewById(R.id.gender_radio);
 
         subscribe = (Button) findViewById(R.id.subscribe);
 
         subscribeClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HashMap<String, String> headerList = new HashMap<String, String>();
 
-                // TODO Remove Lat and Long from this query
-                headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
-                headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
+                // If password won't match
+                if (!password.getText().toString().equals(passwordRepeat.getText().toString())) {
+                    Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.password_problem_match), Toast.LENGTH_LONG).show();
+                }
+                // If password empty
+                else if (password.getText().toString().equals("")) {
+                    Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.password_problem_empty), Toast.LENGTH_LONG).show();
+                } else {
 
-                JSONObject bodyAuth = new JSONObject();
-                JSONObject parent = new JSONObject();
+                    HashMap<String, String> headerList = new HashMap<>();
 
-                // get selected radio button from radioGroup
-                int selectedId = genderRb.getCheckedRadioButtonId();
+                    // TODO Remove Lat and Long from this query
+                    headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
+                    headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
 
-                // find the radiobutton by returned id
-                genderSelected = (RadioButton) findViewById(selectedId);
+                    JSONObject bodyAuth = new JSONObject();
+                    JSONObject parent = new JSONObject();
 
-                try {
-                    bodyAuth.put(QuickstartPreferences.TAG_LASTNAME, lastName.getText().toString());
-                    bodyAuth.put(QuickstartPreferences.TAG_FIRSTNAME, firstName.getText().toString());
-                    bodyAuth.put(QuickstartPreferences.TAG_EMAIL, email.getText().toString());
-                    bodyAuth.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
-                    bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDate(dateFragment.getDate() + "/" +
-                            dateFragment.getMonth() + "/" + dateFragment.getYear(), "dd/MM/yyyy"));
-                    bodyAuth.put(QuickstartPreferences.TAG_GENDER, radioToValue());
-                    parent.put("register", bodyAuth);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    // get selected radio button from radioGroup
+                    int selectedId = genderRg.getCheckedRadioButtonId();
+
+                    // find the radiobutton by returned id
+                    genderSelected = (RadioButton) findViewById(selectedId);
+
+                    try {
+                        bodyAuth.put(QuickstartPreferences.TAG_LASTNAME, lastName.getText().toString());
+                        bodyAuth.put(QuickstartPreferences.TAG_FIRSTNAME, firstName.getText().toString());
+                        bodyAuth.put(QuickstartPreferences.TAG_EMAIL, email.getText().toString());
+                        bodyAuth.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
+                        bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday.getText().toString(), "dd/MM/yyyy", "yyyy-MM-dd hh:mm:ss"));
+                        bodyAuth.put(QuickstartPreferences.TAG_GENDER, radioToValue());
+                        parent.put("register", bodyAuth);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    jsonResult = new GetJsonResult();
+                    jsonResult.setParams(act, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
+                    jsonResult.addListener(jsonListener);
+                    jsonResult.execute();
                 }
 
-                jsonResult = new GetJsonResult();
-                jsonResult.setParams(act, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
-                jsonResult.addListener(jsonListener);
-                jsonResult.execute();
             }
         };
     }
@@ -133,7 +153,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     @Override
     public void getJsonObject() {
 
-        Log.d("Test", jsonResult.getJson().toString());
+        Log.d("JSON", jsonResult.getJson().toString());
 
     }
 
@@ -152,7 +172,6 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
 
     public void showDatePicker(View v){
         showDatePickerDialog(v);
-        Log.d("Test", "Click !");
     }
 
     public String radioToValue(){
