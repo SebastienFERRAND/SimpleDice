@@ -109,7 +109,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
                     Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.password_problem_match), Toast.LENGTH_LONG).show();
                 }
                 // If password empty
-                else if (password.getText().toString().equals("")) {
+                else if (password.getText().toString().isEmpty()) {
                     Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.password_problem_empty), Toast.LENGTH_LONG).show();
                 } else {
 
@@ -154,6 +154,24 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     public void getJsonObject() {
 
         Log.d("JSON", jsonResult.getJson().toString());
+
+        String code_retour = "";
+        String message = "";
+        try {
+            code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
+            message = jsonResult.getJson().getString(QuickstartPreferences.TAG_MESSAGE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (code_retour.equals("200")) {
+            Intent myIntent = new Intent(SubscribeActivity.this, DealActivity.class);
+            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            SubscribeActivity.this.startActivity(myIntent);
+        } else {
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        }
+
 
     }
 

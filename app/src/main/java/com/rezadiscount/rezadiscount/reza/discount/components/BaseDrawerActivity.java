@@ -14,6 +14,7 @@ import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.activities.BusinessFilterResearch;
 import com.rezadiscount.rezadiscount.reza.discount.activities.DealActivity;
 import com.rezadiscount.rezadiscount.reza.discount.activities.FindActivity;
+import com.rezadiscount.rezadiscount.reza.discount.activities.SettingsActivity;
 
 public class BaseDrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -58,6 +59,11 @@ public class BaseDrawerActivity extends AppCompatActivity implements NavigationV
 
         } else if (id == R.id.agenda) {
             Intent myIntent = new Intent(BaseDrawerActivity.this, BusinessFilterResearch.class);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            BaseDrawerActivity.this.startActivity(myIntent);
+
+        } else if (id == R.id.settings) {
+            Intent myIntent = new Intent(BaseDrawerActivity.this, SettingsActivity.class);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             BaseDrawerActivity.this.startActivity(myIntent);
 

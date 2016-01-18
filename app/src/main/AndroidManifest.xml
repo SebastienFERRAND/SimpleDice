@@ -35,14 +35,18 @@
         <activity android:name=".reza.discount.activities.BusinessLocation" />
         <activity android:name=".reza.discount.activities.BusinessFilterResearch" />
         <activity android:name=".reza.discount.components.BaseDrawerActivity" />
-        <activity android:name=".reza.discount.activities.SignInUp">
+        <activity
+            android:name=".reza.discount.activities.SignInUp"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".reza.discount.activities.SubscribeActivity" />
+        <activity
+            android:name=".reza.discount.activities.SubscribeActivity"
+            android:theme="@style/AppTheme" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -100,7 +104,8 @@
             android:label="@string/title_activity_deal" />
         <activity
             android:name=".reza.discount.activities.FindActivity"
-            android:label="@string/title_activity_find"></activity>
+            android:label="@string/title_activity_find" />
+        <activity android:name=".reza.discount.activities.SettingsActivity" />
     </application>
 
 </manifest>

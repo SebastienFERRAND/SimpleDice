@@ -54,6 +54,7 @@ public class QuickstartPreferences {
     public static final String TAG_BIRTHDAY = "birthday";
     public static final String TAG_GENDER = "gender";
     public static final String TAG_HTTPCODE = "httpCode";
+    public static final String TAG_MESSAGE = "message";
 
 
 

@@ -79,6 +79,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
         SharedPreferencesModule.initialise(this);
         if (!SharedPreferencesModule.getToken().equals("")) {
             Intent myIntent = new Intent(SignInUp.this, DealActivity.class);
+            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             SignInUp.this.startActivity(myIntent);
         }
 
@@ -234,7 +235,8 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                 SharedPreferencesModule.initialise(this);
                 SharedPreferencesModule.setToken(token);
 
-                Intent myIntent = new Intent(SignInUp.this, BusinessFilterResearch.class);
+                Intent myIntent = new Intent(SignInUp.this, DealActivity.class);
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 SignInUp.this.startActivity(myIntent);
             } else {
                 Log.d("Facebook", "Inscription");
@@ -242,14 +244,18 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
                 //TODO Ask for return code and perform else if
                 String code_retour = "";
+                String message = "";
                 try {
                     code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
+                    message = jsonResult.getJson().getString(QuickstartPreferences.TAG_MESSAGE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 // Inscription facebook
                 if (code_retour.equals("401") && (isFbConnection)) {
+
+                    Log.d("Error message", message);
 
                     isFbConnection = false;
 
@@ -265,6 +271,8 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
                     SignInUp.this.startActivity(myIntent);
 
+                } else {
+                    Log.d("Error", message);
                 }
 
             }
