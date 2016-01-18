@@ -63,7 +63,7 @@ public class JsonHTTP {
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = input.readLine()) != null) {
-                sb.append(line);
+                sb.append(line + "n");
                 Log.d("Result HTTP", line);
             }
             json = sb.toString();
