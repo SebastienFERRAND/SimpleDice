@@ -81,6 +81,8 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
             } else if (intent.getStringExtra(QuickstartPreferences.TAG_GENDER).equals("female")) {
                 ((RadioButton) genderRg.getChildAt(1)).setChecked(true);
             }
+        } else {
+            ((RadioButton) genderRg.getChildAt(0)).setChecked(true);
         }
     }
 
@@ -134,6 +136,8 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
                         bodyAuth.put(QuickstartPreferences.TAG_EMAIL, email.getText().toString());
                         bodyAuth.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
                         bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday.getText().toString(), "dd/MM/yyyy", "yyyy-MM-dd hh:mm:ss"));
+                        Log.d("body sub", QuickstartPreferences.convertToDateFormat(birthday.getText().toString(), "dd/MM/yyyy", "yyyy-MM-dd hh:mm:ss"));
+                        Log.d("body sub convert", birthday.getText().toString());
                         bodyAuth.put(QuickstartPreferences.TAG_GENDER, radioToValue());
                         parent.put("register", bodyAuth);
                     } catch (JSONException e) {
@@ -184,8 +188,8 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     @Override
     public void getDateSpinner() {
 
-        birthday.setText(dateFragment.getDate() + " " +
-                QuickstartPreferences.getMonth(dateFragment.getMonth()) + " " + dateFragment.getYear());
+        birthday.setText(dateFragment.getDate() + "/" +
+                dateFragment.getMonth() + "/" + dateFragment.getYear());
     }
 
     public void showDatePicker(View v){
