@@ -12,8 +12,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Map;
 
+
+/* DEPRECATED */
 public class JsonHTTP {
 
     static InputStream is = null;
@@ -34,13 +36,10 @@ public class JsonHTTP {
             HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
             httpconn.setRequestMethod(method);
 
-            Iterator<String> keySetIterator = headers.keySet().iterator();
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                httpconn.setRequestProperty(entry.getKey(), entry.getValue());
 
-            while (keySetIterator.hasNext()) {
-                String key = keySetIterator.next();
-                httpconn.setRequestProperty(key, headers.get(key));
-
-                Log.d("Header", key + " " + headers.get(key));
+                Log.d("Header", entry.getKey() + " " + entry.getValue());
             }
 
             if (jsonBody != null) {

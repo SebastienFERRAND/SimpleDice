@@ -27,27 +27,24 @@ import java.util.HashMap;
 public class SubscribeActivity extends AppCompatActivity implements GetJsonListener, GetDateSpinnerListener {
 
 
+    public static final int MALE = 0;
+    public static final int FEMALE = 1;
     private EditText lastName;
     private EditText firstName;
     private EditText email;
     private EditText password;
     private EditText passwordRepeat;
     private TextView birthday;
-
     private Button subscribe;
-
     private GetJsonResult jsonResult;
     private GetJsonListener jsonListener;
-
     private Activity act;
-
     private RadioGroup genderRg;
     private RadioButton genderSelected;
-
     private View.OnClickListener subscribeClick;
-
     private FragmentDatePickerDialog dateFragment;
     private GetDateSpinnerListener datePickerListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,12 +74,13 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
 
 
             if (intent.getStringExtra(QuickstartPreferences.TAG_GENDER).equals("male")) {
-                ((RadioButton) genderRg.getChildAt(0)).setChecked(true);
+                ((RadioButton) genderRg.getChildAt(MALE)).setChecked(true);
             } else if (intent.getStringExtra(QuickstartPreferences.TAG_GENDER).equals("female")) {
-                ((RadioButton) genderRg.getChildAt(1)).setChecked(true);
+                ((RadioButton) genderRg.getChildAt(FEMALE)).setChecked(true);
             }
         } else {
-            ((RadioButton) genderRg.getChildAt(0)).setChecked(true);
+            // Set male by default
+            ((RadioButton) genderRg.getChildAt(MALE)).setChecked(true);
         }
     }
 
@@ -160,10 +158,8 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
         Log.d("JSON", jsonResult.getJson().toString());
 
         String code_retour = "";
-        String message = "";
         try {
             code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
-            message = jsonResult.getJson().getString(QuickstartPreferences.TAG_MESSAGE);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -172,8 +168,6 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
             Intent myIntent = new Intent(SubscribeActivity.this, DealActivity.class);
             myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             SubscribeActivity.this.startActivity(myIntent);
-        } else {
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
 
 

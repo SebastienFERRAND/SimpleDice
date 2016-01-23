@@ -5,9 +5,16 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +22,8 @@ import java.util.Map;
 
 /**
  * Created by sebastienferrand on 12/2/15.
+ * This class is to send a request in POST or get Asynchronously to the server
+ * By passing header and body
  */
 
 public class GetJsonResult extends AsyncTask<String, String, JSONObject>
@@ -25,10 +34,11 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
     private HashMap<String, String> listHeaders;
     private String url;
     private String method;
+    private String resultJSON;
     private JSONObject json;
     private JSONObject bodyJson;
 
-    private List<GetJsonListener> listeners = new ArrayList<GetJsonListener>();
+    private List<GetJsonListener> listeners = new ArrayList<>();
 
     public void setParams(Context con, HashMap<String, String> listHeadersP, String urlP, String methodP, JSONObject body) {
         context = con;
@@ -40,7 +50,7 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
         method = methodP;
         bodyJson = body;
 
-        for(Map.Entry<String, String> entry : listHeadersP.entrySet()) {
+        for (Map.Entry<String, String> entry : listHeadersP.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
 
@@ -50,10 +60,6 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
             // In your case, an other loop.
         }
 
-    }
-
-    public JSONObject getJson() {
-        return json;
     }
 
     @Override
@@ -69,10 +75,8 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
     @Override
     protected JSONObject doInBackground(String... args) {
 
-        JsonHTTP jParser = new JsonHTTP();
-
         // Getting JSON from URL
-        JSONObject json = jParser.getJSONFromUrl(QuickstartPreferences.URL_SERV + url, listHeaders, method, bodyJson);
+        json = this.getJSONFromUrl(QuickstartPreferences.URL_SERV + url, listHeaders, method, bodyJson);
 
         return json;
     }
@@ -82,18 +86,88 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
         pDialog.dismiss();
         Log.d("JSON", "get return " + jsonP.toString());
         // Getting JSON Array from URL
-        if (jsonP != null) {
-            json = jsonP;
-            for (GetJsonListener hl : listeners)
-                hl.getJsonObject();
-        } else {
-            json = null;
-            Log.d("JSON", "Null");
+        json = jsonP;
+        for (GetJsonListener hl : listeners) {
+            hl.getJsonObject();
         }
 
+        String code_retour = "";
+        String message = "";
+        try {
+            code_retour = json.getString(QuickstartPreferences.TAG_HTTPCODE);
+            message = json.getString(QuickstartPreferences.TAG_MESSAGE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Erreur
+        if (!code_retour.equals("200")) {
+            Toast.makeText(context, "Erreur : " + message, Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public JSONObject getJSONFromUrl(String urlString, HashMap<String, String> headers, String method, JSONObject jsonBody) {
+
+        // Making HTTP request
+        try {
+
+            URL url = new URL(urlString);
+            HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
+            httpconn.setRequestMethod(method);
+
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                httpconn.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+
+            if (jsonBody != null) {
+                OutputStream os = httpconn.getOutputStream();
+                os.write(jsonBody.toString().getBytes("UTF-8"));
+                os.close();
+
+                Log.d("Body", "Body : " + jsonBody.toString());
+            }
+
+            BufferedReader input;
+
+            // Faire un switch case
+            if (httpconn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                input = new BufferedReader(new InputStreamReader(httpconn.getInputStream()), 8192);
+            } else {
+                input = new BufferedReader(new InputStreamReader(httpconn.getErrorStream()), 8192);
+            }
+
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = input.readLine()) != null) {
+                sb.append(line + "n");
+                Log.d("Result HTTP", line);
+            }
+            resultJSON = sb.toString();
+
+
+        } catch (Exception e) {
+            Log.e("Error", "Error converting result " + e.toString());
+        }
+
+        // try parse the string to a JSON object
+        try {
+            json = new JSONObject(resultJSON);
+        } catch (JSONException e) {
+            Log.e("Error", "Error parsing data " + e.toString());
+        }
+        // return JSON String
+        return json;
     }
 
     public void addListener(GetJsonListener toAdd) {
         listeners.add(toAdd);
     }
+
+
+    // Method to call when Post execute is done
+    public JSONObject getJson() {
+        return json;
+    }
+
 }
