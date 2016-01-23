@@ -44,6 +44,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     private View.OnClickListener subscribeClick;
     private FragmentDatePickerDialog dateFragment;
     private GetDateSpinnerListener datePickerListener;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +60,10 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     }
 
     private void setValues() {
-        Intent intent = this.getIntent();
+        intent = this.getIntent();
 
         // If facebook sub, no password needed.
         if (intent.getStringExtra(QuickstartPreferences.TAG_LASTNAME) != null) {
-//            password.setVisibility(View.GONE);
-//            passwordRepeat.setVisibility(View.GONE);
 
             // Pre-setting of user data from facebook
             lastName.setText(intent.getStringExtra(QuickstartPreferences.TAG_LASTNAME));
@@ -118,6 +117,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
                     // TODO Remove Lat and Long from this query
                     headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
                     headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
+                    headerList.put(QuickstartPreferences.TAG_TOKENFB, intent.getStringExtra(QuickstartPreferences.TAG_TOKENFB));
 
                     JSONObject bodyAuth = new JSONObject();
                     JSONObject parent = new JSONObject();
@@ -137,6 +137,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
                         Log.d("body sub", QuickstartPreferences.convertToDateFormat(birthday.getText().toString(), "dd/MM/yyyy", "yyyy-MM-dd hh:mm:ss"));
                         Log.d("body sub convert", birthday.getText().toString());
                         bodyAuth.put(QuickstartPreferences.TAG_GENDER, radioToValue());
+                        bodyAuth.put(QuickstartPreferences.TAG_FBUID, intent.getStringExtra(QuickstartPreferences.TAG_FBUID));
                         parent.put("register", bodyAuth);
                     } catch (JSONException e) {
                         e.printStackTrace();

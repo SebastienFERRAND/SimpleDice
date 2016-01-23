@@ -84,11 +84,15 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
     @Override
     protected void onPostExecute(JSONObject jsonP) {
         pDialog.dismiss();
-        Log.d("JSON", "get return " + jsonP.toString());
-        // Getting JSON Array from URL
-        json = jsonP;
-        for (GetJsonListener hl : listeners) {
-            hl.getJsonObject();
+        try {
+            Log.d("JSON", "get return " + jsonP.toString());
+            // Getting JSON Array from URL
+            json = jsonP;
+            for (GetJsonListener hl : listeners) {
+                hl.getJsonObject();
+            }
+        } catch (Exception e) {
+            e.getMessage();
         }
 
         String code_retour = "";
@@ -96,7 +100,7 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
         try {
             code_retour = json.getString(QuickstartPreferences.TAG_HTTPCODE);
             message = json.getString(QuickstartPreferences.TAG_MESSAGE);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
