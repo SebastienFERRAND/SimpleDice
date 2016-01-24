@@ -326,6 +326,9 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
     protected void onResume() {
         super.onResume();
 
+        //Initializing google token
+        SharedPreferencesModule.getGCMToken();
+
         // Logs 'install' and 'app activate' App Events.
         AppEventsLogger.activateApp(this);
     }
