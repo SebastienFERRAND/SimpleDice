@@ -87,9 +87,10 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
         setContentView(R.layout.activity_sign_in_up);
 
+        callbackManager = CallbackManager.Factory.create();
+
         findViewsById();
 
-        callbackManager = CallbackManager.Factory.create();
 
         AccessToken token = AccessToken.getCurrentAccessToken();
         if (token != null) {
@@ -201,9 +202,15 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        Log.d("LoginActivity", "Activity result " + requestCode + resultCode + data.toString());
+        // GCM Token result
+        if (data != null) {
+            super.onActivityResult(requestCode, resultCode, data);
+            //Call the facebook activity result
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+            Log.d("LoginActivity", "Activity result " + requestCode + resultCode + data.toString());
+        } else {
+            Log.d("GCM", "Data is null");
+        }
 
     }
 
@@ -340,5 +347,6 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
         // Logs 'app deactivate' App Event.
         AppEventsLogger.deactivateApp(this);
     }
+
 
 }

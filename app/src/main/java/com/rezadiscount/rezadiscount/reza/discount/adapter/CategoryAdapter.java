@@ -1,5 +1,6 @@
 package com.rezadiscount.rezadiscount.reza.discount.adapter;
 
+import android.content.ClipData;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 .inflate(R.layout.card_view, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
+
         return new ViewHolder((LinearLayout) v);
     }
 
@@ -44,6 +46,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mTextView.setText(mDataset.get(position).get(QuickstartPreferences.TAG_NAME));
+        //holder.currentItem = items.get(position);
+
         Log.d("CardView Text", "DataSet " + mDataset.get(position).get(QuickstartPreferences.TAG_NAME));
 
     }
@@ -62,10 +66,26 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         public ImageView imageView;
         public TextView mTextView;
 
+        public String id;
+        public String label;
+        public String distance;
+        public String picture;
+        public String adress;
+
+        public ClipData.Item currentItem;
+
         public ViewHolder(LinearLayout v) {
             super(v);
             imageView = (ImageView) v.findViewById(R.id.image);
             mTextView = (TextView) v.findViewById(R.id.info_text);
+
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("Click", "Clicked object " + getAdapterPosition());
+                }
+            });
         }
     }
 }
