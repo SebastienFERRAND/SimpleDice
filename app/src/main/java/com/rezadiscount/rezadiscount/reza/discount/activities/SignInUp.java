@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -46,6 +47,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
     private EditText connexionField;
     private EditText passwordField;
     private LoginButton loginButton;
+    private TextView errorTv;
 
     private JSONObject jsonConnexionOrResult = null;
     private Context context;
@@ -166,14 +168,16 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                     @Override
                     public void onCancel() {
                         // App code
-                        Log.d("Facebook", "Cancel");
+                        Log.d("Facebook", "Cancel ");
+                        errorTv.setText(activity.getResources().getString(R.string.facebook_error));
 
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         // App code
-                        Log.d("Facebook", "Error" + exception.getMessage());
+                        Log.d("Facebook", "Error " + exception.getMessage());
+                        errorTv.setText(activity.getResources().getString(R.string.facebook_error));
 
                     }
                 });
@@ -230,7 +234,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
             //Connexion
             if (jsonConnexionOrResult != null) {
-                Log.d("Facebook", "Connec");
+                Log.d("Connection", "Connecting...");
 
                 String token = null;
                 try {
@@ -246,8 +250,8 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 SignInUp.this.startActivity(myIntent);
             } else {
-                Log.d("Facebook", "Inscription");
-                // Subscription
+                Log.d("Connection", "Failed connecting");
+                // Failed to connect (Can't find the result tag)
 
                 //TODO Ask for return code and perform else if
                 String code_retour = "";
@@ -259,28 +263,33 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                     e.printStackTrace();
                 }
 
-                // Inscription facebook
-                if (code_retour.equals("401") && (isFbConnection)) {
 
-                    Log.d("Error message", message);
+                // Return code connection failure
+                if (code_retour.equals("401")) {
+                    // Inscription facebook
+                    if (isFbConnection) {
 
-                    isFbConnection = false;
+                        Log.d("Error message", message);
 
-                    Intent myIntent = new Intent(SignInUp.this, SubscribeActivity.class);
+                        isFbConnection = false;
 
-                    myIntent.putExtra(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday, "MM/dd/yyyy", "yyyy-MM-dd hh:mm:ss"));
-                    myIntent.putExtra(QuickstartPreferences.TAG_LASTNAME, lastName);
-                    myIntent.putExtra(QuickstartPreferences.TAG_FIRSTNAME, firstName);
-                    myIntent.putExtra(QuickstartPreferences.TAG_EMAIL, email);
-                    myIntent.putExtra(QuickstartPreferences.TAG_GENDER, genderSelected);
-                    myIntent.putExtra(QuickstartPreferences.TAG_FBUID, id);
-                    myIntent.putExtra(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
+                        Intent myIntent = new Intent(SignInUp.this, SubscribeActivity.class);
 
-                    SignInUp.this.startActivity(myIntent);
+                        myIntent.putExtra(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday, "MM/dd/yyyy", "yyyy-MM-dd hh:mm:ss"));
+                        myIntent.putExtra(QuickstartPreferences.TAG_LASTNAME, lastName);
+                        myIntent.putExtra(QuickstartPreferences.TAG_FIRSTNAME, firstName);
+                        myIntent.putExtra(QuickstartPreferences.TAG_EMAIL, email);
+                        myIntent.putExtra(QuickstartPreferences.TAG_GENDER, genderSelected);
+                        myIntent.putExtra(QuickstartPreferences.TAG_FBUID, id);
+                        myIntent.putExtra(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
 
-                } else {
-                    Log.d("Error", message);
+                        SignInUp.this.startActivity(myIntent);
+
+                    } else {
+                        errorTv.setText(activity.getResources().getString(R.string.connexion_problem));
+                    }
                 }
+
 
             }
         }
@@ -295,6 +304,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
         register = (Button) findViewById(R.id.inscription);
         connexionField = (EditText) findViewById(R.id.email_field);
         passwordField = (EditText) findViewById(R.id.passwd_field);
+        errorTv = (TextView) findViewById(R.id.error);
         activity = this;
 
         subscribeAction = new View.OnClickListener() {

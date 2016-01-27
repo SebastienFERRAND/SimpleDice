@@ -56,4 +56,6 @@
     <string name="password_repeat">Répéter mot de passe</string>
     <string name="password_problem_match">Les mots de passe ne correspondent pas</string>
     <string name="password_problem_empty">Le mot de passe ne peut pas être vide</string>
+    <string name="facebook_error">There was a Facebook error. Please try again later</string>
+    <string name="connexion_problem">Connection problem. Your login/password doesn\'t match.</string>
 </resources>

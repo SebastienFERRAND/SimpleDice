@@ -62,6 +62,8 @@
     <string name="password_repeat">Repeat password</string>
     <string name="password_problem_match">Passwords won\'t match</string>
     <string name="password_problem_empty">Password can\'t be empty</string>
+    <string name="facebook_error">There was a Facebook error. Please try again later</string>
+    <string name="connexion_problem">Connection problem. Your login/password doesn\'t match.</string>
 
 
 </resources>
