@@ -64,7 +64,7 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
         loc.initialise(getActivity());
         loc.addListener(this);
 
-        View rootView = inflater.inflate(R.layout.find_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_category, container, false);
 
         //Create the list of Deals
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
@@ -95,34 +95,20 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
 
                 // Storing  JSON item in a Variable
                 String idS = c.getString(QuickstartPreferences.TAG_ID);
-                String labelS = c.getString(QuickstartPreferences.TAG_NAME);
+                String nameS = c.getString(QuickstartPreferences.TAG_NAME);
 
                 // Adding value HashMap key => value
 
                 HashMap<String, String> map = new HashMap<>();
 
                 map.put(QuickstartPreferences.TAG_ID, idS);
-                map.put(QuickstartPreferences.TAG_NAME, labelS);
+                map.put(QuickstartPreferences.TAG_NAME, nameS);
 
                 shopList.add(map);
 
-
-                /*mRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                                            int position, long id) {
-                        Intent myIntent = new Intent(getActivity(), BusinessResults.class);
-
-                        myIntent.putExtra(QuickstartPreferences.TAG_ID, shopList.get(position).get(QuickstartPreferences.TAG_ID));
-
-                        getActivity().startActivity(myIntent);
-                    }
-                });*/
-
             }
 
-            mAdapter = new CategoryAdapter(shopList);
+            mAdapter = new CategoryAdapter(shopList, getActivity());
             mRecyclerView.setAdapter(mAdapter);
 
 

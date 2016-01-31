@@ -37,7 +37,7 @@ public class FavoriteShopsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.find_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_category, container, false);
 
         dealList = new ArrayList<>();
 

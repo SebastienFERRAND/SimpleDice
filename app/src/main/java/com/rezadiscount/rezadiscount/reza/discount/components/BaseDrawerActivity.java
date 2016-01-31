@@ -52,25 +52,21 @@ public class BaseDrawerActivity extends AppCompatActivity implements NavigationV
 
         if (id == R.id.deal) {
             Intent myIntent = new Intent(BaseDrawerActivity.this, DealActivity.class);
-            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             BaseDrawerActivity.this.startActivity(myIntent);
         } else if (id == R.id.find) {
             Intent myIntent = new Intent(BaseDrawerActivity.this, FindActivity.class);
-            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             BaseDrawerActivity.this.startActivity(myIntent);
-
         } else if (id == R.id.agenda) {
             Intent myIntent = new Intent(BaseDrawerActivity.this, BusinessFilterResearch.class);
-            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             BaseDrawerActivity.this.startActivity(myIntent);
-
-        } else if (id == R.id.deconnection) {
-
+        } else if (id == R.id.logout) {
             LoginManager.getInstance().logOut();
             SharedPreferencesModule.setToken("");
             Intent myIntent = new Intent(this, SignInUp.class);
             this.startActivity(myIntent);
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -1,6 +1,8 @@
 package com.rezadiscount.rezadiscount.reza.discount.adapter;
 
 import android.content.ClipData;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.activities.BusinessResults;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 
 import java.util.ArrayList;
@@ -21,9 +24,11 @@ import java.util.HashMap;
  */
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private ArrayList<HashMap<String, String>> mDataset;
+    private Context act;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public CategoryAdapter(ArrayList<HashMap<String, String>> myDataset) {
+    public CategoryAdapter(ArrayList<HashMap<String, String>> myDataset, Context actP) {
+        act = actP;
         mDataset = myDataset;
     }
 
@@ -46,6 +51,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mTextView.setText(mDataset.get(position).get(QuickstartPreferences.TAG_NAME));
+        String id = mDataset.get(position).get(QuickstartPreferences.TAG_ID);
+        holder.setItem(id);
         //holder.currentItem = items.get(position);
 
         Log.d("CardView Text", "DataSet " + mDataset.get(position).get(QuickstartPreferences.TAG_NAME));
@@ -61,17 +68,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public ImageView imageView;
         public TextView mTextView;
 
-        public String id;
-        public String label;
-        public String distance;
-        public String picture;
-        public String adress;
-
+        public String mId;
+        public String mName;
         public ClipData.Item currentItem;
 
         public ViewHolder(LinearLayout v) {
@@ -79,13 +82,24 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             imageView = (ImageView) v.findViewById(R.id.image);
             mTextView = (TextView) v.findViewById(R.id.info_text);
 
-
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("Click", "Clicked object " + getAdapterPosition());
+
+                    Intent myIntent = new Intent(act, BusinessResults.class);
+
+                    myIntent.putExtra(QuickstartPreferences.TAG_ID, mId);
+
+                    act.startActivity(myIntent);
+
+                    Log.d("Click", "Id  " + mId);
                 }
             });
+        }
+
+
+        public void setItem(String id) {
+            mId = id;
         }
     }
 }
