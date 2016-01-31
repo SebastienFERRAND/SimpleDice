@@ -20,9 +20,9 @@
             android:title="@string/agenda" />
 
         <item
-            android:id="@+id/settings"
+            android:id="@+id/deconnection"
             android:icon="@drawable/ic_settings_black_24dp"
-            android:title="@string/settings" />
+            android:title="@string/deconnection" />
 
     </group>
 

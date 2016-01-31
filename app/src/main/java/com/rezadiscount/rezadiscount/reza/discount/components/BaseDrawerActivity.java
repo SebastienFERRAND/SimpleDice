@@ -10,11 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.facebook.login.LoginManager;
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.activities.BusinessFilterResearch;
 import com.rezadiscount.rezadiscount.reza.discount.activities.DealActivity;
 import com.rezadiscount.rezadiscount.reza.discount.activities.FindActivity;
-import com.rezadiscount.rezadiscount.reza.discount.activities.SettingsActivity;
+import com.rezadiscount.rezadiscount.reza.discount.activities.SignInUp;
+import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
 public class BaseDrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -62,10 +64,12 @@ public class BaseDrawerActivity extends AppCompatActivity implements NavigationV
             myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             BaseDrawerActivity.this.startActivity(myIntent);
 
-        } else if (id == R.id.settings) {
-            Intent myIntent = new Intent(BaseDrawerActivity.this, SettingsActivity.class);
-            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            BaseDrawerActivity.this.startActivity(myIntent);
+        } else if (id == R.id.deconnection) {
+
+            LoginManager.getInstance().logOut();
+            SharedPreferencesModule.setToken("");
+            Intent myIntent = new Intent(this, SignInUp.class);
+            this.startActivity(myIntent);
 
         }
 
