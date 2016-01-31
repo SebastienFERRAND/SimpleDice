@@ -1,6 +1,7 @@
 package com.rezadiscount.rezadiscount.reza.discount.utilities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,13 +24,13 @@ import java.util.List;
 
 /**
  * Created by sebastienferrand on 11/29/15.
+ * Location tool to get long and lat
  */
 public class LocationUtility implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 
-    private String[] latlong;
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private boolean isUrlRequested = false;
@@ -38,9 +39,27 @@ public class LocationUtility implements
     private double longitude;
 
     private Activity activity;
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    //Yes button clicked
 
-    private List<GetLocationListener> listeners = new ArrayList<GetLocationListener>();
+                    Intent callGPSSettingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    activity.startActivity(callGPSSettingIntent);
 
+                    mGoogleApiClient.connect();
+
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    //No button clicked
+                    break;
+            }
+        }
+    };
+    private List<GetLocationListener> listeners = new ArrayList<>();
 
     public void initialise(Activity act) {
 
@@ -55,8 +74,10 @@ public class LocationUtility implements
 
     public void connectMapAPI() {
         if (!checkGPSEnabled()) {
+            Log.d("GPS", "GPS not enabled");
             showMessageActivateGPS();
         } else {
+            Log.d("GPS", "GPS enabled");
             mGoogleApiClient.connect();
         }
     }
@@ -72,7 +93,6 @@ public class LocationUtility implements
 
         return latlong;
     }
-
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -110,34 +130,9 @@ public class LocationUtility implements
 
     public boolean checkGPSEnabled() {
 
-        LocationManager locationManager = (LocationManager) activity.getSystemService(activity.LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            return true;
-        } else {
-            return false;
-        }
+        LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
-
-    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            switch (which) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    //Yes button clicked
-
-                    Intent callGPSSettingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    activity.startActivity(callGPSSettingIntent);
-
-                    mGoogleApiClient.connect();
-
-                    break;
-
-                case DialogInterface.BUTTON_NEGATIVE:
-                    //No button clicked
-                    break;
-            }
-        }
-    };
 
     public void showMessageActivateGPS() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);

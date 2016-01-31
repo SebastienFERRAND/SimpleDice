@@ -3,7 +3,6 @@ package com.rezadiscount.rezadiscount.reza.discount.activities;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -151,9 +150,10 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("GPS", "Permission granted");
                     loc.connectMapAPI();
                 } else {
-                    Log.e("Permission error", "Missing permission authorization");
+                    Log.d("GPS", "Permission not granted");
                 }
             }
 
@@ -169,6 +169,9 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
 
         latitude = latlong[0];
         longitude = latlong[1];
+
+        Log.d("Long", latitude);
+        Log.d("Lat", longitude);
 
         HashMap<String, String> headerList = new HashMap<>();
         headerList.put(QuickstartPreferences.TAG_LATITUDE, latitude);
@@ -187,9 +190,11 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
     public void onStart() {
         super.onStart();
         if (!loc.checkLocationPermission()) {
-            ActivityCompat.requestPermissions(getActivity(),
+            Log.d("GPS", "You have the Permission");
+            this.requestPermissions(
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         } else {
+            Log.d("GPS", "You don't have the Permission");
             loc.connectMapAPI();
         }
     }
