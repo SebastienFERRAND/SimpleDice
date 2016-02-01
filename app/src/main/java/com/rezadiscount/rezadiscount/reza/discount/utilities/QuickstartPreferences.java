@@ -55,27 +55,18 @@ public class QuickstartPreferences {
     public static final String TAG_GENDER = "gender";
     public static final String TAG_HTTPCODE = "httpCode";
     public static final String TAG_MESSAGE = "message";
-
-
-
-    /////// URL ///////
-    public static final String URL_SERV = "http://api.booking.touratier.fr/app_dev.php/";
+    public static final String URL_SERV_PREPROD = "http://api.preprod.appology.fr/app_dev.php/";
     public static final String URL_CAT = "category";
     public static final String URL_MERC = "merchant";
     public static final String URL_AUTH = "auth";
     public static final String URL_REG = "register";
-
-
-
-
     //////// METHODS ///////
     public static final String TAG_GET = "GET";
     public static final String TAG_POST = "POST";
-
     ////// TIME CONSTANTS //////
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-
+    /////// URL ///////
+    public static String URL_SERV_DEV = "http://api.booking.touratier.fr/app_dev.php/";
 
     public static String getMonth(int month) {
         return new DateFormatSymbols().getMonths()[month];

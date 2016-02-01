@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
@@ -306,6 +307,20 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
         passwordField = (EditText) findViewById(R.id.passwd_field);
         errorTv = (TextView) findViewById(R.id.error);
         activity = this;
+
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.url_rb);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.dev_rb) {
+                    Log.d("ID Radio", "0 dev");
+                    QuickstartPreferences.URL_SERV_DEV = "http://api.booking.touratier.fr/app_dev.php/";
+                } else if (checkedId == R.id.preprod_rb) {
+                    Log.d("ID Radio", "1 preprod");
+                    QuickstartPreferences.URL_SERV_DEV = "http://api.preprod.appology.fr/app_dev.php/";
+                }
+            }
+        });
 
         subscribeAction = new View.OnClickListener() {
             @Override

@@ -76,7 +76,7 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
     protected JSONObject doInBackground(String... args) {
 
         // Getting JSON from URL
-        json = this.getJSONFromUrl(QuickstartPreferences.URL_SERV + url, listHeaders, method, bodyJson);
+        json = this.getJSONFromUrl(QuickstartPreferences.URL_SERV_DEV + url, listHeaders, method, bodyJson);
 
         return json;
     }
@@ -158,7 +158,9 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
         try {
             json = new JSONObject(resultJSON);
         } catch (JSONException e) {
-            Log.e("Error", "Error parsing data " + e.toString());
+            Log.d("Error", "Error parsing data " + e.toString());
+        } catch (Exception e) {
+            Log.d("Error", "Unable to connect to the server. Do you have internet ?");
         }
         // return JSON String
         return json;
