@@ -43,6 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/passwd_field"
+        android:layout_marginTop="10dp"
         android:background="@color/com_facebook_blue"
         android:text="@string/connexion_button"
         android:textColor="@color/white"/>
@@ -52,15 +53,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/connexion"
+        android:layout_marginTop="10dp"
         android:background="@color/com_facebook_blue"
         android:text="@string/subscribe_button"
         android:textColor="@color/white"/>
+
+
+    <Button
+        android:id="@+id/password_forgotten"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/inscription"
+        android:layout_marginTop="10dp"
+        android:background="@color/com_facebook_blue"
+        android:text="@string/password_forgotten"
+        android:textColor="@color/white" />
+
 
     <TextView
         android:id="@+id/error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/inscription" />
+        android:layout_below="@+id/password_forgotten" />
 
 
     <RadioGroup

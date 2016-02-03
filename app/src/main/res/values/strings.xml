@@ -65,6 +65,8 @@
     <string name="facebook_error">There was a Facebook error. Please try again later</string>
     <string name="connexion_problem">Connection problem. Your login/password doesn\'t match</string>
     <string name="logout">Logout</string>
+    <string name="password_forgotten">Password forgotten ?</string>
+    <string name="reset_password">Reset password</string>
 
 
 </resources>

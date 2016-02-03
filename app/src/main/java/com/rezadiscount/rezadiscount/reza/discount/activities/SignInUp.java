@@ -45,6 +45,8 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
     private Button connexion;
     private Button register;
+    private Button passwordForgotten;
+
     private EditText connexionField;
     private EditText passwordField;
     private LoginButton loginButton;
@@ -303,10 +305,19 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
         loginButton = (LoginButton) findViewById(R.id.login_button);
         connexion = (Button) findViewById(R.id.connexion);
         register = (Button) findViewById(R.id.inscription);
+        passwordForgotten = (Button) findViewById(R.id.password_forgotten);
         connexionField = (EditText) findViewById(R.id.email_field);
         passwordField = (EditText) findViewById(R.id.passwd_field);
         errorTv = (TextView) findViewById(R.id.error);
         activity = this;
+
+        passwordForgotten.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(SignInUp.this, PasswordActivity.class);
+                SignInUp.this.startActivity(myIntent);
+            }
+        });
 
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.url_rb);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

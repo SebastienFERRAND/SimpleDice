@@ -59,4 +59,6 @@
     <string name="facebook_error">Une erreur Facebook s\'est produite. Veuillez réessayer plus tard</string>
     <string name="connexion_problem">Problème de connexion. Le login/mot de passe ne correspondent pas</string>
     <string name="logout">Déconnexion</string>
+    <string name="password_forgotten">Mot de passe oublié ?</string>
+    <string name="reset_password">Réinitialiser le mot de passe</string>
 </resources>

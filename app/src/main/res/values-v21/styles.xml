@@ -20,15 +20,16 @@
         <item name="android:datePickerStyle">@style/MyDatePicker</item>
 
         <!--   your app branding color for the app bar -->
-        <item name="android:colorPrimary">@color/blue</item>
+        <!--   <item name="android:colorPrimary"></item> -->
         <!--   darker variant for the status bar and contextual app bars -->
-        <item name="android:colorPrimaryDark">@color/com_facebook_blue</item>
+        <item name="android:colorPrimaryDark">@color/com_facebook_button_background_color_pressed
+        </item>
         <!--   theme UI controls like checkboxes and text fields -->
-        <item name="android:colorAccent">@color/darkblue</item>
+        <item name="android:colorAccent">@color/com_facebook_blue</item>
     </style>
 
     <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar.Solid">
-        <item name="background">@color/blue</item>
+        <item name="background">@color/com_facebook_blue</item>
         <item name="titleTextStyle">@style/MyTitleTextStyle</item>
     </style>
 
