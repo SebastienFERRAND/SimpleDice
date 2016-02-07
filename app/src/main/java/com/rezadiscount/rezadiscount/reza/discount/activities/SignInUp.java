@@ -133,6 +133,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                                             Log.d("Facebook", "birthday: " + object.optString("birthday", null));
                                             Log.d("Facebook", "genderSelected: " + object.getString("gender"));
 
+
                                             id = object.getString("id");
                                             lastName = object.getString("last_name");
                                             firstName = object.getString("first_name");
@@ -142,20 +143,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                                             birthday = object.optString("birthday", null);
                                             genderSelected = object.getString("gender");
 
-                                            HashMap<String, String> headerList = new HashMap<>();
-                                            headerList.put(QuickstartPreferences.TAG_FBUID, id);
-                                            headerList.put(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
-                                            // TODO Remove Lat and Long from this query
-                                            headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
-                                            headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
-                                            SharedPreferencesModule.initialise(activity);
-                                            headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
-                                            headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
-
-                                            jsonResult = new GetJsonResult();
-                                            jsonResult.setParams(context, headerList, QuickstartPreferences.URL_AUTH, QuickstartPreferences.TAG_GET, null);
-                                            jsonResult.addListener(jsonListener);
-                                            jsonResult.execute();
+                                            connectWithFacebook();
 
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -226,53 +214,81 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
         if (jsonResult != null) {
 
-            // Connexion
+            String code_retour = null;
+            JSONObject jsonConnexionOrResult = null;
+            // If subscription
             try {
-                // If result is a connection
-                jsonConnexionOrResult = jsonResult.getJson().getJSONObject(QuickstartPreferences.TAG_RESULT);
-
+                code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            //Connexion
-            if (jsonConnexionOrResult != null) {
-                Log.d("Connection", "Connecting...");
+            // Connexion
+            if (code_retour == null) {
 
-                String token = null;
+                Log.d("Facebook", "Connecting");
                 try {
-                    token = jsonConnexionOrResult.getString(QuickstartPreferences.TAG_TOKEN);
+                    // If result is a connection
+                    jsonConnexionOrResult = jsonResult.getJson().getJSONObject(QuickstartPreferences.TAG_RESULT);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                SharedPreferencesModule.initialise(this);
-                SharedPreferencesModule.setToken(token);
+                //Connexion successful
+                if (jsonConnexionOrResult != null) {
+                    Log.d("Connection", "Connecting...");
 
-                Intent myIntent = new Intent(SignInUp.this, DealActivity.class);
-                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                SignInUp.this.startActivity(myIntent);
-            } else {
-                Log.d("Connection", "Failed connecting");
-                // Failed to connect (Can't find the result tag)
 
-                //TODO Ask for return code and perform else if
-                String code_retour = "";
-                String message = "";
-                try {
-                    code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
-                    message = jsonResult.getJson().getString(QuickstartPreferences.TAG_MESSAGE);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    String token = null;
+                    try {
+                        token = jsonConnexionOrResult.getString(QuickstartPreferences.TAG_TOKEN);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    SharedPreferencesModule.initialise(this);
+                    SharedPreferencesModule.setToken(token);
+
+                    Intent myIntent = new Intent(SignInUp.this, DealActivity.class);
+                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    SignInUp.this.startActivity(myIntent);
+                } else {
+                    Log.d("Connection", "Failed connecting");
+                    // Failed to connect (Can't find the result tag)
+
+                    //TODO Ask for return code and perform else if
+                    String message = "";
+                    try {
+                        code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
+                        message = jsonResult.getJson().getString(QuickstartPreferences.TAG_MESSAGE);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 }
+            }
 
+            // if Signing in with facebook result
+            if (code_retour.equals("200")) {
+                // Connect
+                connectWithFacebook();
 
-                // Return code connection failure
-                if (code_retour.equals("401")) {
-                    // Inscription facebook
-                    if (isFbConnection) {
+            } else if (code_retour.equals("401")) { // Return code connection failure
 
-                        Log.d("Error message", message);
+                Log.d("Facebook", "Fail connection");
+
+                // Inscription facebook
+                if (isFbConnection) {
+
+                    Log.d("Facebook", "Facebook connect");
+
+                    if ((lastName == null) ||
+                            (firstName == null) ||
+                            (email == null) ||
+                            (birthday == null) ||
+                            (genderSelected == null)) { //if some info are missing then send him to Subscribe activity to complete it
+                        Log.d("Facebook", "Missing infos");
 
                         isFbConnection = false;
 
@@ -285,15 +301,50 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                         myIntent.putExtra(QuickstartPreferences.TAG_GENDER, genderSelected);
                         myIntent.putExtra(QuickstartPreferences.TAG_FBUID, id);
                         myIntent.putExtra(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
+                        myIntent.putExtra(QuickstartPreferences.TAG_ISFB, true);
 
                         SignInUp.this.startActivity(myIntent);
-
                     } else {
-                        errorTv.setText(activity.getResources().getString(R.string.connexion_problem));
+                        Log.d("Facebook", "All infos are available infos");
+                        //if we have all user info we need from facebook then send Subscribe request
+
+                        // Subscription
+                        HashMap<String, String> headerList = new HashMap<>();
+
+
+                        // TODO Remove Lat and Long from this query
+                        headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
+                        headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
+
+                        JSONObject bodyAuth = new JSONObject();
+                        JSONObject parent = new JSONObject();
+
+                        headerList.put(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
+
+                        try {
+                            bodyAuth.put(QuickstartPreferences.TAG_FBUID, id);
+                            bodyAuth.put(QuickstartPreferences.TAG_LASTNAME, lastName);
+                            bodyAuth.put(QuickstartPreferences.TAG_FIRSTNAME, firstName);
+                            bodyAuth.put(QuickstartPreferences.TAG_EMAIL, email);
+                            bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday, "MM/dd/yyyy", "yyyy-MM-dd hh:mm:ss"));
+                            Log.d("Birthday", birthday);
+                            bodyAuth.put(QuickstartPreferences.TAG_GENDER, genderSelected.substring(0, 1).toUpperCase());
+                            parent.put("register", bodyAuth);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                        jsonResult = new GetJsonResult();
+                        jsonResult.setParams(this, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
+                        jsonResult.addListener(jsonListener);
+                        jsonResult.execute();
+
                     }
+
+                } else {
+                    errorTv.setText(activity.getResources().getString(R.string.connexion_problem));
                 }
-
-
             }
         }
     }
@@ -341,6 +392,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
             }
         };
 
+        // Normal Authentication
         connectionAction = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -382,6 +434,26 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
         // Logs 'app deactivate' App Event.
         AppEventsLogger.deactivateApp(this);
+    }
+
+    private void connectWithFacebook() {
+
+        Log.d("Facebook", "Connecting with facebook");
+
+        HashMap<String, String> headerList = new HashMap<>();
+        headerList.put(QuickstartPreferences.TAG_FBUID, id);
+        headerList.put(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
+        // TODO Remove Lat and Long from this query
+        headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
+        headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
+        SharedPreferencesModule.initialise(activity);
+        headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
+        headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
+
+        jsonResult = new GetJsonResult();
+        jsonResult.setParams(context, headerList, QuickstartPreferences.URL_AUTH, QuickstartPreferences.TAG_GET, null);
+        jsonResult.addListener(jsonListener);
+        jsonResult.execute();
     }
 
 

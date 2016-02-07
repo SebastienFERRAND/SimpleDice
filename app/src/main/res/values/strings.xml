@@ -33,7 +33,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="book">Book</string>
-    <string name="facebook_app_id">1518479935118372</string>
+
+    <!-- RezaDiscount -->
+    <!--<string name="facebook_app_id">1518479935118372</string>-->
+    <!-- Weal -->
+    <string name="facebook_app_id">934436326647123</string>
+
 
     <string name="lastname">Last name</string>
     <string name="firstname">First name</string>
