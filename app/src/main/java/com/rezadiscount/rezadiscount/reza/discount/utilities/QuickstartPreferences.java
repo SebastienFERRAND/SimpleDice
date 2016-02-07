@@ -60,6 +60,7 @@ public class QuickstartPreferences {
     public static final String URL_MERC = "merchant";
     public static final String URL_AUTH = "auth";
     public static final String URL_REG = "register";
+    public static final String TAG_ISFB = "from_facebook";
     //////// METHODS ///////
     public static final String TAG_GET = "GET";
     public static final String TAG_POST = "POST";

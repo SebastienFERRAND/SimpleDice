@@ -21,27 +21,27 @@
 
     <EditText
         android:id="@+id/firstname"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/firstname" />
 
     <EditText
         android:id="@+id/email"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/email"
         android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/password"
         android:inputType="textPassword" />
 
     <EditText
         android:id="@+id/passwd_repeat"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/password_repeat"
         android:inputType="textPassword" />
@@ -49,7 +49,7 @@
     <TextView
         android:id="@+id/birthday"
         style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:hint="@string/birthday"
