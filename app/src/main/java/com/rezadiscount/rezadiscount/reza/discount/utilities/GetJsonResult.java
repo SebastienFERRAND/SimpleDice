@@ -100,13 +100,15 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
         try {
             code_retour = json.getString(QuickstartPreferences.TAG_HTTPCODE);
             message = json.getString(QuickstartPreferences.TAG_MESSAGE);
+
+            // Erreur
+            if (!code_retour.equals("200")) {
+                Toast.makeText(context, "Erreur : " + message, Toast.LENGTH_LONG).show();
+            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        // Erreur
-        if (!code_retour.equals("200")) {
-            Toast.makeText(context, "Erreur : " + message, Toast.LENGTH_LONG).show();
         }
 
     }
