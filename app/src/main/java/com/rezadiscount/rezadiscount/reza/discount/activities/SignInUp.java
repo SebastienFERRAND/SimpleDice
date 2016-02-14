@@ -25,6 +25,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.rezadiscount.rezadiscount.R;
@@ -60,8 +61,6 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
     private AccessToken tokenF;
 
-    private boolean isFbConnection;
-
     private String id;
     private String lastName;
     private String firstName;
@@ -73,6 +72,8 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
     private View.OnClickListener subscribeAction;
     private View.OnClickListener connectionAction;
+
+    private String source = "";
 
 
     @Override
@@ -87,6 +88,8 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
             myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             SignInUp.this.startActivity(myIntent);
         }
+
+        QuickstartPreferences.URL_SERV = QuickstartPreferences.URL_SERV_DEV;
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
@@ -124,7 +127,6 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                                             GraphResponse response) {
                                         // Application code
                                         try {
-                                            isFbConnection = true;
 
                                             Log.d("Facebook", "id: " + object.getString("id"));
                                             Log.d("Facebook", "lastName: " + object.getString("last_name"));
@@ -215,7 +217,6 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
         if (jsonResult != null) {
 
             String code_retour = null;
-            JSONObject jsonConnexionOrResult = null;
             // If subscription
             try {
                 code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
@@ -223,65 +224,29 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                 e.printStackTrace();
             }
 
-            // Connexion
-            if (code_retour == null) {
 
-                Log.d("Facebook", "Connecting");
-                try {
-                    // If result is a connection
-                    jsonConnexionOrResult = jsonResult.getJson().getJSONObject(QuickstartPreferences.TAG_RESULT);
+            if (source.equals(QuickstartPreferences.facebookConnexion)) {
+                Log.d("HTTP", "Connexion Facebook");
+                // if Success
+                if (code_retour.equals("200")) {
+                    Log.d("HTTP", "Connexion Facebook success");
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+//                    List<String> permissions = new ArrayList<>();
+//                    permissions.add("id");
+//                    permissions.add("first_name");
+//                    permissions.add("last_name");
+//                    permissions.add("email");
+//                    permissions.add("gender");
+//                    permissions.add("birthday");
+//
+//                    LoginManager.getInstance().logInWithPublishPermissions(this, permissions);
+                    getTokenAndLogin();
 
-                //Connexion successful
-                if (jsonConnexionOrResult != null) {
-                    Log.d("Connection", "Connecting...");
+                } else { // Failure facebook connexion
+                    Log.d("HTTP", "Connexion Facebook fail");
 
-
-                    String token = null;
-                    try {
-                        token = jsonConnexionOrResult.getString(QuickstartPreferences.TAG_TOKEN);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    SharedPreferencesModule.initialise(this);
-                    SharedPreferencesModule.setToken(token);
-
-                    Intent myIntent = new Intent(SignInUp.this, DealActivity.class);
-                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    SignInUp.this.startActivity(myIntent);
-                } else {
-                    Log.d("Connection", "Failed connecting");
-                    // Failed to connect (Can't find the result tag)
-
-                    //TODO Ask for return code and perform else if
-                    String message = "";
-                    try {
-                        code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
-                        message = jsonResult.getJson().getString(QuickstartPreferences.TAG_MESSAGE);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-
-            // if Signing in with facebook result
-            if (code_retour.equals("200")) {
-                // Connect
-                connectWithFacebook();
-
-            } else if (code_retour.equals("401")) { // Return code connection failure
-
-                Log.d("Facebook", "Fail connection");
-
-                // Inscription facebook
-                if (isFbConnection) {
-
-                    Log.d("Facebook", "Facebook connect");
+                    LoginManager.getInstance().logOut();
+                    SharedPreferencesModule.setToken("");
 
                     if ((lastName == null) ||
                             (firstName == null) ||
@@ -290,62 +255,28 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                             (genderSelected == null)) { //if some info are missing then send him to Subscribe activity to complete it
                         Log.d("Facebook", "Missing infos");
 
-                        isFbConnection = false;
-
-                        Intent myIntent = new Intent(SignInUp.this, SubscribeActivity.class);
-
-                        myIntent.putExtra(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday, "MM/dd/yyyy", "yyyy-MM-dd hh:mm:ss"));
-                        myIntent.putExtra(QuickstartPreferences.TAG_LASTNAME, lastName);
-                        myIntent.putExtra(QuickstartPreferences.TAG_FIRSTNAME, firstName);
-                        myIntent.putExtra(QuickstartPreferences.TAG_EMAIL, email);
-                        myIntent.putExtra(QuickstartPreferences.TAG_GENDER, genderSelected);
-                        myIntent.putExtra(QuickstartPreferences.TAG_FBUID, id);
-                        myIntent.putExtra(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
-                        myIntent.putExtra(QuickstartPreferences.TAG_ISFB, true);
-
-                        SignInUp.this.startActivity(myIntent);
+                        subscribeFacebookMissingInfo();
                     } else {
-                        Log.d("Facebook", "All infos are available infos");
-                        //if we have all user info we need from facebook then send Subscribe request
-
-                        // Subscription
-                        HashMap<String, String> headerList = new HashMap<>();
-
-
-                        // TODO Remove Lat and Long from this query
-                        headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
-                        headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
-
-                        JSONObject bodyAuth = new JSONObject();
-                        JSONObject parent = new JSONObject();
-
-                        headerList.put(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
-
-                        try {
-                            bodyAuth.put(QuickstartPreferences.TAG_FBUID, id);
-                            bodyAuth.put(QuickstartPreferences.TAG_LASTNAME, lastName);
-                            bodyAuth.put(QuickstartPreferences.TAG_FIRSTNAME, firstName);
-                            bodyAuth.put(QuickstartPreferences.TAG_EMAIL, email);
-                            bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday, "MM/dd/yyyy", "yyyy-MM-dd hh:mm:ss"));
-                            Log.d("Birthday", birthday);
-                            bodyAuth.put(QuickstartPreferences.TAG_GENDER, genderSelected.substring(0, 1).toUpperCase());
-                            parent.put("register", bodyAuth);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-
-                        jsonResult = new GetJsonResult();
-                        jsonResult.setParams(this, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
-                        jsonResult.addListener(jsonListener);
-                        jsonResult.execute();
-
+                        //Subscribe with facebook
+                        subscribeWithFacebook();
                     }
-
+                }
+            } else if (source.equals(QuickstartPreferences.normalConnexion)) {
+                Log.d("HTTP", "Connexion Normale");
+                // if Success
+                if (code_retour.equals("200")) {
+                    Log.d("HTTP", "Normal connexion success");
+                    getTokenAndLogin();
                 } else {
                     errorTv.setText(activity.getResources().getString(R.string.connexion_problem));
                 }
+
+            } else if (source.equals(QuickstartPreferences.facebookSubscription)) {
+                Log.d("HTTP", "Inscription Facebook");
+                connectWithFacebook();
             }
+
+            source = "";
         }
     }
 
@@ -376,10 +307,10 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.dev_rb) {
                     Log.d("ID Radio", "0 dev");
-                    QuickstartPreferences.URL_SERV_DEV = "http://api.booking.touratier.fr/app_dev.php/";
+                    QuickstartPreferences.URL_SERV = QuickstartPreferences.URL_SERV_DEV;
                 } else if (checkedId == R.id.preprod_rb) {
                     Log.d("ID Radio", "1 preprod");
-                    QuickstartPreferences.URL_SERV_DEV = "http://api.preprod.appology.fr/app_dev.php/";
+                    QuickstartPreferences.URL_SERV = QuickstartPreferences.URL_SERV_PREPROD;
                 }
             }
         });
@@ -412,6 +343,8 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                 jsonResult.setParams(context, headerList, QuickstartPreferences.URL_AUTH, QuickstartPreferences.TAG_GET, null);
                 jsonResult.addListener(jsonListener);
                 jsonResult.execute();
+
+                source = QuickstartPreferences.normalConnexion;
 
             }
         };
@@ -454,6 +387,85 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
         jsonResult.setParams(context, headerList, QuickstartPreferences.URL_AUTH, QuickstartPreferences.TAG_GET, null);
         jsonResult.addListener(jsonListener);
         jsonResult.execute();
+
+        source = QuickstartPreferences.facebookConnexion;
+    }
+
+
+    private void subscribeWithFacebook() {
+
+        Log.d("Facebook", "Facebook subscription");
+        //if we have all user info we need from facebook then send Subscribe request
+
+        // Subscription
+        HashMap<String, String> headerList = new HashMap<>();
+
+
+        // TODO Remove Lat and Long from this query
+        headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
+        headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
+
+        JSONObject bodyAuth = new JSONObject();
+        JSONObject parent = new JSONObject();
+
+        headerList.put(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
+
+        try {
+            bodyAuth.put(QuickstartPreferences.TAG_FBUID, id);
+            bodyAuth.put(QuickstartPreferences.TAG_LASTNAME, lastName);
+            bodyAuth.put(QuickstartPreferences.TAG_FIRSTNAME, firstName);
+            bodyAuth.put(QuickstartPreferences.TAG_EMAIL, email);
+            bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday, "MM/dd/yyyy", "yyyy-MM-dd hh:mm:ss"));
+            Log.d("Birthday", birthday);
+            bodyAuth.put(QuickstartPreferences.TAG_GENDER, genderSelected.substring(0, 1).toUpperCase());
+            parent.put("register", bodyAuth);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        jsonResult = new GetJsonResult();
+        jsonResult.setParams(this, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
+        jsonResult.addListener(jsonListener);
+        jsonResult.execute();
+
+        source = QuickstartPreferences.facebookSubscription;
+    }
+
+    private void getTokenAndLogin() {
+        Log.d("Token", "get token and login");
+
+        // Get the token
+        String token = null;
+        try {
+            token = jsonResult.getJson().getString(QuickstartPreferences.TAG_TOKEN);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Store it in local
+        SharedPreferencesModule.initialise(this);
+        SharedPreferencesModule.setToken(token);
+
+        // Start Home activity
+        Intent myIntent = new Intent(SignInUp.this, DealActivity.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        SignInUp.this.startActivity(myIntent);
+    }
+
+    private void subscribeFacebookMissingInfo() {
+        Intent myIntent = new Intent(SignInUp.this, SubscribeActivity.class);
+
+        myIntent.putExtra(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday, "MM/dd/yyyy", "yyyy-MM-dd hh:mm:ss"));
+        myIntent.putExtra(QuickstartPreferences.TAG_LASTNAME, lastName);
+        myIntent.putExtra(QuickstartPreferences.TAG_FIRSTNAME, firstName);
+        myIntent.putExtra(QuickstartPreferences.TAG_EMAIL, email);
+        myIntent.putExtra(QuickstartPreferences.TAG_GENDER, genderSelected);
+        myIntent.putExtra(QuickstartPreferences.TAG_FBUID, id);
+        myIntent.putExtra(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
+        myIntent.putExtra(QuickstartPreferences.TAG_ISFB, true);
+
+        SignInUp.this.startActivity(myIntent);
     }
 
 

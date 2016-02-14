@@ -76,7 +76,7 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
     protected JSONObject doInBackground(String... args) {
 
         // Getting JSON from URL
-        json = this.getJSONFromUrl(QuickstartPreferences.URL_SERV_DEV + url, listHeaders, method, bodyJson);
+        json = this.getJSONFromUrl(QuickstartPreferences.URL_SERV + url, listHeaders, method, bodyJson);
 
         return json;
     }

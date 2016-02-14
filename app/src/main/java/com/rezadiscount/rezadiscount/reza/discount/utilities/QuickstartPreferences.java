@@ -55,19 +55,27 @@ public class QuickstartPreferences {
     public static final String TAG_GENDER = "gender";
     public static final String TAG_HTTPCODE = "httpCode";
     public static final String TAG_MESSAGE = "message";
-    public static final String URL_SERV_PREPROD = "http://api.preprod.appology.fr/app_dev.php/";
     public static final String URL_CAT = "category";
     public static final String URL_MERC = "merchant";
     public static final String URL_AUTH = "auth";
     public static final String URL_REG = "register";
     public static final String TAG_ISFB = "from_facebook";
+    public static final String TAG_SOURCE = "source";
+
+
     //////// METHODS ///////
     public static final String TAG_GET = "GET";
     public static final String TAG_POST = "POST";
     ////// TIME CONSTANTS //////
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    public static final String URL_SERV_DEV = "http://api.booking.touratier.fr/app_dev.php/";
+    public static final String URL_SERV_PREPROD = "http://api.preprod.appology.fr/";
     /////// URL ///////
-    public static String URL_SERV_DEV = "http://api.booking.touratier.fr/app_dev.php/";
+    public static String URL_SERV = "";
+    ////// CONST ///////
+    public static String normalConnexion = "Normal Connexion";
+    public static String facebookConnexion = "Facebook Connexion";
+    public static String facebookSubscription = "Facebook Subscription";
 
     public static String getMonth(int month) {
         return new DateFormatSymbols().getMonths()[month];
