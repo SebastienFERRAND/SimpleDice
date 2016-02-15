@@ -214,6 +214,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
     @Override
     public void getJsonObject() {
 
+        // if Json return isn't null
         if (jsonResult != null) {
 
             String code_retour = null;
@@ -226,20 +227,12 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
 
             if (source.equals(QuickstartPreferences.facebookConnexion)) {
+                source = "";
                 Log.d("HTTP", "Connexion Facebook");
                 // if Success
                 if (code_retour.equals("200")) {
                     Log.d("HTTP", "Connexion Facebook success");
 
-//                    List<String> permissions = new ArrayList<>();
-//                    permissions.add("id");
-//                    permissions.add("first_name");
-//                    permissions.add("last_name");
-//                    permissions.add("email");
-//                    permissions.add("gender");
-//                    permissions.add("birthday");
-//
-//                    LoginManager.getInstance().logInWithPublishPermissions(this, permissions);
                     getTokenAndLogin();
 
                 } else { // Failure facebook connexion
@@ -262,6 +255,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                     }
                 }
             } else if (source.equals(QuickstartPreferences.normalConnexion)) {
+                source = "";
                 Log.d("HTTP", "Connexion Normale");
                 // if Success
                 if (code_retour.equals("200")) {
@@ -272,11 +266,11 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                 }
 
             } else if (source.equals(QuickstartPreferences.facebookSubscription)) {
+                source = "";
                 Log.d("HTTP", "Inscription Facebook");
                 connectWithFacebook();
             }
 
-            source = "";
         }
     }
 

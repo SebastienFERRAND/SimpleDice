@@ -47,6 +47,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     private FragmentDatePickerDialog dateFragment;
     private GetDateSpinnerListener datePickerListener;
     private Intent intent;
+    private String source = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,18 +115,22 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
 
                 // Test if all fields are filled up
                 if (lastName.getText().toString().equals("")) {
+                    lastName.setError(SubscribeActivity.this.getResources().getString(R.string.last_name_empty));
                     Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.last_name_empty), Toast.LENGTH_LONG).show();
                     fieldError = true;
                 }
                 if (firstName.getText().toString().equals("")) {
+                    firstName.setError(SubscribeActivity.this.getResources().getString(R.string.first_name_empty));
                     Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.first_name_empty), Toast.LENGTH_LONG).show();
                     fieldError = true;
                 }
                 if (email.getText().toString().equals("")) {
+                    email.setError(SubscribeActivity.this.getResources().getString(R.string.email_empty));
                     Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.email_empty), Toast.LENGTH_LONG).show();
                     fieldError = true;
                 }
                 if (birthday.getText().toString().equals("")) {
+                    birthday.setError(SubscribeActivity.this.getResources().getString(R.string.birthday_empty));
                     Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.birthday_empty), Toast.LENGTH_LONG).show();
                     fieldError = true;
                 }
@@ -133,81 +138,21 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
                 if (!intent.getBooleanExtra(QuickstartPreferences.TAG_ISFB, false)) {
                     // If password won't match
                     if (!password.getText().toString().equals(passwordRepeat.getText().toString())) {
+                        passwordRepeat.setError(SubscribeActivity.this.getResources().getString(R.string.password_problem_match));
                         Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.password_problem_match), Toast.LENGTH_LONG).show();
                         fieldError = true;
                     }
                     // If password empty
                     else if (password.getText().toString().isEmpty()) {
+                        password.setError(SubscribeActivity.this.getResources().getString(R.string.password_problem_empty));
                         Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.password_problem_empty), Toast.LENGTH_LONG).show();
                         fieldError = true;
                     }
                 }
 
-
+                // If there's no errors
                 if (!fieldError) {
-
-                    // Subscription
-                    HashMap<String, String> headerList = new HashMap<>();
-
-                    // TODO Remove Lat and Long from this query
-                    headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
-                    headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
-
-                    JSONObject bodyAuth = new JSONObject();
-                    JSONObject parent = new JSONObject();
-
-                    // get selected radio button from radioGroup
-                    int selectedId = genderRg.getCheckedRadioButtonId();
-
-                    // find the radiobutton by returned id
-                    genderSelected = (RadioButton) findViewById(selectedId);
-
-                    // Facebook Subscribe
-                    if (intent.getBooleanExtra(QuickstartPreferences.TAG_ISFB, false)) {
-
-                        headerList.put(QuickstartPreferences.TAG_TOKENFB, intent.getStringExtra(QuickstartPreferences.TAG_TOKENFB));
-
-                        try {
-                            bodyAuth.put(QuickstartPreferences.TAG_FBUID, intent.getStringExtra(QuickstartPreferences.TAG_FBUID));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        // Normal subscribe
-                    } else {
-
-                        // Try to send any useful info
-                        try {
-                            bodyAuth.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                    try {
-                        bodyAuth.put(QuickstartPreferences.TAG_LASTNAME, lastName.getText().toString());
-                        bodyAuth.put(QuickstartPreferences.TAG_FIRSTNAME, firstName.getText().toString());
-                        bodyAuth.put(QuickstartPreferences.TAG_EMAIL, email.getText().toString());
-                        bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday.getText().toString(), "dd/MM/yyyy", "yyyy-MM-dd hh:mm:ss"));
-                        Log.d("body sub", QuickstartPreferences.convertToDateFormat(birthday.getText().toString(), "dd/MM/yyyy", "yyyy-MM-dd hh:mm:ss"));
-                        Log.d("body sub convert", birthday.getText().toString());
-                        bodyAuth.put(QuickstartPreferences.TAG_GENDER, radioToValue());
-
-                        parent.put("register", bodyAuth);
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                    jsonResult = new GetJsonResult();
-                    jsonResult.setParams(act, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
-                    jsonResult.addListener(jsonListener);
-                    jsonResult.execute();
-
+                    subscribeUser();
                 }
             }
         };
@@ -216,75 +161,43 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     @Override
     public void getJsonObject() {
 
-        Log.d("JSON", jsonResult.getJson().toString());
+        Log.d("HTTP", "Result");
 
-        String code_retour = "";
-        JSONObject jsonConnexionOrResult = null;
-        // If subscription
-        try {
-            code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        // if Json return isn't null
+        if (jsonResult != null) {
+            Log.d("HTTP", "Result not null. Source : " + source);
+            String code_retour = "";
 
-        // If connect
-        try {
-            jsonConnexionOrResult = jsonResult.getJson().getJSONObject(QuickstartPreferences.TAG_RESULT);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        // if user created with success subscription
-        if (code_retour.equals("200")) {
-            // Getting JSON from URL
-
-            HashMap<String, String> headerList = new HashMap<>();
-            // TODO Remove Lat and Long from this query
-            headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
-            headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
-            SharedPreferencesModule.initialise(this);
-            headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
-            headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
-
-
-            // Try connecting with newly created profile
-            //If Facebook
-            if (intent.getBooleanExtra(QuickstartPreferences.TAG_ISFB, false)) {
-                headerList.put(QuickstartPreferences.TAG_FBUID, intent.getStringExtra(QuickstartPreferences.TAG_FBUID));
-                headerList.put(QuickstartPreferences.TAG_TOKENFB, intent.getStringExtra(QuickstartPreferences.TAG_TOKENFB));
-            } else {
-                // if auth
-                headerList.put(QuickstartPreferences.TAG_LOGIN, email.getText().toString());
-                headerList.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
-            }
-
-            jsonResult = new GetJsonResult();
-            jsonResult.setParams(this, headerList, QuickstartPreferences.URL_AUTH, QuickstartPreferences.TAG_GET, null);
-            jsonResult.addListener(jsonListener);
-            jsonResult.execute();
-
-        }
-
-        //Connection
-        if (jsonConnexionOrResult != null) {
-
-            String token = null;
+            // If subscription
             try {
-                token = jsonConnexionOrResult.getString(QuickstartPreferences.TAG_TOKEN);
+                code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            SharedPreferencesModule.initialise(this);
-            SharedPreferencesModule.setToken(token);
 
-            Intent myIntent = new Intent(SubscribeActivity.this, DealActivity.class);
-            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            SubscribeActivity.this.startActivity(myIntent);
+            if (source.equals(QuickstartPreferences.connexion)) {
 
+                source = "";
+                // if Success
+                if (code_retour.equals("200")) {
+                    Log.d("HTTP", "Connexion success");
+                    getTokenAndConnect();
+                } else {
+                    Log.d("HTTP", "Connexion problems");
+                }
+            } else if (source.equals(QuickstartPreferences.subscription)) {
+                source = "";
+                Log.d("HTTP", "Subscription");
+                // if Success
+                if (code_retour.equals("200")) {
+                    Log.d("HTTP", "Subscription success");
+                    connectUser();
+                } else {
+                    Log.d("HTTP", "Subscription problems");
+                }
+            }
         }
-
     }
 
     private void showDatePickerDialog(View v) {
@@ -295,7 +208,6 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
 
     @Override
     public void getDateSpinner() {
-
         birthday.setText(dateFragment.getDate() + "/" +
                 dateFragment.getMonth() + "/" + dateFragment.getYear());
     }
@@ -311,9 +223,123 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
         if (genderSelected.getText().equals(this.getResources().getString(R.string.male))) {
             return "M";
         }
-
         return null;
+    }
 
+    private void subscribeUser() {
+        Log.d("HTTP", "Subscription");
+
+        // Subscription
+        HashMap<String, String> headerList = new HashMap<>();
+
+        // TODO Remove Lat and Long from this query
+        headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
+        headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
+
+        JSONObject bodyAuth = new JSONObject();
+        JSONObject parent = new JSONObject();
+
+        // get selected radio button from radioGroup
+        int selectedId = genderRg.getCheckedRadioButtonId();
+
+        // find the radiobutton by returned id
+        genderSelected = (RadioButton) findViewById(selectedId);
+
+        // Facebook Subscribe
+        if (intent.getBooleanExtra(QuickstartPreferences.TAG_ISFB, false)) {
+
+            headerList.put(QuickstartPreferences.TAG_TOKENFB, intent.getStringExtra(QuickstartPreferences.TAG_TOKENFB));
+
+            try {
+                bodyAuth.put(QuickstartPreferences.TAG_FBUID, intent.getStringExtra(QuickstartPreferences.TAG_FBUID));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            // Normal subscribe
+        } else {
+
+            // Try to send any useful info
+            try {
+                bodyAuth.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        try {
+            bodyAuth.put(QuickstartPreferences.TAG_LASTNAME, lastName.getText().toString());
+            bodyAuth.put(QuickstartPreferences.TAG_FIRSTNAME, firstName.getText().toString());
+            bodyAuth.put(QuickstartPreferences.TAG_EMAIL, email.getText().toString());
+            bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday.getText().toString(), "dd/MM/yyyy", "yyyy-MM-dd hh:mm:ss"));
+            Log.d("body sub", QuickstartPreferences.convertToDateFormat(birthday.getText().toString(), "dd/MM/yyyy", "yyyy-MM-dd hh:mm:ss"));
+            Log.d("body sub convert", birthday.getText().toString());
+            bodyAuth.put(QuickstartPreferences.TAG_GENDER, radioToValue());
+
+            parent.put("register", bodyAuth);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        jsonResult = new GetJsonResult();
+        jsonResult.setParams(act, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
+        jsonResult.addListener(jsonListener);
+        jsonResult.execute();
+
+        source = QuickstartPreferences.subscription;
+
+
+    }
+
+    private void connectUser() {
+        Log.d("HTTP", "Connexion");
+        HashMap<String, String> headerList = new HashMap<>();
+        // TODO Remove Lat and Long from this query
+        headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
+        headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
+        SharedPreferencesModule.initialise(this);
+        headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
+        headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
+
+
+        // Try connecting with newly created profile
+        //If Facebook
+        if (intent.getBooleanExtra(QuickstartPreferences.TAG_ISFB, false)) {
+            headerList.put(QuickstartPreferences.TAG_FBUID, intent.getStringExtra(QuickstartPreferences.TAG_FBUID));
+            headerList.put(QuickstartPreferences.TAG_TOKENFB, intent.getStringExtra(QuickstartPreferences.TAG_TOKENFB));
+        } else {
+            // if auth
+            headerList.put(QuickstartPreferences.TAG_LOGIN, email.getText().toString());
+            headerList.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
+        }
+
+        jsonResult = new GetJsonResult();
+        jsonResult.setParams(this, headerList, QuickstartPreferences.URL_AUTH, QuickstartPreferences.TAG_GET, null);
+        jsonResult.addListener(jsonListener);
+        jsonResult.execute();
+
+        source = QuickstartPreferences.connexion;
+    }
+
+    private void getTokenAndConnect() {
+        Log.d("HTTP", "get token and login");
+
+        String token = null;
+        try {
+            token = jsonResult.getJson().getString(QuickstartPreferences.TAG_TOKEN);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        SharedPreferencesModule.initialise(this);
+        SharedPreferencesModule.setToken(token);
+
+        Intent myIntent = new Intent(SubscribeActivity.this, DealActivity.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        SubscribeActivity.this.startActivity(myIntent);
     }
 
 }
