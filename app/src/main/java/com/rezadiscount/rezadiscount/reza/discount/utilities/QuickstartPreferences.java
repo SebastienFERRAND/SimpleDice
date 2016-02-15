@@ -55,12 +55,10 @@ public class QuickstartPreferences {
     public static final String TAG_GENDER = "gender";
     public static final String TAG_HTTPCODE = "httpCode";
     public static final String TAG_MESSAGE = "message";
-    public static final String URL_CAT = "category";
-    public static final String URL_MERC = "merchant";
-    public static final String URL_AUTH = "auth";
-    public static final String URL_REG = "register";
     public static final String TAG_ISFB = "from_facebook";
     public static final String TAG_SOURCE = "source";
+    public static final String TAG_PASSWORD_RECOVER = "password-recover";
+    public static final String TAG_REGISTER = "register";
 
 
     //////// METHODS ///////
@@ -70,12 +68,19 @@ public class QuickstartPreferences {
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String URL_SERV_DEV = "http://api.booking.touratier.fr/app_dev.php/";
     public static final String URL_SERV_PREPROD = "http://api.preprod.appology.fr/";
+    public static final String URL_CAT = "category";
+    public static final String URL_MERC = "merchant";
+    public static final String URL_AUTH = "auth";
+    public static final String URL_REG = "register";
+    public static final String URL_FORPSSWD = "password-recover";
     /////// URL ///////
     public static String URL_SERV = "";
     ////// CONST ///////
     public static String normalConnexion = "Normal Connexion";
     public static String facebookConnexion = "Facebook Connexion";
     public static String facebookSubscription = "Facebook Subscription";
+    public static String connexion = "Connexion";
+    public static String subscription = "Subscription";
 
     public static String getMonth(int month) {
         return new DateFormatSymbols().getMonths()[month];

@@ -65,4 +65,5 @@
     <string name="first_name_empty">Veuillez remplir le champ prénom</string>
     <string name="email_empty">Veuillez remplir le champ email</string>
     <string name="birthday_empty">Veuillez remplir le champ anniversaire</string>
+    <string name="password_email_success">La récupération de votre passe vous à été envoyé par email</string>
 </resources>
