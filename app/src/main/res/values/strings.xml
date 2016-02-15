@@ -72,6 +72,10 @@
     <string name="logout">Logout</string>
     <string name="password_forgotten">Password forgotten ?</string>
     <string name="reset_password">Reset password</string>
+    <string name="last_name_empty">Please fill last name field</string>
+    <string name="first_name_empty">Please fill first name field</string>
+    <string name="email_empty">Please fill email field</string>
+    <string name="birthday_empty">Please fill birthday field</string>
 
 
 </resources>

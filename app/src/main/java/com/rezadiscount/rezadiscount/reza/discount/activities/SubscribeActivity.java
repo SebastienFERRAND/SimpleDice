@@ -109,76 +109,106 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
             @Override
             public void onClick(View v) {
 
-                // Subscription
-                HashMap<String, String> headerList = new HashMap<>();
+                boolean fieldError = false;
 
-                // TODO Remove Lat and Long from this query
-                headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
-                headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
 
-                JSONObject bodyAuth = new JSONObject();
-                JSONObject parent = new JSONObject();
+                // Test if all fields are filled up
+                if (lastName.getText().toString().equals("")) {
+                    Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.last_name_empty), Toast.LENGTH_LONG).show();
+                    fieldError = true;
+                }
+                if (firstName.getText().toString().equals("")) {
+                    Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.first_name_empty), Toast.LENGTH_LONG).show();
+                    fieldError = true;
+                }
+                if (email.getText().toString().equals("")) {
+                    Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.email_empty), Toast.LENGTH_LONG).show();
+                    fieldError = true;
+                }
+                if (birthday.getText().toString().equals("")) {
+                    Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.birthday_empty), Toast.LENGTH_LONG).show();
+                    fieldError = true;
+                }
 
-                // get selected radio button from radioGroup
-                int selectedId = genderRg.getCheckedRadioButtonId();
-
-                // find the radiobutton by returned id
-                genderSelected = (RadioButton) findViewById(selectedId);
-
-                // Facebook Subscribe
-                if (intent.getBooleanExtra(QuickstartPreferences.TAG_ISFB, false)) {
-
-                    headerList.put(QuickstartPreferences.TAG_TOKENFB, intent.getStringExtra(QuickstartPreferences.TAG_TOKENFB));
-
-                    try {
-                        bodyAuth.put(QuickstartPreferences.TAG_FBUID, intent.getStringExtra(QuickstartPreferences.TAG_FBUID));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    // Normal subscribe
-                } else {
+                if (!intent.getBooleanExtra(QuickstartPreferences.TAG_ISFB, false)) {
                     // If password won't match
                     if (!password.getText().toString().equals(passwordRepeat.getText().toString())) {
                         Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.password_problem_match), Toast.LENGTH_LONG).show();
+                        fieldError = true;
                     }
                     // If password empty
                     else if (password.getText().toString().isEmpty()) {
                         Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.password_problem_empty), Toast.LENGTH_LONG).show();
+                        fieldError = true;
+                    }
+                }
+
+
+                if (!fieldError) {
+
+                    // Subscription
+                    HashMap<String, String> headerList = new HashMap<>();
+
+                    // TODO Remove Lat and Long from this query
+                    headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
+                    headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
+
+                    JSONObject bodyAuth = new JSONObject();
+                    JSONObject parent = new JSONObject();
+
+                    // get selected radio button from radioGroup
+                    int selectedId = genderRg.getCheckedRadioButtonId();
+
+                    // find the radiobutton by returned id
+                    genderSelected = (RadioButton) findViewById(selectedId);
+
+                    // Facebook Subscribe
+                    if (intent.getBooleanExtra(QuickstartPreferences.TAG_ISFB, false)) {
+
+                        headerList.put(QuickstartPreferences.TAG_TOKENFB, intent.getStringExtra(QuickstartPreferences.TAG_TOKENFB));
+
+                        try {
+                            bodyAuth.put(QuickstartPreferences.TAG_FBUID, intent.getStringExtra(QuickstartPreferences.TAG_FBUID));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Normal subscribe
+                    } else {
+
+                        // Try to send any useful info
+                        try {
+                            bodyAuth.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
-                    // Try to send any useful info
                     try {
-                        bodyAuth.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
+                        bodyAuth.put(QuickstartPreferences.TAG_LASTNAME, lastName.getText().toString());
+                        bodyAuth.put(QuickstartPreferences.TAG_FIRSTNAME, firstName.getText().toString());
+                        bodyAuth.put(QuickstartPreferences.TAG_EMAIL, email.getText().toString());
+                        bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday.getText().toString(), "dd/MM/yyyy", "yyyy-MM-dd hh:mm:ss"));
+                        Log.d("body sub", QuickstartPreferences.convertToDateFormat(birthday.getText().toString(), "dd/MM/yyyy", "yyyy-MM-dd hh:mm:ss"));
+                        Log.d("body sub convert", birthday.getText().toString());
+                        bodyAuth.put(QuickstartPreferences.TAG_GENDER, radioToValue());
+
+                        parent.put("register", bodyAuth);
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
+
+                    jsonResult = new GetJsonResult();
+                    jsonResult.setParams(act, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
+                    jsonResult.addListener(jsonListener);
+                    jsonResult.execute();
+
                 }
-
-                try {
-                    bodyAuth.put(QuickstartPreferences.TAG_LASTNAME, lastName.getText().toString());
-                    bodyAuth.put(QuickstartPreferences.TAG_FIRSTNAME, firstName.getText().toString());
-                    bodyAuth.put(QuickstartPreferences.TAG_EMAIL, email.getText().toString());
-                    bodyAuth.put(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday.getText().toString(), "dd/MM/yyyy", "yyyy-MM-dd hh:mm:ss"));
-                    Log.d("body sub", QuickstartPreferences.convertToDateFormat(birthday.getText().toString(), "dd/MM/yyyy", "yyyy-MM-dd hh:mm:ss"));
-                    Log.d("body sub convert", birthday.getText().toString());
-                    bodyAuth.put(QuickstartPreferences.TAG_GENDER, radioToValue());
-
-                    parent.put("register", bodyAuth);
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-                jsonResult = new GetJsonResult();
-                jsonResult.setParams(act, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
-                jsonResult.addListener(jsonListener);
-                jsonResult.execute();
-
             }
         };
     }
@@ -270,15 +300,15 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
                 dateFragment.getMonth() + "/" + dateFragment.getYear());
     }
 
-    public void showDatePicker(View v){
+    public void showDatePicker(View v) {
         showDatePickerDialog(v);
     }
 
-    public String radioToValue(){
-        if (genderSelected.getText().equals(this.getResources().getString(R.string.female))){
+    public String radioToValue() {
+        if (genderSelected.getText().equals(this.getResources().getString(R.string.female))) {
             return "F";
         }
-        if (genderSelected.getText().equals(this.getResources().getString(R.string.male))){
+        if (genderSelected.getText().equals(this.getResources().getString(R.string.male))) {
             return "M";
         }
 
