@@ -16,10 +16,13 @@
 
 package com.rezadiscount.rezadiscount.reza.discount.utilities;
 
+import android.util.Patterns;
+
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class QuickstartPreferences {
 
@@ -107,6 +110,11 @@ public class QuickstartPreferences {
             return null;
         }
 
+    }
+
+    public static boolean isValidEmail(String email) {
+        Pattern pattern = Patterns.EMAIL_ADDRESS;
+        return pattern.matcher(email).matches();
     }
 
 

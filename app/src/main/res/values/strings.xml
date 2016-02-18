@@ -77,6 +77,7 @@
     <string name="email_empty">Please fill email field</string>
     <string name="birthday_empty">Please fill birthday field</string>
     <string name="password_email_success">Password recover has been sent to your email adress</string>
+    <string name="email_incorrect">Email is incorrect</string>
 
 
 </resources>

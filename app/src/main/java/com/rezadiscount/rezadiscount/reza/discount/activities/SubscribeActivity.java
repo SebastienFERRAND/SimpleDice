@@ -116,25 +116,29 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
                 // Test if all fields are filled up
                 if (lastName.getText().toString().equals("")) {
                     lastName.setError(SubscribeActivity.this.getResources().getString(R.string.last_name_empty));
-                    Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.last_name_empty), Toast.LENGTH_LONG).show();
                     fieldError = true;
                 }
                 if (firstName.getText().toString().equals("")) {
                     firstName.setError(SubscribeActivity.this.getResources().getString(R.string.first_name_empty));
-                    Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.first_name_empty), Toast.LENGTH_LONG).show();
                     fieldError = true;
                 }
                 if (email.getText().toString().equals("")) {
                     email.setError(SubscribeActivity.this.getResources().getString(R.string.email_empty));
-                    Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.email_empty), Toast.LENGTH_LONG).show();
-                    fieldError = true;
-                }
-                if (birthday.getText().toString().equals("")) {
-                    birthday.setError(SubscribeActivity.this.getResources().getString(R.string.birthday_empty));
-                    Toast.makeText(SubscribeActivity.this, SubscribeActivity.this.getResources().getString(R.string.birthday_empty), Toast.LENGTH_LONG).show();
                     fieldError = true;
                 }
 
+                if (birthday.getText().toString().equals("")) {
+                    birthday.setError(SubscribeActivity.this.getResources().getString(R.string.birthday_empty));
+                    fieldError = true;
+                }
+
+                // Test email validity
+                if (!QuickstartPreferences.isValidEmail(email.getText().toString())) {
+                    email.setError(SubscribeActivity.this.getResources().getString(R.string.email_incorrect));
+                    fieldError = true;
+                }
+
+                //If it's a normal subscription with passwords
                 if (!intent.getBooleanExtra(QuickstartPreferences.TAG_ISFB, false)) {
                     // If password won't match
                     if (!password.getText().toString().equals(passwordRepeat.getText().toString())) {
