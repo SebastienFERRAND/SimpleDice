@@ -236,10 +236,6 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
         // Subscription
         HashMap<String, String> headerList = new HashMap<>();
 
-        // TODO Remove Lat and Long from this query
-        headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
-        headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
-
         JSONObject bodyAuth = new JSONObject();
         JSONObject parent = new JSONObject();
 
@@ -301,9 +297,6 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     private void connectUser() {
         Log.d("HTTP", "Connexion");
         HashMap<String, String> headerList = new HashMap<>();
-        // TODO Remove Lat and Long from this query
-        headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
-        headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
         SharedPreferencesModule.initialise(this);
         headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
         headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);

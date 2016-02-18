@@ -60,11 +60,6 @@ public class PasswordActivity extends Activity implements GetJsonListener {
     protected void sendEmailHttp() {
         HashMap<String, String> headerList = new HashMap<>();
 
-
-        // TODO Remove Lat and Long from this query
-        headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
-        headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
-
         JSONObject bodyAuth = new JSONObject();
         JSONObject parent = new JSONObject();
 
@@ -106,7 +101,8 @@ public class PasswordActivity extends Activity implements GetJsonListener {
             if (code_retour.equals("200")) {
                 Toast.makeText(this, this.getResources().getString(R.string.password_email_success), Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Erreur", Toast.LENGTH_LONG).show();
+                //TODO set different error messages depending on return
+                emailText.setError("Erreur");
             }
         }
     }

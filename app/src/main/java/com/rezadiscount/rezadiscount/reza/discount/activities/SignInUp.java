@@ -326,9 +326,6 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                 HashMap<String, String> headerList = new HashMap<>();
                 headerList.put(QuickstartPreferences.TAG_LOGIN, connexionField.getText().toString());
                 headerList.put(QuickstartPreferences.TAG_PASSWD, passwordField.getText().toString());
-                // TODO Remove Lat and Long from this query
-                headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
-                headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
                 SharedPreferencesModule.initialise(activity);
                 headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
                 headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
@@ -370,9 +367,6 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
         HashMap<String, String> headerList = new HashMap<>();
         headerList.put(QuickstartPreferences.TAG_FBUID, id);
         headerList.put(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
-        // TODO Remove Lat and Long from this query
-        headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
-        headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
         SharedPreferencesModule.initialise(activity);
         headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
         headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
@@ -393,11 +387,6 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
         // Subscription
         HashMap<String, String> headerList = new HashMap<>();
-
-
-        // TODO Remove Lat and Long from this query
-        headerList.put(QuickstartPreferences.TAG_LATITUDE, "1337");
-        headerList.put(QuickstartPreferences.TAG_LONGITUDE, "1337");
 
         JSONObject bodyAuth = new JSONObject();
         JSONObject parent = new JSONObject();
