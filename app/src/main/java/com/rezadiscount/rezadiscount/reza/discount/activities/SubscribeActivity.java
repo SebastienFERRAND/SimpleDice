@@ -15,9 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerPassword;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultSignUp;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetDateSpinnerListener;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonListener;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonResult;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class SubscribeActivity extends AppCompatActivity implements GetJsonListener, GetDateSpinnerListener {
+public class SubscribeActivity extends AppCompatActivity implements GetJsonListenerPassword, GetDateSpinnerListener {
 
 
     public static final int MALE = 0;
@@ -38,8 +38,8 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     private EditText passwordRepeat;
     private TextView birthday;
     private Button subscribe;
-    private GetJsonResult jsonResult;
-    private GetJsonListener jsonListener;
+    private GetJsonResultSignUp jsonResult;
+    private GetJsonListenerPassword jsonListener;
     private Activity act;
     private RadioGroup genderRg;
     private RadioButton genderSelected;
@@ -284,7 +284,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
             e.printStackTrace();
         }
 
-        jsonResult = new GetJsonResult();
+        jsonResult = new GetJsonResultSignUp();
         jsonResult.setParams(act, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
         jsonResult.addListener(jsonListener);
         jsonResult.execute();
@@ -313,7 +313,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
             headerList.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
         }
 
-        jsonResult = new GetJsonResult();
+        jsonResult = new GetJsonResultSignUp();
         jsonResult.setParams(this, headerList, QuickstartPreferences.URL_AUTH, QuickstartPreferences.TAG_GET, null);
         jsonResult.addListener(jsonListener);
         jsonResult.execute();

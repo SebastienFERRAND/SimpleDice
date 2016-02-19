@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerPassword;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultSignUp;
 import com.rezadiscount.rezadiscount.reza.discount.adapter.CategoryAdapter;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonListener;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonResult;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetLocationListener;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.LocationUtility;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
@@ -27,7 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CategoryFragment extends Fragment implements GetLocationListener, GetJsonListener {
+public class CategoryFragment extends Fragment implements GetLocationListener, GetJsonListenerPassword {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -37,7 +37,7 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
 
     private LocationUtility loc;
 
-    private GetJsonResult jsonResult;
+    private GetJsonResultSignUp jsonResult;
 
     private String latitude;
     private String longitude;
@@ -165,7 +165,7 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
         SharedPreferencesModule.initialise(getActivity());
         headerList.put(QuickstartPreferences.TAG_TOKEN, SharedPreferencesModule.getToken());
 
-        jsonResult = new GetJsonResult();
+        jsonResult = new GetJsonResultSignUp();
         jsonResult.setParams(getActivity(), headerList, QuickstartPreferences.URL_CAT, QuickstartPreferences.TAG_GET, null);
         jsonResult.addListener(this);
         jsonResult.execute();

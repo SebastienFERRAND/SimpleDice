@@ -9,8 +9,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonListener;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonResult;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerPassword;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultSignUp;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 
 import org.json.JSONException;
@@ -18,13 +18,13 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class PasswordActivity extends Activity implements GetJsonListener {
+public class PasswordActivity extends Activity implements GetJsonListenerPassword {
 
     private EditText emailText;
     private Button sendEmailButton;
     private View.OnClickListener sendEmail;
-    private GetJsonResult jsonResult;
-    private GetJsonListener jsonListener;
+    private GetJsonResultSignUp jsonResult;
+    private GetJsonListenerPassword jsonListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,7 @@ public class PasswordActivity extends Activity implements GetJsonListener {
         }
 
 
-        jsonResult = new GetJsonResult();
+        jsonResult = new GetJsonResultSignUp();
         jsonResult.setParams(this, headerList, QuickstartPreferences.URL_FORPSSWD, QuickstartPreferences.TAG_POST, parent);
         jsonResult.addListener(jsonListener);
         jsonResult.execute();

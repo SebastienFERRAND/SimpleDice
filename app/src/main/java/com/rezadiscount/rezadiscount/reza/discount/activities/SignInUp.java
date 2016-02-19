@@ -29,8 +29,8 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.rezadiscount.rezadiscount.R;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonListener;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonResult;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerPassword;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultSignUp;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
@@ -42,7 +42,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class SignInUp extends AppCompatActivity implements GetJsonListener {
+public class SignInUp extends AppCompatActivity implements GetJsonListenerPassword {
 
     private Button connexion;
     private Button register;
@@ -55,8 +55,8 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
 
     private JSONObject jsonConnexionOrResult = null;
     private Context context;
-    private GetJsonListener jsonListener;
-    private GetJsonResult jsonResult;
+    private GetJsonListenerPassword jsonListener;
+    private GetJsonResultSignUp jsonResult;
     private CallbackManager callbackManager;
 
     private AccessToken tokenF;
@@ -330,7 +330,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
                 headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
                 headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
 
-                jsonResult = new GetJsonResult();
+                jsonResult = new GetJsonResultSignUp();
                 jsonResult.setParams(context, headerList, QuickstartPreferences.URL_AUTH, QuickstartPreferences.TAG_GET, null);
                 jsonResult.addListener(jsonListener);
                 jsonResult.execute();
@@ -371,7 +371,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
         headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
         headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
 
-        jsonResult = new GetJsonResult();
+        jsonResult = new GetJsonResultSignUp();
         jsonResult.setParams(context, headerList, QuickstartPreferences.URL_AUTH, QuickstartPreferences.TAG_GET, null);
         jsonResult.addListener(jsonListener);
         jsonResult.execute();
@@ -407,7 +407,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListener {
         }
 
 
-        jsonResult = new GetJsonResult();
+        jsonResult = new GetJsonResultSignUp();
         jsonResult.setParams(this, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
         jsonResult.addListener(jsonListener);
         jsonResult.execute();

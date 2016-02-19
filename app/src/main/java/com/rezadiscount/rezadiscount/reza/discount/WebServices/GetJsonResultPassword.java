@@ -1,4 +1,4 @@
-package com.rezadiscount.rezadiscount.reza.discount.utilities;
+package com.rezadiscount.rezadiscount.reza.discount.WebServices;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +28,7 @@ import java.util.Map;
  * By passing header and body
  */
 
-public class GetJsonResult extends AsyncTask<String, String, JSONObject>
+public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
 
 {
     private ProgressDialog pDialog;
@@ -38,7 +40,7 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
     private JSONObject json;
     private JSONObject bodyJson;
 
-    private List<GetJsonListener> listeners = new ArrayList<>();
+    private List<GetJsonListenerPassword> listeners = new ArrayList<>();
 
     public void setParams(Context con, HashMap<String, String> listHeadersP, String urlP, String methodP, JSONObject body) {
         context = con;
@@ -88,7 +90,7 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
             Log.d("JSON", "get return " + jsonP.toString());
             // Getting JSON Array from URL
             json = jsonP;
-            for (GetJsonListener hl : listeners) {
+            for (GetJsonListenerPassword hl : listeners) {
                 hl.getJsonObject();
             }
         } catch (Exception e) {
@@ -168,7 +170,7 @@ public class GetJsonResult extends AsyncTask<String, String, JSONObject>
         return json;
     }
 
-    public void addListener(GetJsonListener toAdd) {
+    public void addListener(GetJsonListenerPassword toAdd) {
         listeners.add(toAdd);
     }
 

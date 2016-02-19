@@ -12,10 +12,11 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerPassword;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultSignUp;
 import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonListener;
-import com.rezadiscount.rezadiscount.reza.discount.utilities.GetJsonResult;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetLocationListener;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.LocationUtility;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class BusinessResults extends BaseDrawerActivity implements GetLocationListener, GetJsonListener {
+public class BusinessResults extends BaseDrawerActivity implements GetLocationListener, GetJsonListenerPassword {
 
     ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
 
@@ -41,7 +42,7 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
 
     private LocationUtility loc;
 
-    private GetJsonResult jsonResult;
+    private GetJsonResultSignUp jsonResult;
 
 
     @Override
@@ -154,7 +155,7 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
         SharedPreferencesModule.initialise(this);
         headerList.put(QuickstartPreferences.TAG_TOKEN, SharedPreferencesModule.getToken());
 
-        jsonResult = new GetJsonResult();
+        jsonResult = new GetJsonResultSignUp();
         jsonResult.setParams(this, headerList, QuickstartPreferences.URL_MERC, QuickstartPreferences.TAG_GET, null);
         jsonResult.addListener(this);
         jsonResult.execute();
