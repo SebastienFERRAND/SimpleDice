@@ -40,7 +40,7 @@ public class GetJsonResultSignIn extends AsyncTask<String, String, JSONObject>
     private JSONObject json;
     private JSONObject bodyJson;
 
-    private List<GetJsonListenerPassword> listeners = new ArrayList<>();
+    private List<GetJsonListenerSignIn> listeners = new ArrayList<>();
 
     public void setParams(Context con, HashMap<String, String> listHeadersP, String urlP, String methodP, JSONObject body) {
         context = con;
@@ -90,7 +90,7 @@ public class GetJsonResultSignIn extends AsyncTask<String, String, JSONObject>
             Log.d("JSON", "get return " + jsonP.toString());
             // Getting JSON Array from URL
             json = jsonP;
-            for (GetJsonListenerPassword hl : listeners) {
+            for (GetJsonListenerSignIn hl : listeners) {
                 hl.getJsonObject();
             }
         } catch (Exception e) {
@@ -170,7 +170,7 @@ public class GetJsonResultSignIn extends AsyncTask<String, String, JSONObject>
         return json;
     }
 
-    public void addListener(GetJsonListenerPassword toAdd) {
+    public void addListener(GetJsonListenerSignIn toAdd) {
         listeners.add(toAdd);
     }
 

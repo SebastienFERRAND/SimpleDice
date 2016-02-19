@@ -33,7 +33,6 @@
         <activity android:name=".reza.discount.activities.BusinessResults" />
         <activity android:name=".reza.discount.activities.BusinessProfile" />
         <activity android:name=".reza.discount.activities.BusinessLocation" />
-        <activity android:name=".reza.discount.activities.BusinessFilterResearch" />
         <activity android:name=".reza.discount.components.BaseDrawerActivity" />
         <activity
             android:name=".reza.discount.activities.SignInUp"
@@ -109,6 +108,9 @@
         <activity
             android:name=".reza.discount.activities.PasswordActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".reza.discount.activities.AgendaActivity"
+            android:label="@string/title_activity_agenda"></activity>
     </application>
 
 </manifest>

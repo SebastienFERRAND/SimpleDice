@@ -87,9 +87,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 public void onClick(View v) {
 
                     Intent myIntent = new Intent(act, BusinessResults.class);
-
                     myIntent.putExtra(QuickstartPreferences.TAG_ID, mId);
-
                     act.startActivity(myIntent);
 
                     Log.d("Click", "Id  " + mId);

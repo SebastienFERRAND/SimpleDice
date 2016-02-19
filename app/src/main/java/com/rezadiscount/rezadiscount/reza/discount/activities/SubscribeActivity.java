@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
-import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerPassword;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerSignUp;
 import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultSignUp;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetDateSpinnerListener;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class SubscribeActivity extends AppCompatActivity implements GetJsonListenerPassword, GetDateSpinnerListener {
+public class SubscribeActivity extends AppCompatActivity implements GetJsonListenerSignUp, GetDateSpinnerListener {
 
 
     public static final int MALE = 0;
@@ -39,7 +39,7 @@ public class SubscribeActivity extends AppCompatActivity implements GetJsonListe
     private TextView birthday;
     private Button subscribe;
     private GetJsonResultSignUp jsonResult;
-    private GetJsonListenerPassword jsonListener;
+    private GetJsonListenerSignUp jsonListener;
     private Activity act;
     private RadioGroup genderRg;
     private RadioButton genderSelected;

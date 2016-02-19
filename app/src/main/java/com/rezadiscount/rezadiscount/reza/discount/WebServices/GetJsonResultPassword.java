@@ -5,8 +5,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.HTTPObjects.HTTPStandardReturn;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 
 import org.json.JSONException;
@@ -24,8 +25,9 @@ import java.util.Map;
 
 /**
  * Created by sebastienferrand on 12/2/15.
- * This class is to send a request in POST or get Asynchronously to the server
+ * This class is to send a request in POST Asynchronously to the server
  * By passing header and body
+ * This class is for password recover
  */
 
 public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
@@ -34,41 +36,25 @@ public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
     private ProgressDialog pDialog;
     private Context context;
     private HashMap<String, String> listHeaders;
-    private String url;
-    private String method;
     private String resultJSON;
     private JSONObject json;
     private JSONObject bodyJson;
+    private HTTPStandardReturn passwordReturn;
 
     private List<GetJsonListenerPassword> listeners = new ArrayList<>();
 
-    public void setParams(Context con, HashMap<String, String> listHeadersP, String urlP, String methodP, JSONObject body) {
+    public void setParams(Context con, JSONObject body) {
+        Log.d("Password", "Password recovery starting");
+
         context = con;
-        listHeaders = listHeadersP;
-        listHeaders.put("Accept", "application/json");
-        listHeaders.put("Content-Type", "application/json");
-        listHeaders.put("deviceid", Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
-        url = urlP;
-        method = methodP;
         bodyJson = body;
-
-        for (Map.Entry<String, String> entry : listHeadersP.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-
-            Log.d("Header", key + " " + value);
-
-            // do what you have to do here
-            // In your case, an other loop.
-        }
-
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         pDialog = new ProgressDialog(context);
-        pDialog.setMessage("Getting Data ...");
+        pDialog.setMessage(context.getResources().getString(R.string.waiting));
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(true);
         pDialog.show();
@@ -78,67 +64,74 @@ public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
     protected JSONObject doInBackground(String... args) {
 
         // Getting JSON from URL
-        json = this.getJSONFromUrl(QuickstartPreferences.URL_SERV + url, listHeaders, method, bodyJson);
+        json = this.getJSONFromUrl(listHeaders, bodyJson);
 
         return json;
     }
 
     @Override
     protected void onPostExecute(JSONObject jsonP) {
-        pDialog.dismiss();
+
+        // if Json return isn't null
+        if (json != null) {
+
+            // If subscription
+            try {
+                passwordReturn = new HTTPStandardReturn();
+                passwordReturn.setCode(json.getString(QuickstartPreferences.TAG_HTTPCODE));
+                passwordReturn.setMessage(json.getString(QuickstartPreferences.TAG_MESSAGE));
+                passwordReturn.setSource(json.getString(QuickstartPreferences.TAG_SOURCE));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Calling listeners
         try {
-            Log.d("JSON", "get return " + jsonP.toString());
-            // Getting JSON Array from URL
             json = jsonP;
             for (GetJsonListenerPassword hl : listeners) {
-                hl.getJsonObject();
+                hl.getReturnPassword();
             }
         } catch (Exception e) {
             e.getMessage();
         }
-
-        String code_retour = "";
-        String message = "";
-        try {
-            code_retour = json.getString(QuickstartPreferences.TAG_HTTPCODE);
-            message = json.getString(QuickstartPreferences.TAG_MESSAGE);
-
-            // Erreur
-            if (!code_retour.equals("200")) {
-                Toast.makeText(context, "Erreur : " + message, Toast.LENGTH_LONG).show();
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        pDialog.dismiss();
     }
 
-    public JSONObject getJSONFromUrl(String urlString, HashMap<String, String> headers, String method, JSONObject jsonBody) {
+    /*
+    Sending password request to server
+     */
+    private JSONObject getJSONFromUrl(HashMap<String, String> headers, JSONObject jsonBody) {
 
         // Making HTTP request
         try {
 
-            URL url = new URL(urlString);
+            URL url = new URL(QuickstartPreferences.URL_SERV + QuickstartPreferences.URL_FORPSSWD);
             HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
-            httpconn.setRequestMethod(method);
+            httpconn.setRequestMethod(QuickstartPreferences.TAG_POST);
 
-            for (Map.Entry<String, String> entry : headers.entrySet()) {
-                httpconn.setRequestProperty(entry.getKey(), entry.getValue());
+            // Setting headers
+            HashMap<String, String> listHeaders = new HashMap<>();
+            listHeaders.put("Accept", "application/json");
+            listHeaders.put("Content-Type", "application/json");
+            listHeaders.put("deviceid", Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
+            for (Map.Entry<String, String> entry : listHeaders.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                Log.d("Header", key + " " + value);
+                httpconn.setRequestProperty(key, value);
             }
 
-            if (jsonBody != null) {
-                OutputStream os = httpconn.getOutputStream();
-                os.write(jsonBody.toString().getBytes("UTF-8"));
-                os.close();
+            // Setting body
 
-                Log.d("Body", "Body : " + jsonBody.toString());
-            }
+            Log.d("Body", "Body : " + jsonBody.toString());
+            OutputStream os = httpconn.getOutputStream();
+            os.write(jsonBody.toString().getBytes("UTF-8"));
+            os.close();
 
             BufferedReader input;
 
-            // Faire un switch case
+            // Requete effectuee et verification du code retour
             if (httpconn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 input = new BufferedReader(new InputStreamReader(httpconn.getInputStream()), 8192);
             } else {
@@ -176,8 +169,8 @@ public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
 
 
     // Method to call when Post execute is done
-    public JSONObject getJson() {
-        return json;
+    public HTTPStandardReturn getReturnPassword() {
+        return passwordReturn;
     }
 
 }

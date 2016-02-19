@@ -67,4 +67,5 @@
     <string name="birthday_empty">Veuillez remplir le champ anniversaire</string>
     <string name="password_email_success">La récupération de votre passe vous à été envoyé par email</string>
     <string name="email_incorrect">L\'email n\'est pas valide</string>
+    <string name="waiting">Attendez un instant :)</string>
 </resources>

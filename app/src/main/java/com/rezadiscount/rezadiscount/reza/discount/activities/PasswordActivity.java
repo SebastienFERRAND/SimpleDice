@@ -2,29 +2,26 @@ package com.rezadiscount.rezadiscount.reza.discount.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.HTTPObjects.HTTPStandardReturn;
 import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerPassword;
-import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultSignUp;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultPassword;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
 
 public class PasswordActivity extends Activity implements GetJsonListenerPassword {
 
     private EditText emailText;
     private Button sendEmailButton;
     private View.OnClickListener sendEmail;
-    private GetJsonResultSignUp jsonResult;
-    private GetJsonListenerPassword jsonListener;
+    private GetJsonResultPassword jsonResultPassword;
+    private GetJsonListenerPassword jsonListenerPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +32,7 @@ public class PasswordActivity extends Activity implements GetJsonListenerPasswor
     }
 
     private void setValuesId() {
+        jsonListenerPassword = this;
         emailText = (EditText) findViewById(R.id.mail_forgotten);
         sendEmailButton = (Button) findViewById(R.id.send_email);
 
@@ -58,7 +56,7 @@ public class PasswordActivity extends Activity implements GetJsonListenerPasswor
     }
 
     protected void sendEmailHttp() {
-        HashMap<String, String> headerList = new HashMap<>();
+
 
         JSONObject bodyAuth = new JSONObject();
         JSONObject parent = new JSONObject();
@@ -66,44 +64,34 @@ public class PasswordActivity extends Activity implements GetJsonListenerPasswor
         try {
             bodyAuth.put(QuickstartPreferences.TAG_EMAIL, emailText.getText().toString());
             parent.put(QuickstartPreferences.TAG_PASSWORD_RECOVER, bodyAuth);
-            Log.d("email", emailText.getText().toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
-        jsonResult = new GetJsonResultSignUp();
-        jsonResult.setParams(this, headerList, QuickstartPreferences.URL_FORPSSWD, QuickstartPreferences.TAG_POST, parent);
-        jsonResult.addListener(jsonListener);
-        jsonResult.execute();
+        jsonResultPassword = new GetJsonResultPassword();
+        jsonResultPassword.setParams(this, parent);
+        jsonResultPassword.addListener(jsonListenerPassword);
+        jsonResultPassword.execute();
     }
 
-
     @Override
-    public void getJsonObject() {
+    public void getReturnPassword() {
 
-        // if Json return isn't null
-        if (jsonResult != null) {
+        HTTPStandardReturn passwordReturn = jsonResultPassword.getReturnPassword();
 
-            String code_retour = "";
-            String message_retour = "";
-            // If subscription
-            try {
-                code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
-                message_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_MESSAGE);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        // Si tout s'est bien passé
+        if (passwordReturn.getCode().equals("200")) {
+            // 1. Instantiate an AlertDialog.Builder with its constructor
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            // 2. Chain together various setter methods to set the dialog characteristics
+            builder.setMessage(R.string.password_email_success);
+            // 3. Get the AlertDialog from create()
+            AlertDialog dialog = builder.create();
 
-            Log.d("Message", "Message : " + message_retour);
-
-            // Si tout s'est bien passé
-            if (code_retour.equals("200")) {
-                Toast.makeText(this, this.getResources().getString(R.string.password_email_success), Toast.LENGTH_LONG).show();
-            } else {
-                //TODO set different error messages depending on return
-                emailText.setError("Erreur");
-            }
+        } else {
+            //TODO set different error messages depending on return
+            emailText.setError("Erreur");
         }
+
     }
 }

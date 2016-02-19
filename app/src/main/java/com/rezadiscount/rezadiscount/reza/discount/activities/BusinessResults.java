@@ -14,8 +14,8 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
-import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerPassword;
-import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultSignUp;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerMerchant;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultMerchant;
 import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetLocationListener;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.LocationUtility;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class BusinessResults extends BaseDrawerActivity implements GetLocationListener, GetJsonListenerPassword {
+public class BusinessResults extends BaseDrawerActivity implements GetLocationListener, GetJsonListenerMerchant {
 
     ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
 
@@ -42,7 +42,7 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
 
     private LocationUtility loc;
 
-    private GetJsonResultSignUp jsonResult;
+    private GetJsonResultMerchant jsonResult;
 
 
     @Override
@@ -155,7 +155,7 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
         SharedPreferencesModule.initialise(this);
         headerList.put(QuickstartPreferences.TAG_TOKEN, SharedPreferencesModule.getToken());
 
-        jsonResult = new GetJsonResultSignUp();
+        jsonResult = new GetJsonResultMerchant();
         jsonResult.setParams(this, headerList, QuickstartPreferences.URL_MERC, QuickstartPreferences.TAG_GET, null);
         jsonResult.addListener(this);
         jsonResult.execute();

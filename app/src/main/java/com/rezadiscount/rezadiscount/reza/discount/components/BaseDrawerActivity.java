@@ -12,7 +12,7 @@ import android.view.MenuItem;
 
 import com.facebook.login.LoginManager;
 import com.rezadiscount.rezadiscount.R;
-import com.rezadiscount.rezadiscount.reza.discount.activities.BusinessFilterResearch;
+import com.rezadiscount.rezadiscount.reza.discount.activities.AgendaActivity;
 import com.rezadiscount.rezadiscount.reza.discount.activities.DealActivity;
 import com.rezadiscount.rezadiscount.reza.discount.activities.FindActivity;
 import com.rezadiscount.rezadiscount.reza.discount.activities.SignInUp;
@@ -59,7 +59,7 @@ public class BaseDrawerActivity extends AppCompatActivity implements NavigationV
             myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             BaseDrawerActivity.this.startActivity(myIntent);
         } else if (id == R.id.agenda) {
-            Intent myIntent = new Intent(BaseDrawerActivity.this, BusinessFilterResearch.class);
+            Intent myIntent = new Intent(BaseDrawerActivity.this, AgendaActivity.class);
             myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             BaseDrawerActivity.this.startActivity(myIntent);
         } else if (id == R.id.logout) {

@@ -78,6 +78,8 @@
     <string name="birthday_empty">Please fill birthday field</string>
     <string name="password_email_success">Password recover has been sent to your email adress</string>
     <string name="email_incorrect">Email is incorrect</string>
+    <string name="waiting">Wait a minute :)</string>
+    <string name="title_activity_agenda">AgendaActivity</string>
 
 
 </resources>

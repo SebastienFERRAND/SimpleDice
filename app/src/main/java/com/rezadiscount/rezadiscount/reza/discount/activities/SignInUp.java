@@ -29,7 +29,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.rezadiscount.rezadiscount.R;
-import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerPassword;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerSignUp;
 import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultSignUp;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
@@ -42,7 +42,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class SignInUp extends AppCompatActivity implements GetJsonListenerPassword {
+public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp {
 
     private Button connexion;
     private Button register;
@@ -55,7 +55,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerPasswo
 
     private JSONObject jsonConnexionOrResult = null;
     private Context context;
-    private GetJsonListenerPassword jsonListener;
+    private GetJsonListenerSignUp jsonListener;
     private GetJsonResultSignUp jsonResult;
     private CallbackManager callbackManager;
 
