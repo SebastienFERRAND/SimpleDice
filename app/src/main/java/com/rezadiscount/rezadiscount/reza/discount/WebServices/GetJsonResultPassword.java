@@ -72,6 +72,8 @@ public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
     @Override
     protected void onPostExecute(JSONObject jsonP) {
 
+        pDialog.dismiss();
+
         // if Json return isn't null
         if (json != null) {
 
@@ -95,7 +97,6 @@ public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
         } catch (Exception e) {
             e.getMessage();
         }
-        pDialog.dismiss();
     }
 
     /*

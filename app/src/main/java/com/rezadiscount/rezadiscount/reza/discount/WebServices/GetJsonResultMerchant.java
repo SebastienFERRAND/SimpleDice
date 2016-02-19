@@ -7,6 +7,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 
 import org.json.JSONException;
@@ -68,7 +69,7 @@ public class GetJsonResultMerchant extends AsyncTask<String, String, JSONObject>
     protected void onPreExecute() {
         super.onPreExecute();
         pDialog = new ProgressDialog(context);
-        pDialog.setMessage("Getting Data ...");
+        pDialog.setMessage(context.getResources().getString(R.string.waiting));
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(true);
         pDialog.show();
@@ -103,7 +104,7 @@ public class GetJsonResultMerchant extends AsyncTask<String, String, JSONObject>
             code_retour = json.getString(QuickstartPreferences.TAG_HTTPCODE);
             message = json.getString(QuickstartPreferences.TAG_MESSAGE);
 
-            // Erreur
+            // Error
             if (!code_retour.equals("200")) {
                 Toast.makeText(context, "Erreur : " + message, Toast.LENGTH_LONG).show();
             }

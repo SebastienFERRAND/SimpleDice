@@ -1,8 +1,8 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -81,12 +81,12 @@ public class PasswordActivity extends Activity implements GetJsonListenerPasswor
 
         // Si tout s'est bien passé
         if (passwordReturn.getCode().equals("200")) {
-            // 1. Instantiate an AlertDialog.Builder with its constructor
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            // 2. Chain together various setter methods to set the dialog characteristics
-            builder.setMessage(R.string.password_email_success);
-            // 3. Get the AlertDialog from create()
-            AlertDialog dialog = builder.create();
+
+            // Start Home activity
+            Intent myIntent = new Intent(PasswordActivity.this, SignInUp.class);
+            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            myIntent.putExtra("fromRecovery", true);
+            PasswordActivity.this.startActivity(myIntent);
 
         } else {
             //TODO set different error messages depending on return
