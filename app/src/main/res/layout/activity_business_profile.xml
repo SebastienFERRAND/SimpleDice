@@ -28,16 +28,16 @@
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <TabWidget
                     android:id="@android:id/tabs"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"/>
+                    android:layout_weight="0"
+                    android:orientation="horizontal" />
 
                 <FrameLayout
                     android:id="@android:id/tabcontent"
@@ -63,7 +63,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_item_list_view_drawer" />
 
 

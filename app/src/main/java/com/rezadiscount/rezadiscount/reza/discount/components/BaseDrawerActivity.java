@@ -1,6 +1,8 @@
 package com.rezadiscount.rezadiscount.reza.discount.components;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,6 +11,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
 import com.rezadiscount.rezadiscount.R;
@@ -19,6 +23,8 @@ import com.rezadiscount.rezadiscount.reza.discount.activities.SignInUp;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
 public class BaseDrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private TextView appVersion;
 
     protected void onCreateBaseDrawerActivity() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -32,6 +38,25 @@ public class BaseDrawerActivity extends AppCompatActivity implements NavigationV
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Implement header
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+
+        // Get version number
+        appVersion = (TextView) headerView.findViewById(R.id.app_version);
+
+        PackageManager manager = this.getPackageManager();
+        PackageInfo info = null;
+        String version = "";
+        try {
+            info = manager.getPackageInfo(
+                    this.getPackageName(), 0);
+            version = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        appVersion.setText(version);
     }
 
     @Override
