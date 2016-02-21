@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -31,6 +32,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.HTTPObjects.HTTPStandardReturn;
 import com.rezadiscount.rezadiscount.reza.discount.HTTPObjects.SignInReturn;
 import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerSignIn;
 import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerSignUp;
@@ -191,14 +193,14 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
                     this.getPackageName(),
                     PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
-                MessageDigest md = null;
                 try {
+                    MessageDigest md;
                     md = MessageDigest.getInstance("SHA");
+                    md.update(signature.toByteArray());
+                    Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
-                md.update(signature.toByteArray());
-                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
         } catch (PackageManager.NameNotFoundException e) {
             Log.d("KeyHash", e.getMessage());
@@ -271,8 +273,15 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
     //Sign up facebook
     @Override
     public void getReturnSignUp() {
-        Log.d("HTTP", "Inscription Facebook");
-        facebookSignIn();
+
+        HTTPStandardReturn signUpReturn = jsonResultSignUp.getReturnSignUp();
+
+        // If signup was a sucess, then sign in
+        if (signUpReturn.getCode().equals("200")) {
+            facebookSignIn();
+        } else {
+            Toast.makeText(this, "There was an error on signup", Toast.LENGTH_LONG);
+        }
     }
 
     private void findViewsById() {
@@ -444,7 +453,7 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
         }
 
         jsonResultSignUp = new GetJsonResultSignUp();
-        jsonResultSignUp.setParams(this, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
+        jsonResultSignUp.setParams(this, headerList, parent);
         jsonResultSignUp.addListener(jsonListenerSignUp);
         jsonResultSignUp.execute();
 

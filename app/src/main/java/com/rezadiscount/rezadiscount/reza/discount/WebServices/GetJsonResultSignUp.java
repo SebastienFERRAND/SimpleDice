@@ -5,9 +5,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.HTTPObjects.HTTPStandardReturn;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 
 import org.json.JSONException;
@@ -29,30 +29,26 @@ import java.util.Map;
  * By passing header and body
  */
 
-
-//TODO refactoring
 public class GetJsonResultSignUp extends AsyncTask<String, String, JSONObject>
 
 {
     private ProgressDialog pDialog;
     private Context context;
     private HashMap<String, String> listHeaders;
-    private String url;
-    private String method;
     private String resultJSON;
     private JSONObject json;
     private JSONObject bodyJson;
 
+    private HTTPStandardReturn signUpReturn;
+
     private List<GetJsonListenerSignUp> listeners = new ArrayList<>();
 
-    public void setParams(Context con, HashMap<String, String> listHeadersP, String urlP, String methodP, JSONObject body) {
+    public void setParams(Context con, HashMap<String, String> listHeadersP, JSONObject body) {
         context = con;
         listHeaders = listHeadersP;
         listHeaders.put("Accept", "application/json");
         listHeaders.put("Content-Type", "application/json");
         listHeaders.put("deviceid", Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
-        url = urlP;
-        method = methodP;
         bodyJson = body;
 
         for (Map.Entry<String, String> entry : listHeadersP.entrySet()) {
@@ -81,7 +77,7 @@ public class GetJsonResultSignUp extends AsyncTask<String, String, JSONObject>
     protected JSONObject doInBackground(String... args) {
 
         // Getting JSON from URL
-        json = this.getJSONFromUrl(QuickstartPreferences.URL_SERV + url, listHeaders, method, bodyJson);
+        json = this.getJSONFromUrl(listHeaders, bodyJson);
 
         return json;
     }
@@ -89,6 +85,22 @@ public class GetJsonResultSignUp extends AsyncTask<String, String, JSONObject>
     @Override
     protected void onPostExecute(JSONObject jsonP) {
         pDialog.dismiss();
+
+
+        // if Json return isn't null
+        if (json != null) {
+
+            // If subscription
+            try {
+                signUpReturn = new HTTPStandardReturn();
+                signUpReturn.setCode(json.getString(QuickstartPreferences.TAG_HTTPCODE));
+                signUpReturn.setMessage(json.getString(QuickstartPreferences.TAG_MESSAGE));
+                signUpReturn.setSource(json.getString(QuickstartPreferences.TAG_SOURCE));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         try {
             Log.d("JSON", "get return " + jsonP.toString());
             // Getting JSON Array from URL
@@ -100,32 +112,16 @@ public class GetJsonResultSignUp extends AsyncTask<String, String, JSONObject>
             e.getMessage();
         }
 
-        String code_retour;
-        String message;
-        try {
-            code_retour = json.getString(QuickstartPreferences.TAG_HTTPCODE);
-            message = json.getString(QuickstartPreferences.TAG_MESSAGE);
-
-            // Error
-            if (!code_retour.equals("200")) {
-                Toast.makeText(context, "Erreur : " + message, Toast.LENGTH_LONG).show();
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
-    public JSONObject getJSONFromUrl(String urlString, HashMap<String, String> headers, String method, JSONObject jsonBody) {
+    public JSONObject getJSONFromUrl(HashMap<String, String> headers, JSONObject jsonBody) {
 
         // Making HTTP request
         try {
 
-            URL url = new URL(urlString);
+            URL url = new URL(QuickstartPreferences.URL_SERV + QuickstartPreferences.URL_REG);
             HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
-            httpconn.setRequestMethod(method);
+            httpconn.setRequestMethod(QuickstartPreferences.TAG_POST);
 
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 httpconn.setRequestProperty(entry.getKey(), entry.getValue());
@@ -179,8 +175,8 @@ public class GetJsonResultSignUp extends AsyncTask<String, String, JSONObject>
 
 
     // Method to call when Post execute is done
-    public JSONObject getJson() {
-        return json;
+    public HTTPStandardReturn getReturnSignUp() {
+        return signUpReturn;
     }
 
 }

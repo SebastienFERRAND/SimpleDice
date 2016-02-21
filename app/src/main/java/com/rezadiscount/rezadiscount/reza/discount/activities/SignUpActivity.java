@@ -2,7 +2,6 @@ package com.rezadiscount.rezadiscount.reza.discount.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,7 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.HTTPObjects.HTTPStandardReturn;
+import com.rezadiscount.rezadiscount.reza.discount.HTTPObjects.SignInReturn;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerSignIn;
 import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerSignUp;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultSignIn;
 import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultSignUp;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetDateSpinnerListener;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
@@ -26,7 +29,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class SignUpActivity extends AppCompatActivity implements GetJsonListenerSignUp, GetDateSpinnerListener {
+public class SignUpActivity extends AppCompatActivity implements GetJsonListenerSignUp, GetJsonListenerSignIn, GetDateSpinnerListener {
 
 
     public static final int MALE = 0;
@@ -38,8 +41,10 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
     private EditText passwordRepeat;
     private TextView birthday;
     private Button subscribe;
-    private GetJsonResultSignUp jsonResult;
-    private GetJsonListenerSignUp jsonListener;
+    private GetJsonResultSignUp jsonResultSignUp;
+    private GetJsonListenerSignUp jsonListenerSignUp;
+    private GetJsonResultSignIn jsonResultSignIn;
+    private GetJsonListenerSignIn jsonListenerSignIn;
     private Activity act;
     private RadioGroup genderRg;
     private RadioButton genderSelected;
@@ -47,7 +52,6 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
     private FragmentDatePickerDialog dateFragment;
     private GetDateSpinnerListener datePickerListener;
     private Intent intent;
-    private String source = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +97,8 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
     public void findViewsById() {
 
         act = this;
-        jsonListener = this;
+        jsonListenerSignIn = this;
+        jsonListenerSignUp = this;
         datePickerListener = this;
 
         lastName = (EditText) findViewById(R.id.lastname);
@@ -165,43 +170,31 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
     @Override
     public void getReturnSignUp() {
 
-        Log.d("HTTP", "Result");
+        HTTPStandardReturn signUpReturn = jsonResultSignUp.getReturnSignUp();
 
-        // if Json return isn't null
-        if (jsonResult != null) {
-            Log.d("HTTP", "Result not null. Source : " + source);
-            String code_retour = "";
-
-            // If subscription
-            try {
-                code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-            if (source.equals(QuickstartPreferences.connexion)) {
-
-                source = "";
-                // if Success
-                if (code_retour.equals("200")) {
-                    Log.d("HTTP", "Connexion success");
-                    getTokenAndConnect();
-                } else {
-                    Log.d("HTTP", "Connexion problems");
-                }
-            } else if (source.equals(QuickstartPreferences.subscription)) {
-                source = "";
-                Log.d("HTTP", "Subscription");
-                // if Success
-                if (code_retour.equals("200")) {
-                    Log.d("HTTP", "Subscription success");
-                    connectUser();
-                } else {
-                    Log.d("HTTP", "Subscription problems");
-                }
-            }
+        // If signup was a sucess, then sign in
+        if (signUpReturn.getCode().equals("200")) {
+            Log.d("HTTP", "Subscription success");
+            SignInUser();
+        } else {
+            Log.d("HTTP", "Subscription problems");
         }
+    }
+
+
+    @Override
+    public void getReturnSignIn() {
+
+        SignInReturn signInReturn = jsonResultSignIn.getReturnSignIn();
+
+        // if Success
+        if (signInReturn.getCode().equals("200")) {
+            Log.d("HTTP", "Connexion success");
+            getTokenAndSignIn();
+        } else {
+            Log.d("HTTP", "Connexion problems");
+        }
+
     }
 
     private void showDatePickerDialog(View v) {
@@ -284,22 +277,19 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
             e.printStackTrace();
         }
 
-        jsonResult = new GetJsonResultSignUp();
-        jsonResult.setParams(act, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
-        jsonResult.addListener(jsonListener);
-        jsonResult.execute();
-
-        source = QuickstartPreferences.subscription;
+        jsonResultSignUp = new GetJsonResultSignUp();
+        jsonResultSignUp.setParams(act, headerList, parent);
+        jsonResultSignUp.addListener(jsonListenerSignUp);
+        jsonResultSignUp.execute();
 
 
     }
 
-    private void connectUser() {
+    private void SignInUser() {
         Log.d("HTTP", "Connexion");
         HashMap<String, String> headerList = new HashMap<>();
         SharedPreferencesModule.initialise(this);
         headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
-        headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
 
 
         // Try connecting with newly created profile
@@ -313,30 +303,20 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
             headerList.put(QuickstartPreferences.TAG_PASSWD, password.getText().toString());
         }
 
-        jsonResult = new GetJsonResultSignUp();
-        jsonResult.setParams(this, headerList, QuickstartPreferences.URL_AUTH, QuickstartPreferences.TAG_GET, null);
-        jsonResult.addListener(jsonListener);
-        jsonResult.execute();
-
-        source = QuickstartPreferences.connexion;
+        jsonResultSignIn = new GetJsonResultSignIn();
+        jsonResultSignIn.setParams(this, headerList, null);
+        jsonResultSignIn.addListener(jsonListenerSignIn);
+        jsonResultSignIn.execute();
     }
 
-    private void getTokenAndConnect() {
+    private void getTokenAndSignIn() {
         Log.d("HTTP", "get token and login");
 
-        String token = null;
-        try {
-            token = jsonResult.getJson().getString(QuickstartPreferences.TAG_TOKEN);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
         SharedPreferencesModule.initialise(this);
-        SharedPreferencesModule.setToken(token);
+        SharedPreferencesModule.setToken(jsonResultSignIn.getReturnSignIn().getToken());
 
         Intent myIntent = new Intent(SignUpActivity.this, DealActivity.class);
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         SignUpActivity.this.startActivity(myIntent);
     }
-
 }

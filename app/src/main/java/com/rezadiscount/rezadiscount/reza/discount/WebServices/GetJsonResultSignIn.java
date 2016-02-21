@@ -15,7 +15,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,8 +28,6 @@ import java.util.Map;
  * By passing header and body
  */
 
-
-//TODO refactoring
 public class GetJsonResultSignIn extends AsyncTask<String, String, JSONObject>
 
 {
@@ -39,7 +36,6 @@ public class GetJsonResultSignIn extends AsyncTask<String, String, JSONObject>
     private HashMap<String, String> listHeaders;
     private String resultJSON;
     private JSONObject json;
-    private JSONObject bodyJson;
 
     private SignInReturn signInReturn;
 
@@ -52,7 +48,6 @@ public class GetJsonResultSignIn extends AsyncTask<String, String, JSONObject>
         listHeaders.put("Accept", "application/json");
         listHeaders.put("Content-Type", "application/json");
         listHeaders.put("deviceid", Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
-        bodyJson = body;
 
         for (Map.Entry<String, String> entry : listHeadersP.entrySet()) {
             String key = entry.getKey();
@@ -80,7 +75,7 @@ public class GetJsonResultSignIn extends AsyncTask<String, String, JSONObject>
     protected JSONObject doInBackground(String... args) {
 
         // Getting JSON from URL
-        json = this.getJSONFromUrl(listHeaders, bodyJson);
+        json = this.getJSONFromUrl(listHeaders);
 
         return json;
     }
@@ -117,7 +112,7 @@ public class GetJsonResultSignIn extends AsyncTask<String, String, JSONObject>
 
     }
 
-    private JSONObject getJSONFromUrl(HashMap<String, String> headers, JSONObject jsonBody) {
+    private JSONObject getJSONFromUrl(HashMap<String, String> headers) {
 
         // Making HTTP request
         try {
@@ -128,14 +123,6 @@ public class GetJsonResultSignIn extends AsyncTask<String, String, JSONObject>
 
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 httpconn.setRequestProperty(entry.getKey(), entry.getValue());
-            }
-
-            if (jsonBody != null) {
-                OutputStream os = httpconn.getOutputStream();
-                os.write(jsonBody.toString().getBytes("UTF-8"));
-                os.close();
-
-                Log.d("Body", "Body : " + jsonBody.toString());
             }
 
             BufferedReader input;
