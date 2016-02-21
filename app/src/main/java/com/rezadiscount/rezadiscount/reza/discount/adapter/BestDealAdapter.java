@@ -66,10 +66,6 @@ public class BestDealAdapter extends RecyclerView.Adapter<BestDealAdapter.ViewHo
             super(v);
             imageView = (ImageView) v.findViewById(R.id.image);
             mTextView = (TextView) v.findViewById(R.id.info_text);
-
-
         }
-
-
     }
 }

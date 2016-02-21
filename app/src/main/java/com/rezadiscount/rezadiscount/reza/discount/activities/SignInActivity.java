@@ -102,11 +102,12 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
             SignInActivity.this.startActivity(myIntent);
         }
 
-        QuickstartPreferences.URL_SERV = QuickstartPreferences.URL_SERV_DEV;
+        // Default server is preprod
+        QuickstartPreferences.URL_SERV = QuickstartPreferences.URL_SERV_PREPROD;
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        setContentView(R.layout.activity_sign_in_up);
+        setContentView(R.layout.activity_sign_in);
 
         callbackManager = CallbackManager.Factory.create();
 
@@ -234,7 +235,7 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
             source = "";
             Log.d("HTTP", "Connexion Facebook");
             // if Success
-            if (signInReturn.getCode().equals("200")) {
+            if (signInReturn.getCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
                 Log.d("HTTP", "Connexion Facebook success");
                 getTokenAndLogin();
 
@@ -261,7 +262,7 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
             source = "";
             Log.d("HTTP", "Connexion Normale");
             // if Success
-            if (signInReturn.getCode().equals("200")) {
+            if (signInReturn.getCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
                 Log.d("HTTP", "Normal connexion success");
                 getTokenAndLogin();
             } else {
@@ -277,7 +278,7 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
         HTTPStandardReturn signUpReturn = jsonResultSignUp.getReturnSignUp();
 
         // If signup was a sucess, then sign in
-        if (signUpReturn.getCode().equals("200")) {
+        if (signUpReturn.getCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
             facebookSignIn();
         } else {
             Toast.makeText(this, "There was an error on signup", Toast.LENGTH_LONG);
@@ -456,9 +457,7 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
         jsonResultSignUp.setParams(this, headerList, parent);
         jsonResultSignUp.addListener(jsonListenerSignUp);
         jsonResultSignUp.execute();
-
     }
-
 
     private void facebookSignUpMissingInfo() {
         Intent myIntent = new Intent(SignInActivity.this, SignUpActivity.class);

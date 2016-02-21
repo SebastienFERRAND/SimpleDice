@@ -107,7 +107,7 @@ public class GetJsonResultMerchant extends AsyncTask<String, String, JSONObject>
             message = json.getString(QuickstartPreferences.TAG_MESSAGE);
 
             // Error
-            if (!code_retour.equals("200")) {
+            if (!code_retour.equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
                 Toast.makeText(context, "Erreur : " + message, Toast.LENGTH_LONG).show();
             }
 

@@ -1,5 +1,3 @@
-package com.rezadiscount.rezadiscount;
-
 import android.content.pm.PackageInfo;
 import android.test.ApplicationTestCase;
 import android.test.MoreAsserts;
@@ -28,3 +26,4 @@ public class ApplicationTest extends ApplicationTestCase<Grenadeal> {
     }
 
 }
+

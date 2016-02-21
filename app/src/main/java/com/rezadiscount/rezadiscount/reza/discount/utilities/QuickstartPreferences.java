@@ -67,6 +67,7 @@ public class QuickstartPreferences {
     //////// METHODS ///////
     public static final String TAG_GET = "GET";
     public static final String TAG_POST = "POST";
+
     ////// TIME CONSTANTS //////
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String URL_SERV_DEV = "http://api.booking.touratier.fr/app_dev.php/";
@@ -76,18 +77,17 @@ public class QuickstartPreferences {
     public static final String URL_AUTH = "auth";
     public static final String URL_REG = "register";
     public static final String URL_FORPSSWD = "password-recover";
+    ///// HTTP CODES /////
+    public static final String TAG_HTTP_SUCCESS = "200";
     /////// URL ///////
     public static String URL_SERV = "";
     ////// CONST ///////
     public static String normalConnexion = "Normal Connexion";
     public static String facebookConnexion = "Facebook Connexion";
-    public static String connexion = "Connexion";
-    public static String subscription = "Subscription";
 
     public static String getMonth(int month) {
         return new DateFormatSymbols().getMonths()[month];
     }
-
 
     public static String convertToDateFormat(String dateP, String inputPattern, String outputPattern) {
 
@@ -106,7 +106,7 @@ public class QuickstartPreferences {
             }
             return str;
         } else {
-            return null;
+            return "";
         }
 
     }
@@ -115,8 +115,4 @@ public class QuickstartPreferences {
         Pattern pattern = Patterns.EMAIL_ADDRESS;
         return pattern.matcher(email).matches();
     }
-
-
-
-
 }

@@ -56,7 +56,7 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subscribe);
+        setContentView(R.layout.activity_sign_up);
 
         findViewsById();
 
@@ -173,7 +173,7 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
         HTTPStandardReturn signUpReturn = jsonResultSignUp.getReturnSignUp();
 
         // If signup was a sucess, then sign in
-        if (signUpReturn.getCode().equals("200")) {
+        if (signUpReturn.getCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
             Log.d("HTTP", "Subscription success");
             SignInUser();
         } else {

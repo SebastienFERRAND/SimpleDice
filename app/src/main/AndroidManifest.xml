@@ -22,6 +22,7 @@
         android:protectionLevel="signature" />
 
     <application
+        android:name=".reza.discount.Grenadeal"
         android:allowBackup="true"
         android:icon="@drawable/pomegranate_icon"
         android:label="@string/app_name"

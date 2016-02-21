@@ -80,7 +80,7 @@ public class PasswordActivity extends Activity implements GetJsonListenerPasswor
         HTTPStandardReturn passwordReturn = jsonResultPassword.getReturnPassword();
 
         // Si tout s'est bien passé
-        if (passwordReturn.getCode().equals("200")) {
+        if (passwordReturn.getCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
 
             // Start Home activity
             Intent myIntent = new Intent(PasswordActivity.this, SignInActivity.class);
