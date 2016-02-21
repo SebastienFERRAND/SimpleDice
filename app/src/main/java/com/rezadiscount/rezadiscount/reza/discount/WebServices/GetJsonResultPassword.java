@@ -35,7 +35,6 @@ public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
 {
     private ProgressDialog pDialog;
     private Context context;
-    private HashMap<String, String> listHeaders;
     private String resultJSON;
     private JSONObject json;
     private JSONObject bodyJson;
@@ -64,7 +63,7 @@ public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
     protected JSONObject doInBackground(String... args) {
 
         // Getting JSON from URL
-        json = this.getJSONFromUrl(listHeaders, bodyJson);
+        json = this.getJSONFromUrl(bodyJson);
 
         return json;
     }
@@ -102,7 +101,7 @@ public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
     /*
     Sending password request to server
      */
-    private JSONObject getJSONFromUrl(HashMap<String, String> headers, JSONObject jsonBody) {
+    private JSONObject getJSONFromUrl(JSONObject jsonBody) {
 
         // Making HTTP request
         try {

@@ -83,7 +83,7 @@ public class PasswordActivity extends Activity implements GetJsonListenerPasswor
         if (passwordReturn.getCode().equals("200")) {
 
             // Start Home activity
-            Intent myIntent = new Intent(PasswordActivity.this, SignInUp.class);
+            Intent myIntent = new Intent(PasswordActivity.this, SignInActivity.class);
             myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             myIntent.putExtra("fromRecovery", true);
             PasswordActivity.this.startActivity(myIntent);

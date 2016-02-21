@@ -5,5 +5,5 @@ package com.rezadiscount.rezadiscount.reza.discount.WebServices;
  * All classes implementing it will get the JSON result from the server
  */
 public interface GetJsonListenerSignIn {
-    void getJsonObject();
+    void getReturnSignIn();
 }

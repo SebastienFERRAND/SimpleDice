@@ -31,7 +31,10 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.HTTPObjects.SignInReturn;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerSignIn;
 import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerSignUp;
+import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultSignIn;
 import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultSignUp;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
@@ -41,10 +44,11 @@ import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp {
+public class SignInActivity extends AppCompatActivity implements GetJsonListenerSignIn, GetJsonListenerSignUp {
 
     private Button connexion;
     private Button register;
@@ -57,8 +61,13 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
 
     private JSONObject jsonConnexionOrResult = null;
     private Context context;
-    private GetJsonListenerSignUp jsonListener;
-    private GetJsonResultSignUp jsonResult;
+
+    private GetJsonListenerSignIn jsonListenerSignIn;
+    private GetJsonResultSignIn jsonResultSignIn;
+
+    private GetJsonListenerSignUp jsonListenerSignUp;
+    private GetJsonResultSignUp jsonResultSignUp;
+
     private CallbackManager callbackManager;
 
     private AccessToken tokenF;
@@ -86,9 +95,9 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
         //if a token already exist, no need to sign in
         SharedPreferencesModule.initialise(this);
         if (!SharedPreferencesModule.getToken().equals("")) {
-            Intent myIntent = new Intent(SignInUp.this, DealActivity.class);
+            Intent myIntent = new Intent(SignInActivity.this, DealActivity.class);
             myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            SignInUp.this.startActivity(myIntent);
+            SignInActivity.this.startActivity(myIntent);
         }
 
         QuickstartPreferences.URL_SERV = QuickstartPreferences.URL_SERV_DEV;
@@ -109,7 +118,13 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
             Log.d("facebook", "no token ");
         }
 
-        loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday, user_friends"));
+        List<String> permissionList = new ArrayList<>();
+        permissionList.add("public_profile");
+        permissionList.add("email");
+        permissionList.add("user_birthday");
+        permissionList.add("user_friends");
+
+        loginButton.setReadPermissions(permissionList);
         loginButton.registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
@@ -130,14 +145,6 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
                                         // Application code
                                         try {
 
-                                            Log.d("Facebook", "id: " + object.getString("id"));
-                                            Log.d("Facebook", "lastName: " + object.getString("last_name"));
-                                            Log.d("Facebook", "firstName: " + object.getString("first_name"));
-                                            Log.d("Facebook", "email: " + object.getString("email"));
-                                            Log.d("Facebook", "birthday: " + object.optString("birthday", null));
-                                            Log.d("Facebook", "genderSelected: " + object.getString("gender"));
-
-
                                             id = object.getString("id");
                                             lastName = object.getString("last_name");
                                             firstName = object.getString("first_name");
@@ -147,7 +154,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
                                             birthday = object.optString("birthday", null);
                                             genderSelected = object.getString("gender");
 
-                                            connectWithFacebook();
+                                            facebookSignIn();
 
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -184,13 +191,16 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
                     this.getPackageName(),
                     PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
+                MessageDigest md = null;
+                try {
+                    md = MessageDigest.getInstance("SHA");
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
                 md.update(signature.toByteArray());
                 Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Log.d("KeyHash", e.getMessage());
-        } catch (NoSuchAlgorithmException e) {
             Log.d("KeyHash", e.getMessage());
         }
 
@@ -214,71 +224,61 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
     }
 
     @Override
-    public void getJsonObject() {
+    public void getReturnSignIn() {
 
-        // if Json return isn't null
-        if (jsonResult != null) {
+        SignInReturn signInReturn = jsonResultSignIn.getReturnSignIn();
 
-            String code_retour = null;
-            // If subscription
-            try {
-                code_retour = jsonResult.getJson().getString(QuickstartPreferences.TAG_HTTPCODE);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        if (source.equals(QuickstartPreferences.facebookConnexion)) {
+            source = "";
+            Log.d("HTTP", "Connexion Facebook");
+            // if Success
+            if (signInReturn.getCode().equals("200")) {
+                Log.d("HTTP", "Connexion Facebook success");
+                getTokenAndLogin();
 
+            } else { // Failure facebook connexion
+                Log.d("HTTP", "Connexion Facebook fail");
 
-            if (source.equals(QuickstartPreferences.facebookConnexion)) {
-                source = "";
-                Log.d("HTTP", "Connexion Facebook");
-                // if Success
-                if (code_retour.equals("200")) {
-                    Log.d("HTTP", "Connexion Facebook success");
+                LoginManager.getInstance().logOut();
+                SharedPreferencesModule.setToken("");
 
-                    getTokenAndLogin();
+                if ((lastName == null) ||
+                        (firstName == null) ||
+                        (email == null) ||
+                        (birthday == null) ||
+                        (genderSelected == null)) { //if some info are missing then send him to Subscribe activity to complete it
+                    Log.d("Facebook", "Missing infos");
 
-                } else { // Failure facebook connexion
-                    Log.d("HTTP", "Connexion Facebook fail");
-
-                    LoginManager.getInstance().logOut();
-                    SharedPreferencesModule.setToken("");
-
-                    if ((lastName == null) ||
-                            (firstName == null) ||
-                            (email == null) ||
-                            (birthday == null) ||
-                            (genderSelected == null)) { //if some info are missing then send him to Subscribe activity to complete it
-                        Log.d("Facebook", "Missing infos");
-
-                        subscribeFacebookMissingInfo();
-                    } else {
-                        //Subscribe with facebook
-                        subscribeWithFacebook();
-                    }
-                }
-            } else if (source.equals(QuickstartPreferences.normalConnexion)) {
-                source = "";
-                Log.d("HTTP", "Connexion Normale");
-                // if Success
-                if (code_retour.equals("200")) {
-                    Log.d("HTTP", "Normal connexion success");
-                    getTokenAndLogin();
+                    facebookSignUpMissingInfo();
                 } else {
-                    errorTv.setText(activity.getResources().getString(R.string.connexion_problem));
+                    //Subscribe with facebook
+                    facebookSignUp();
                 }
-
-            } else if (source.equals(QuickstartPreferences.facebookSubscription)) {
-                source = "";
-                Log.d("HTTP", "Inscription Facebook");
-                connectWithFacebook();
             }
-
+        } else if (source.equals(QuickstartPreferences.normalConnexion)) {
+            source = "";
+            Log.d("HTTP", "Connexion Normale");
+            // if Success
+            if (signInReturn.getCode().equals("200")) {
+                Log.d("HTTP", "Normal connexion success");
+                getTokenAndLogin();
+            } else {
+                errorTv.setText(activity.getResources().getString(R.string.connexion_problem));
+            }
         }
+    }
+
+    //Sign up facebook
+    @Override
+    public void getReturnSignUp() {
+        Log.d("HTTP", "Inscription Facebook");
+        facebookSignIn();
     }
 
     private void findViewsById() {
         context = this;
-        jsonListener = this;
+        jsonListenerSignIn = this;
+        jsonListenerSignUp = this;
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
         connexion = (Button) findViewById(R.id.connexion);
@@ -292,8 +292,8 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
         passwordForgotten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(SignInUp.this, PasswordActivity.class);
-                SignInUp.this.startActivity(myIntent);
+                Intent myIntent = new Intent(SignInActivity.this, PasswordActivity.class);
+                SignInActivity.this.startActivity(myIntent);
             }
         });
 
@@ -314,8 +314,8 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
         subscribeAction = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(SignInUp.this, SubscribeActivity.class);
-                SignInUp.this.startActivity(myIntent);
+                Intent myIntent = new Intent(SignInActivity.this, SignUpActivity.class);
+                SignInActivity.this.startActivity(myIntent);
             }
         };
 
@@ -323,36 +323,7 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
         connectionAction = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                boolean missingArgument = false;
-
-                if (connexionField.getText().toString().equals("")) {
-                    connexionField.setError(activity.getResources().getString(R.string.email_empty));
-                    missingArgument = true;
-                }
-
-                if (passwordField.getText().toString().equals("")) {
-                    passwordField.setError(activity.getResources().getString(R.string.password_problem_empty));
-                    missingArgument = true;
-                }
-
-                if (!missingArgument) {
-                    // Getting JSON from URL
-                    HashMap<String, String> headerList = new HashMap<>();
-                    headerList.put(QuickstartPreferences.TAG_LOGIN, connexionField.getText().toString());
-                    headerList.put(QuickstartPreferences.TAG_PASSWD, passwordField.getText().toString());
-                    SharedPreferencesModule.initialise(activity);
-                    headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
-                    headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
-
-                    jsonResult = new GetJsonResultSignUp();
-                    jsonResult.setParams(context, headerList, QuickstartPreferences.URL_AUTH, QuickstartPreferences.TAG_GET, null);
-                    jsonResult.addListener(jsonListener);
-                    jsonResult.execute();
-
-                    source = QuickstartPreferences.normalConnexion;
-                }
-
+                normalSignIn();
             }
         };
     }
@@ -361,9 +332,8 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
     protected void onResume() {
         super.onResume();
 
-
+        // If coming from password recovery, show alertDialog of success
         Intent myIntent = getIntent();
-
         if (myIntent.getBooleanExtra("fromRecovery", false)) {
             // 1. Instantiate an AlertDialog.Builder with its constructor
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -394,7 +364,40 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
         AppEventsLogger.deactivateApp(this);
     }
 
-    private void connectWithFacebook() {
+
+    private void normalSignIn() {
+
+        boolean missingArgument = false;
+
+        if (connexionField.getText().toString().equals("")) {
+            connexionField.setError(activity.getResources().getString(R.string.email_empty));
+            missingArgument = true;
+        }
+
+        if (passwordField.getText().toString().equals("")) {
+            passwordField.setError(activity.getResources().getString(R.string.password_problem_empty));
+            missingArgument = true;
+        }
+
+        if (!missingArgument) {
+            // Getting JSON from URL
+            HashMap<String, String> headerList = new HashMap<>();
+            headerList.put(QuickstartPreferences.TAG_LOGIN, connexionField.getText().toString());
+            headerList.put(QuickstartPreferences.TAG_PASSWD, passwordField.getText().toString());
+            SharedPreferencesModule.initialise(activity);
+            headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
+            headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
+
+            jsonResultSignIn = new GetJsonResultSignIn();
+            jsonResultSignIn.setParams(context, headerList, null);
+            jsonResultSignIn.addListener(jsonListenerSignIn);
+            jsonResultSignIn.execute();
+
+            source = QuickstartPreferences.normalConnexion;
+        }
+    }
+
+    private void facebookSignIn() {
 
         Log.d("Facebook", "Connecting with facebook");
 
@@ -405,16 +408,16 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
         headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
         headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
 
-        jsonResult = new GetJsonResultSignUp();
-        jsonResult.setParams(context, headerList, QuickstartPreferences.URL_AUTH, QuickstartPreferences.TAG_GET, null);
-        jsonResult.addListener(jsonListener);
-        jsonResult.execute();
+        jsonResultSignIn = new GetJsonResultSignIn();
+        jsonResultSignIn.setParams(context, headerList, null);
+        jsonResultSignIn.addListener(jsonListenerSignIn);
+        jsonResultSignIn.execute();
 
         source = QuickstartPreferences.facebookConnexion;
     }
 
 
-    private void subscribeWithFacebook() {
+    private void facebookSignUp() {
 
         Log.d("Facebook", "Facebook subscription");
         //if we have all user info we need from facebook then send Subscribe request
@@ -440,38 +443,16 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
             e.printStackTrace();
         }
 
+        jsonResultSignUp = new GetJsonResultSignUp();
+        jsonResultSignUp.setParams(this, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
+        jsonResultSignUp.addListener(jsonListenerSignUp);
+        jsonResultSignUp.execute();
 
-        jsonResult = new GetJsonResultSignUp();
-        jsonResult.setParams(this, headerList, QuickstartPreferences.URL_REG, QuickstartPreferences.TAG_POST, parent);
-        jsonResult.addListener(jsonListener);
-        jsonResult.execute();
-
-        source = QuickstartPreferences.facebookSubscription;
     }
 
-    private void getTokenAndLogin() {
-        Log.d("Token", "get token and login");
 
-        // Get the token
-        String token = null;
-        try {
-            token = jsonResult.getJson().getString(QuickstartPreferences.TAG_TOKEN);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        // Store it in local
-        SharedPreferencesModule.initialise(this);
-        SharedPreferencesModule.setToken(token);
-
-        // Start Home activity
-        Intent myIntent = new Intent(SignInUp.this, DealActivity.class);
-        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        SignInUp.this.startActivity(myIntent);
-    }
-
-    private void subscribeFacebookMissingInfo() {
-        Intent myIntent = new Intent(SignInUp.this, SubscribeActivity.class);
+    private void facebookSignUpMissingInfo() {
+        Intent myIntent = new Intent(SignInActivity.this, SignUpActivity.class);
 
         myIntent.putExtra(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday, "MM/dd/yyyy", "yyyy-MM-dd hh:mm:ss"));
         myIntent.putExtra(QuickstartPreferences.TAG_LASTNAME, lastName);
@@ -482,7 +463,22 @@ public class SignInUp extends AppCompatActivity implements GetJsonListenerSignUp
         myIntent.putExtra(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
         myIntent.putExtra(QuickstartPreferences.TAG_ISFB, true);
 
-        SignInUp.this.startActivity(myIntent);
+        SignInActivity.this.startActivity(myIntent);
+    }
+
+    private void getTokenAndLogin() {
+        Log.d("Token", "get token and login");
+
+        SignInReturn signInReturn = jsonResultSignIn.getReturnSignIn();
+
+        // Store it in local
+        SharedPreferencesModule.initialise(this);
+        SharedPreferencesModule.setToken(signInReturn.getToken());
+
+        // Start Home activity
+        Intent myIntent = new Intent(SignInActivity.this, DealActivity.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        SignInActivity.this.startActivity(myIntent);
     }
 
 

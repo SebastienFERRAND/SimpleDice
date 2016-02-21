@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +33,7 @@ import java.util.HashMap;
 
 public class BusinessResults extends BaseDrawerActivity implements GetLocationListener, GetJsonListenerMerchant {
 
-    ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String, String>> oslist = new ArrayList<>();
 
     private ListView list;
     private JSONArray android = null;
@@ -58,7 +59,7 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
     }
 
     @Override
-    public void getJsonObject() {
+    public void getReturnMerchant() {
         try {
 
             android = jsonResult.getJson().getJSONArray(QuickstartPreferences.TAG_RESULT);
@@ -67,7 +68,7 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
 
                 // Adding value HashMap key => value
 
-                HashMap<String, String> map = new HashMap<String, String>();
+                HashMap<String, String> map = new HashMap<>();
 
                 map.put(QuickstartPreferences.TAG_ID, c.getString(QuickstartPreferences.TAG_ID));
                 map.put(QuickstartPreferences.TAG_NAME, c.getString(QuickstartPreferences.TAG_NAME));
@@ -121,7 +122,7 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case 1: {
                 // If request is cancelled, the result arrays are empty.
@@ -129,10 +130,8 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     loc.connectMapAPI();
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+                    Toast.makeText(this, "Location permission was denied", Toast.LENGTH_LONG);
                 }
-                return;
             }
             // other 'case' lines to check for other
             // permissions this app might request
@@ -148,7 +147,7 @@ public class BusinessResults extends BaseDrawerActivity implements GetLocationLi
 
         Intent myIntent = getIntent();
 
-        HashMap<String, String> headerList = new HashMap<String, String>();
+        HashMap<String, String> headerList = new HashMap<>();
         headerList.put(QuickstartPreferences.TAG_LATITUDE, latitude + "");
         headerList.put(QuickstartPreferences.TAG_LONGITUDE, longitude + "");
         headerList.put(QuickstartPreferences.TAG_CATEGORIES, myIntent.getStringExtra(QuickstartPreferences.TAG_ID));

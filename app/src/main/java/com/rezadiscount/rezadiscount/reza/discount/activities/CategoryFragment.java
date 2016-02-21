@@ -3,6 +3,7 @@ package com.rezadiscount.rezadiscount.reza.discount.activities;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -82,7 +83,7 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
     }
 
     @Override
-    public void getJsonObject() {
+    public void getReturnCategory() {
 
         Log.d("JSON Find business", "get return " + jsonResult.getJson().toString());
 
@@ -130,7 +131,7 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case 1: {
                 // If request is cancelled, the result arrays are empty.

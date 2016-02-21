@@ -81,7 +81,6 @@ public class QuickstartPreferences {
     ////// CONST ///////
     public static String normalConnexion = "Normal Connexion";
     public static String facebookConnexion = "Facebook Connexion";
-    public static String facebookSubscription = "Facebook Subscription";
     public static String connexion = "Connexion";
     public static String subscription = "Subscription";
 

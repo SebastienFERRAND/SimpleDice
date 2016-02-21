@@ -19,7 +19,7 @@ import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.activities.AgendaActivity;
 import com.rezadiscount.rezadiscount.reza.discount.activities.DealActivity;
 import com.rezadiscount.rezadiscount.reza.discount.activities.FindActivity;
-import com.rezadiscount.rezadiscount.reza.discount.activities.SignInUp;
+import com.rezadiscount.rezadiscount.reza.discount.activities.SignInActivity;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
 public class BaseDrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -46,7 +46,7 @@ public class BaseDrawerActivity extends AppCompatActivity implements NavigationV
         appVersion = (TextView) headerView.findViewById(R.id.app_version);
 
         PackageManager manager = this.getPackageManager();
-        PackageInfo info = null;
+        PackageInfo info;
         String version = "";
         try {
             info = manager.getPackageInfo(
@@ -90,7 +90,7 @@ public class BaseDrawerActivity extends AppCompatActivity implements NavigationV
         } else if (id == R.id.logout) {
             LoginManager.getInstance().logOut();
             SharedPreferencesModule.setToken("");
-            Intent myIntent = new Intent(this, SignInUp.class);
+            Intent myIntent = new Intent(this, SignInActivity.class);
             this.startActivity(myIntent);
         }
 

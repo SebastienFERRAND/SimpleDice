@@ -29,6 +29,8 @@ import java.util.Map;
  * By passing header and body
  */
 
+
+//TODO refactoring
 public class GetJsonResultSignUp extends AsyncTask<String, String, JSONObject>
 
 {
@@ -92,14 +94,14 @@ public class GetJsonResultSignUp extends AsyncTask<String, String, JSONObject>
             // Getting JSON Array from URL
             json = jsonP;
             for (GetJsonListenerSignUp hl : listeners) {
-                hl.getJsonObject();
+                hl.getReturnSignUp();
             }
         } catch (Exception e) {
             e.getMessage();
         }
 
-        String code_retour = "";
-        String message = "";
+        String code_retour;
+        String message;
         try {
             code_retour = json.getString(QuickstartPreferences.TAG_HTTPCODE);
             message = json.getString(QuickstartPreferences.TAG_MESSAGE);
