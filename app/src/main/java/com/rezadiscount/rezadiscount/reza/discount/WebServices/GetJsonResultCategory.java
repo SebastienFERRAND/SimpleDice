@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
@@ -99,23 +98,6 @@ public class GetJsonResultCategory extends AsyncTask<String, String, JSONObject>
         } catch (Exception e) {
             e.getMessage();
         }
-
-        String code_retour;
-        String message;
-        try {
-            code_retour = json.getString(QuickstartPreferences.TAG_HTTPCODE);
-            message = json.getString(QuickstartPreferences.TAG_MESSAGE);
-
-            // Error
-            if (!code_retour.equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
-                Toast.makeText(context, "Erreur : " + message, Toast.LENGTH_LONG).show();
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     public JSONObject getJSONFromUrl(String urlString, HashMap<String, String> headers, String method, JSONObject jsonBody) {
@@ -125,6 +107,10 @@ public class GetJsonResultCategory extends AsyncTask<String, String, JSONObject>
 
             URL url = new URL(urlString);
             HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
+
+            httpconn.setConnectTimeout(15000);
+            httpconn.setReadTimeout(15000);
+
             httpconn.setRequestMethod(method);
 
             for (Map.Entry<String, String> entry : headers.entrySet()) {

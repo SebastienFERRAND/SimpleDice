@@ -125,6 +125,10 @@ public class GetJsonResultMerchant extends AsyncTask<String, String, JSONObject>
 
             URL url = new URL(urlString);
             HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
+
+            httpconn.setConnectTimeout(15000);
+            httpconn.setReadTimeout(15000);
+
             httpconn.setRequestMethod(method);
 
             for (Map.Entry<String, String> entry : headers.entrySet()) {

@@ -121,6 +121,10 @@ public class GetJsonResultSignUp extends AsyncTask<String, String, JSONObject>
 
             URL url = new URL(QuickstartPreferences.URL_SERV + QuickstartPreferences.URL_REG);
             HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
+
+            httpconn.setConnectTimeout(15000);
+            httpconn.setReadTimeout(15000);
+
             httpconn.setRequestMethod(QuickstartPreferences.TAG_POST);
 
             for (Map.Entry<String, String> entry : headers.entrySet()) {

@@ -108,6 +108,10 @@ public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
 
             URL url = new URL(QuickstartPreferences.URL_SERV + QuickstartPreferences.URL_FORPSSWD);
             HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
+
+            httpconn.setConnectTimeout(15000);
+            httpconn.setReadTimeout(15000);
+
             httpconn.setRequestMethod(QuickstartPreferences.TAG_POST);
 
             // Setting headers

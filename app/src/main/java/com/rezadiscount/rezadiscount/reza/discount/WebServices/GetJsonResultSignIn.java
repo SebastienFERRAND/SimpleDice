@@ -119,6 +119,10 @@ public class GetJsonResultSignIn extends AsyncTask<String, String, JSONObject>
 
             URL url = new URL(QuickstartPreferences.URL_SERV + QuickstartPreferences.URL_AUTH);
             HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
+
+            httpconn.setConnectTimeout(15000);
+            httpconn.setReadTimeout(15000);
+
             httpconn.setRequestMethod(QuickstartPreferences.TAG_GET);
 
             for (Map.Entry<String, String> entry : headers.entrySet()) {
