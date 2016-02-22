@@ -60,8 +60,6 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
     private EditText passwordField;
     private LoginButton loginButton;
     private TextView errorTv;
-
-    private JSONObject jsonConnexionOrResult = null;
     private Context context;
 
     private GetJsonListenerSignIn jsonListenerSignIn;
@@ -113,6 +111,20 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
 
         findViewsById();
 
+
+        // App version number
+        PackageManager manager = this.getPackageManager();
+        PackageInfo info;
+        String version = "";
+        try {
+            info = manager.getPackageInfo(
+                    this.getPackageName(), 0);
+            version = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        errorTv.setText(version);
 
         AccessToken token = AccessToken.getCurrentAccessToken();
         if (token != null) {
@@ -190,7 +202,7 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
 
         // GET SSH KEY
         try {
-            PackageInfo info = getPackageManager().getPackageInfo(
+            info = getPackageManager().getPackageInfo(
                     this.getPackageName(),
                     PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {

@@ -65,6 +65,7 @@
     <string name="best_deal">Best deal</string>
     <string name="title_activity_find">FindActivity</string>
     <string name="password_repeat">Repeat password</string>
+    <string name="password_problem_match">Login/password not matching</string>
     <string name="password_problem_empty">Password can\'t be empty</string>
     <string name="facebook_error">There was a Facebook error. Please try again later</string>
     <string name="connexion_problem">Connection problem. Your login/password doesn\'t match</string>

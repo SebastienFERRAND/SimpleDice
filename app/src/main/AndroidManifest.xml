@@ -105,7 +105,6 @@
         <activity
             android:name=".reza.discount.activities.FindActivity"
             android:label="@string/title_activity_find" />
-        <activity android:name=".reza.discount.activities.SettingsActivity" />
         <activity
             android:name=".reza.discount.activities.PasswordActivity"
             android:theme="@style/AppTheme" />
