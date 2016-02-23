@@ -7,8 +7,11 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.Business.Category;
+import com.rezadiscount.rezadiscount.reza.discount.HTTPObjects.CategoryReturn;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,22 +39,20 @@ public class GetJsonResultCategory extends AsyncTask<String, String, JSONObject>
     private ProgressDialog pDialog;
     private Context context;
     private HashMap<String, String> listHeaders;
-    private String url;
-    private String method;
     private String resultJSON;
     private JSONObject json;
     private JSONObject bodyJson;
 
+    private CategoryReturn categoryReturn;
+
     private List<GetJsonListenerCategory> listeners = new ArrayList<>();
 
-    public void setParams(Context con, HashMap<String, String> listHeadersP, String urlP, String methodP, JSONObject body) {
+    public void setParams(Context con, HashMap<String, String> listHeadersP, JSONObject body) {
         context = con;
         listHeaders = listHeadersP;
         listHeaders.put("Accept", "application/json");
         listHeaders.put("Content-Type", "application/json");
         listHeaders.put("deviceid", Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
-        url = urlP;
-        method = methodP;
         bodyJson = body;
 
         for (Map.Entry<String, String> entry : listHeadersP.entrySet()) {
@@ -80,18 +81,42 @@ public class GetJsonResultCategory extends AsyncTask<String, String, JSONObject>
     protected JSONObject doInBackground(String... args) {
 
         // Getting JSON from URL
-        json = this.getJSONFromUrl(QuickstartPreferences.URL_SERV + url, listHeaders, method, bodyJson);
-
+        json = this.getJSONFromUrl(listHeaders, bodyJson);
         return json;
     }
 
     @Override
     protected void onPostExecute(JSONObject jsonP) {
         pDialog.dismiss();
+
+        CategoryReturn categoryReturn = new CategoryReturn();
+
+        ArrayList<Category> categoryList = new ArrayList<>();
+
         try {
-            Log.d("JSON", "get return " + jsonP.toString());
-            // Getting JSON Array from URL
-            json = jsonP;
+
+            JSONArray jsonArray = json.getJSONArray(QuickstartPreferences.TAG_RESULT);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                JSONObject c = jsonArray.getJSONObject(i);
+
+                Category category = new Category();
+                category.setId(c.getInt(QuickstartPreferences.TAG_ID));
+                category.setName(c.getString(QuickstartPreferences.TAG_NAME));
+
+                categoryList.add(category);
+
+            }
+
+            categoryReturn.setListCategories(categoryList);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
             for (GetJsonListenerCategory hl : listeners) {
                 hl.getReturnCategory();
             }
@@ -100,18 +125,18 @@ public class GetJsonResultCategory extends AsyncTask<String, String, JSONObject>
         }
     }
 
-    public JSONObject getJSONFromUrl(String urlString, HashMap<String, String> headers, String method, JSONObject jsonBody) {
+    public JSONObject getJSONFromUrl(HashMap<String, String> headers, JSONObject jsonBody) {
 
         // Making HTTP request
         try {
 
-            URL url = new URL(urlString);
+            URL url = new URL(QuickstartPreferences.URL_SERV + QuickstartPreferences.URL_CAT);
             HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
 
             httpconn.setConnectTimeout(15000);
             httpconn.setReadTimeout(15000);
 
-            httpconn.setRequestMethod(method);
+            httpconn.setRequestMethod(QuickstartPreferences.TAG_GET);
 
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 httpconn.setRequestProperty(entry.getKey(), entry.getValue());
@@ -165,8 +190,8 @@ public class GetJsonResultCategory extends AsyncTask<String, String, JSONObject>
 
 
     // Method to call when Post execute is done
-    public JSONObject getJson() {
-        return json;
+    public CategoryReturn getReturnCategories() {
+        return categoryReturn;
     }
 
 }

@@ -101,9 +101,6 @@ public class GetJsonResultSignIn extends AsyncTask<String, String, JSONObject>
             }
         }
         try {
-            Log.d("JSON", "get return " + jsonP.toString());
-            // Getting JSON Array from URL
-            json = jsonP;
             for (GetJsonListenerSignIn hl : listeners) {
                 hl.getReturnSignIn();
             }

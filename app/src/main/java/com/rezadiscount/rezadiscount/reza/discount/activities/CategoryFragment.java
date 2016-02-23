@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
+import com.rezadiscount.rezadiscount.reza.discount.HTTPObjects.CategoryReturn;
 import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerCategory;
 import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultCategory;
 import com.rezadiscount.rezadiscount.reza.discount.adapter.CategoryAdapter;
@@ -22,10 +23,6 @@ import com.rezadiscount.rezadiscount.reza.discount.utilities.LocationUtility;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CategoryFragment extends Fragment implements GetLocationListener, GetJsonListenerCategory {
@@ -34,16 +31,9 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private ArrayList<HashMap<String, String>> shopList;
-
     private LocationUtility loc;
 
     private GetJsonResultCategory jsonResult;
-
-    private String latitude;
-    private String longitude;
-
-    private JSONArray jsonReturn;
 
     public CategoryFragment() {
         // Required empty public constructor
@@ -58,8 +48,6 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        shopList = new ArrayList<>();
 
         loc = new LocationUtility();
         loc.initialise(getActivity());
@@ -85,47 +73,17 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
     @Override
     public void getReturnCategory() {
 
-        Log.d("JSON Find business", "get return " + jsonResult.getJson().toString());
 
-        try {
+        CategoryReturn categoryReturn = jsonResult.getReturnCategories();
 
-            jsonReturn = jsonResult.getJson().getJSONArray(QuickstartPreferences.TAG_RESULT);
 
-            for (int i = 0; i < jsonReturn.length(); i++) {
-                JSONObject c = jsonReturn.getJSONObject(i);
-
-                // Storing  JSON item in a Variable
-                String idS = c.getString(QuickstartPreferences.TAG_ID);
-                String nameS = c.getString(QuickstartPreferences.TAG_NAME);
-
-                // Adding value HashMap key => value
-
-                HashMap<String, String> map = new HashMap<>();
-
-                map.put(QuickstartPreferences.TAG_ID, idS);
-                map.put(QuickstartPreferences.TAG_NAME, nameS);
-
-                shopList.add(map);
-
-            }
-
-            mAdapter = new CategoryAdapter(shopList, getActivity());
+        if (categoryReturn.getHTTPCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
+            mAdapter = new CategoryAdapter(categoryReturn.getListCategories(), getActivity());
             mRecyclerView.setAdapter(mAdapter);
-
-
-        } catch (Exception e) {
-
-            Log.d("Error json return", e.getMessage());
-            try {
-                String status = jsonResult.getJson().getString(QuickstartPreferences.TAG_STATUS);
-                String details = jsonResult.getJson().getString(QuickstartPreferences.TAG_DETAIL);
-
-                Toast.makeText(getActivity(), "There was an error " + status + " : " + details, Toast.LENGTH_LONG).show();
-
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+        } else { //TODO deal with custom error messages
+            Toast.makeText(getActivity(), "Can't get categories", Toast.LENGTH_LONG).show();
         }
+
     }
 
 
@@ -149,16 +107,17 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
         }
     }
 
+    // When GPS was able to locate, then we get categories
     @Override
     public void getLaglong() {
 
         String[] latlong = loc.getLocation();
+        getCategories(latlong[0], latlong[1]);
 
-        latitude = latlong[0];
-        longitude = latlong[1];
+    }
 
-        Log.d("Long", latitude);
-        Log.d("Lat", longitude);
+    private void getCategories(String latitude, String longitude) {
+
 
         HashMap<String, String> headerList = new HashMap<>();
         headerList.put(QuickstartPreferences.TAG_LATITUDE, latitude);
@@ -167,10 +126,9 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
         headerList.put(QuickstartPreferences.TAG_TOKEN, SharedPreferencesModule.getToken());
 
         jsonResult = new GetJsonResultCategory();
-        jsonResult.setParams(getActivity(), headerList, QuickstartPreferences.URL_CAT, QuickstartPreferences.TAG_GET, null);
+        jsonResult.setParams(getActivity(), headerList, null);
         jsonResult.addListener(this);
         jsonResult.execute();
-
     }
 
     @Override

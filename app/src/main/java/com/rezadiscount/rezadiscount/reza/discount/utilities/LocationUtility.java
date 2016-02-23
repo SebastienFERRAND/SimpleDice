@@ -86,11 +86,17 @@ public class LocationUtility implements
         mGoogleApiClient.disconnect();
     }
 
+    /**
+     * This method gives you the given lat and long
+     * latlong[0] = latitude
+     * latlong[1] = longitude
+     *
+     * @return
+     */
     public String[] getLocation() {
         String[] latlong = new String[2];
         latlong[0] = latitude + "";
         latlong[1] = longitude + "";
-
         return latlong;
     }
 

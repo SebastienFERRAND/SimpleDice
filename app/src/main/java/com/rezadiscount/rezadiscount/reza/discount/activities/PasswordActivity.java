@@ -59,7 +59,6 @@ public class PasswordActivity extends Activity implements GetJsonListenerPasswor
 
     protected void sendEmailHttp() {
 
-
         JSONObject bodyAuth = new JSONObject();
         JSONObject parent = new JSONObject();
 

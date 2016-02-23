@@ -89,7 +89,6 @@ public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
 
         // Calling listeners
         try {
-            json = jsonP;
             for (GetJsonListenerPassword hl : listeners) {
                 hl.getReturnPassword();
             }
