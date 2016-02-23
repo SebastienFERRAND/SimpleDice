@@ -62,6 +62,7 @@ public class QuickstartPreferences {
     public static final String TAG_SOURCE = "source";
     public static final String TAG_PASSWORD_RECOVER = "password-recover";
     public static final String TAG_REGISTER = "register";
+    public static final String TAG_ERROR_CODE = "code";
 
 
     //////// METHODS ///////
@@ -79,6 +80,22 @@ public class QuickstartPreferences {
     public static final String URL_FORPSSWD = "password-recover";
     ///// HTTP CODES /////
     public static final String TAG_HTTP_SUCCESS = "200";
+
+
+    ///// ERROR CODES /////
+    public static final String TAG_NO_ERROR = "0";
+
+    //Auth
+    public static final String TAG_ERROR_CODE_AUTH_1 = "AUTH_1";
+    public static final String TAG_ERROR_CODE_AUTH_2 = "AUTH_2";
+    public static final String TAG_ERROR_CODE_AUTH_3 = "AUTH_3";
+    public static final String TAG_ERROR_CODE_AUTH_4 = "AUTH_4";
+    //Register
+    public static final String TAG_ERROR_CODE_REG_1 = "REG_1";
+    public static final String TAG_ERROR_CODE_REG_2 = "REG_2";
+    public static final String TAG_ERROR_CODE_REG_3 = "REG_3";
+    public static final String TAG_ERROR_CODE_REG_4 = "REG_4";
+
     /////// URL ///////
     public static String URL_SERV = "";
     ////// CONST ///////

@@ -245,7 +245,7 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
             source = "";
             Log.d("HTTP", "Connexion Facebook");
             // if Success
-            if (signInReturn.getCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
+            if (signInReturn.getHTTPCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
                 Log.d("HTTP", "Connexion Facebook success");
                 getTokenAndLogin();
 
@@ -271,10 +271,29 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
         } else if (source.equals(QuickstartPreferences.normalConnexion)) {
             source = "";
             Log.d("HTTP", "Connexion Normale");
-            // if Success
-            if (signInReturn.getCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
-                Log.d("HTTP", "Normal connexion success");
-                getTokenAndLogin();
+            // if HTTP Success
+            if (signInReturn.getHTTPCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
+
+                //Checking custom error codes
+                switch (signInReturn.getErrorCode()) {
+                    case QuickstartPreferences.TAG_NO_ERROR:
+                        Log.d("HTTP", "Normal connexion success");
+                        getTokenAndLogin();
+                        break;
+                    case QuickstartPreferences.TAG_ERROR_CODE_AUTH_1:
+                        errorTv.setText(getResources().getString(R.string.auth_1));
+                        break;
+                    case QuickstartPreferences.TAG_ERROR_CODE_AUTH_2:
+                        errorTv.setText(getResources().getString(R.string.auth_2));
+                        break;
+                    case QuickstartPreferences.TAG_ERROR_CODE_AUTH_3:
+                        errorTv.setText(getResources().getString(R.string.auth_3));
+                        break;
+                    case QuickstartPreferences.TAG_ERROR_CODE_AUTH_4:
+                        errorTv.setText(getResources().getString(R.string.auth_4));
+                        break;
+                }
+
             } else {
                 errorTv.setText(activity.getResources().getString(R.string.connexion_problem));
             }
@@ -288,7 +307,7 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
         HTTPStandardReturn signUpReturn = jsonResultSignUp.getReturnSignUp();
 
         // If signup was a sucess, then sign in
-        if (signUpReturn.getCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
+        if (signUpReturn.getHTTPCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
             facebookSignIn();
         } else {
             Toast.makeText(this, "There was an error on signup", Toast.LENGTH_LONG);
@@ -379,6 +398,12 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
 
         if (passwordField.getText().toString().equals("")) {
             passwordField.setError(activity.getResources().getString(R.string.password_problem_empty));
+            missingArgument = true;
+        }
+
+        // Test email validity
+        if (!QuickstartPreferences.isValidEmail(connexionField.getText().toString())) {
+            connexionField.setError(SignInActivity.this.getResources().getString(R.string.email_incorrect));
             missingArgument = true;
         }
 

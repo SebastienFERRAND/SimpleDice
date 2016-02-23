@@ -79,7 +79,7 @@ public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
             // If subscription
             try {
                 passwordReturn = new HTTPStandardReturn();
-                passwordReturn.setCode(json.getString(QuickstartPreferences.TAG_HTTPCODE));
+                passwordReturn.setHTTPCode(json.getString(QuickstartPreferences.TAG_HTTPCODE));
                 passwordReturn.setMessage(json.getString(QuickstartPreferences.TAG_MESSAGE));
                 passwordReturn.setSource(json.getString(QuickstartPreferences.TAG_SOURCE));
             } catch (JSONException e) {

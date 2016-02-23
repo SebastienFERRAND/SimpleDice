@@ -93,7 +93,8 @@ public class GetJsonResultSignUp extends AsyncTask<String, String, JSONObject>
             // If subscription
             try {
                 signUpReturn = new HTTPStandardReturn();
-                signUpReturn.setCode(json.getString(QuickstartPreferences.TAG_HTTPCODE));
+                signUpReturn.setErrorCode(json.getString(QuickstartPreferences.TAG_ERROR_CODE));
+                signUpReturn.setHTTPCode(json.getString(QuickstartPreferences.TAG_HTTPCODE));
                 signUpReturn.setMessage(json.getString(QuickstartPreferences.TAG_MESSAGE));
                 signUpReturn.setSource(json.getString(QuickstartPreferences.TAG_SOURCE));
             } catch (JSONException e) {

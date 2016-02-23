@@ -82,7 +82,7 @@ public class PasswordActivity extends Activity implements GetJsonListenerPasswor
         HTTPStandardReturn passwordReturn = jsonResultPassword.getReturnPassword();
 
         // Si tout s'est bien passé
-        if (passwordReturn.getCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
+        if (passwordReturn.getHTTPCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
 
 
             // 1. Instantiate an AlertDialog.Builder with its constructor

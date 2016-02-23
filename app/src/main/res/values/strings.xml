@@ -82,5 +82,17 @@
     <string name="title_activity_agenda">AgendaActivity</string>
     <string name="ok">Ok</string>
 
+    <!--Sign in error-->
+    <string name="auth_1">There was a facebook error, Try again later</string>
+    <string name="auth_2">There was an internal error, please try again later</string>
+    <string name="auth_3">There was a facebook error, Try again later</string>
+    <string name="auth_4">Login/Password combination isn\'t valid</string>
+
+    <!--Sign up errors-->
+    <string name="reg_1">There\'s already a user associated with this email adress</string>
+    <string name="reg_2">Password cannot be empty</string>
+    <string name="reg_3">Birthday provided is not valid</string>
+    <string name="reg_4">Password must have at least 8 characters</string>
+
 
 </resources>

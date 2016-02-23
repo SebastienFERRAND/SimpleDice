@@ -91,7 +91,8 @@ public class GetJsonResultSignIn extends AsyncTask<String, String, JSONObject>
             // If subscription
             try {
                 signInReturn = new SignInReturn();
-                signInReturn.setCode(json.getString(QuickstartPreferences.TAG_HTTPCODE));
+                signInReturn.setErrorCode(json.getString(QuickstartPreferences.TAG_ERROR_CODE));
+                signInReturn.setHTTPCode(json.getString(QuickstartPreferences.TAG_HTTPCODE));
                 signInReturn.setMessage(json.getString(QuickstartPreferences.TAG_MESSAGE));
                 signInReturn.setSource(json.getString(QuickstartPreferences.TAG_SOURCE));
                 signInReturn.setToken(json.getString(QuickstartPreferences.TAG_TOKEN));

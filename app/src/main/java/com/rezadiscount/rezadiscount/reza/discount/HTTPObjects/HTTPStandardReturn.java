@@ -4,7 +4,9 @@ package com.rezadiscount.rezadiscount.reza.discount.HTTPObjects;
  * Created by sebastienferrand on 2/19/16.
  */
 public class HTTPStandardReturn {
-    private String code;
+
+    private String errorCode;
+    private String HTTPcode;
     private String message;
     private String source;
 
@@ -16,12 +18,12 @@ public class HTTPStandardReturn {
         this.source = source;
     }
 
-    public String getCode() {
-        return code;
+    public String getHTTPCode() {
+        return HTTPcode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setHTTPCode(String code) {
+        this.HTTPcode = code;
     }
 
     public String getMessage() {
@@ -30,6 +32,15 @@ public class HTTPStandardReturn {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
     }
 
 

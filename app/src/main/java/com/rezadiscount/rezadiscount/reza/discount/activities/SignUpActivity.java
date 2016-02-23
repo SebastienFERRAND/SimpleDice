@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.HTTPObjects.HTTPStandardReturn;
@@ -52,6 +51,7 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
     private FragmentDatePickerDialog dateFragment;
     private GetDateSpinnerListener datePickerListener;
     private Intent intent;
+    private TextView errorTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +108,7 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
         passwordRepeat = (EditText) findViewById(R.id.passwd_repeat);
         birthday = (TextView) findViewById(R.id.birthday);
         genderRg = (RadioGroup) findViewById(R.id.gender_radio);
+        errorTv = (TextView) findViewById(R.id.error);
 
         subscribe = (Button) findViewById(R.id.subscribe);
 
@@ -148,13 +149,11 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
                     // If password won't match
                     if (!password.getText().toString().equals(passwordRepeat.getText().toString())) {
                         passwordRepeat.setError(SignUpActivity.this.getResources().getString(R.string.password_problem_match));
-                        Toast.makeText(SignUpActivity.this, SignUpActivity.this.getResources().getString(R.string.password_problem_match), Toast.LENGTH_LONG).show();
                         fieldError = true;
                     }
                     // If password empty
                     else if (password.getText().toString().isEmpty()) {
                         password.setError(SignUpActivity.this.getResources().getString(R.string.password_problem_empty));
-                        Toast.makeText(SignUpActivity.this, SignUpActivity.this.getResources().getString(R.string.password_problem_empty), Toast.LENGTH_LONG).show();
                         fieldError = true;
                     }
                 }
@@ -172,10 +171,29 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
 
         HTTPStandardReturn signUpReturn = jsonResultSignUp.getReturnSignUp();
 
-        // If signup was a sucess, then sign in
-        if (signUpReturn.getCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
-            Log.d("HTTP", "Subscription success");
-            SignInUser();
+        // if HTTP code is ok
+        if (signUpReturn.getHTTPCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
+
+            //Checking custom error codes
+            switch (signUpReturn.getErrorCode()) {// If signup was a sucess, then sign in
+                case QuickstartPreferences.TAG_NO_ERROR:
+                    Log.d("HTTP", "Subscription success");
+                    SignInUser();
+                    break;
+                case QuickstartPreferences.TAG_ERROR_CODE_REG_1:
+                    errorTv.setText(getResources().getString(R.string.reg_1));
+                    break;
+                case QuickstartPreferences.TAG_ERROR_CODE_REG_2:
+                    errorTv.setText(getResources().getString(R.string.reg_2));
+                    break;
+                case QuickstartPreferences.TAG_ERROR_CODE_REG_3:
+                    errorTv.setText(getResources().getString(R.string.reg_3));
+                    break;
+                case QuickstartPreferences.TAG_ERROR_CODE_REG_4:
+                    errorTv.setText(getResources().getString(R.string.reg_4));
+                    break;
+            }
+
         } else {
             Log.d("HTTP", "Subscription problems");
         }
@@ -188,7 +206,7 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
         SignInReturn signInReturn = jsonResultSignIn.getReturnSignIn();
 
         // if Success
-        if (signInReturn.getCode().equals("200")) {
+        if (signInReturn.getHTTPCode().equals("200")) {
             Log.d("HTTP", "Connexion success");
             getTokenAndSignIn();
         } else {
