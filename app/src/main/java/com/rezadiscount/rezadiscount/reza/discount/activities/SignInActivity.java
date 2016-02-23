@@ -2,14 +2,12 @@ package com.rezadiscount.rezadiscount.reza.discount.activities;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -200,7 +198,7 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
                 });
 
 
-        // GET SSH KEY
+        // GET SSH KEY for facebook
         try {
             info = getPackageManager().getPackageInfo(
                     this.getPackageName(),
@@ -353,23 +351,6 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
     @Override
     protected void onResume() {
         super.onResume();
-
-        // If coming from password recovery, show alertDialog of success
-        Intent myIntent = getIntent();
-        if (myIntent.getBooleanExtra("fromRecovery", false)) {
-            // 1. Instantiate an AlertDialog.Builder with its constructor
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            // 2. Chain together various setter methods to set the dialog characteristics
-            builder.setMessage(R.string.password_email_success);
-            builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // User clicked OK button
-                }
-            });
-            // 3. Get the AlertDialog from create()
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        }
 
         //Initializing google token
         SharedPreferencesModule.getGCMToken();
