@@ -180,17 +180,24 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
                     Log.d("HTTP", "Subscription success");
                     SignInUser();
                     break;
+                // An user is already present in database for this email adress.
                 case QuickstartPreferences.TAG_ERROR_CODE_REG_1:
-                    errorTv.setText(getResources().getString(R.string.reg_1));
+                    errorTv.setText(getResources().getString(R.string.api_error_reg_1));
                     break;
+                // "password" property is missing or empty.
+                // TODO this should never happen, if it does, think of a way to warn us
                 case QuickstartPreferences.TAG_ERROR_CODE_REG_2:
-                    errorTv.setText(getResources().getString(R.string.reg_2));
+                    errorTv.setText(getResources().getString(R.string.api_error_reg_2));
                     break;
+                // "birthday" format or date is invalid.
+                // TODO this should never happen, if it does, think of a way to warn us
                 case QuickstartPreferences.TAG_ERROR_CODE_REG_3:
-                    errorTv.setText(getResources().getString(R.string.reg_3));
+                    errorTv.setText(getResources().getString(R.string.api_error_reg_3));
                     break;
+                // "password" lenght is invalid.
+                // TODO this should never happen, if it does, think of a way to warn us
                 case QuickstartPreferences.TAG_ERROR_CODE_REG_4:
-                    errorTv.setText(getResources().getString(R.string.reg_4));
+                    errorTv.setText(getResources().getString(R.string.api_error_reg_4));
                     break;
             }
 

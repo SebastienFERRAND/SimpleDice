@@ -80,6 +80,6 @@
     <string name="reg_1">Il existe déjà un utilisateur associé à cet email</string>
     <string name="reg_2">Le mot de passe ne peut pas être vide</string>
     <string name="reg_3">La date de naissance renseignée n\'est pas valide</string>
-    <string name="reg_4">Le mot de passe doit contenir au minimum 8 caractères</string>
+    <string name="reg_4">Le mot de passe doit contenir entre 6 et 30 caractères</string>
 
 </resources>

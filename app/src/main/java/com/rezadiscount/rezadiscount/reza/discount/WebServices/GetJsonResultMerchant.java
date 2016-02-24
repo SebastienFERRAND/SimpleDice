@@ -126,6 +126,7 @@ public class GetJsonResultMerchant extends AsyncTask<String, String, JSONObject>
             URL url = new URL(urlString);
             HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
 
+            //TODO catch timeout
             httpconn.setConnectTimeout(15000);
             httpconn.setReadTimeout(15000);
 
@@ -155,7 +156,8 @@ public class GetJsonResultMerchant extends AsyncTask<String, String, JSONObject>
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = input.readLine()) != null) {
-                sb.append(line + "n");
+                String fullLine = line + "n";
+                sb.append(fullLine);
                 Log.d("Result HTTP", line);
             }
             resultJSON = sb.toString();

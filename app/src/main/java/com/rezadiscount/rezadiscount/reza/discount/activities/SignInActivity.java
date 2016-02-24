@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -280,17 +279,23 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
                         Log.d("HTTP", "Normal connexion success");
                         getTokenAndLogin();
                         break;
+                    //  At least one the these headers is missing : "fbuid", "tokenfb".
+                    // TODO this should never happen, if it does, think of a way to warn us
                     case QuickstartPreferences.TAG_ERROR_CODE_AUTH_1:
-                        errorTv.setText(getResources().getString(R.string.auth_1));
+                        errorTv.setText(getResources().getString(R.string.api_error_auth_1));
                         break;
+                    // At least one the these headers is missing : "login", "password", "devicemodel", "tokeng".
+                    // TODO this should never happen, if it does, think of a way to warn us
                     case QuickstartPreferences.TAG_ERROR_CODE_AUTH_2:
-                        errorTv.setText(getResources().getString(R.string.auth_2));
+                        errorTv.setText(getResources().getString(R.string.api_error_auth_2));
                         break;
+                    //Bad match between FBUI and FB Token.
                     case QuickstartPreferences.TAG_ERROR_CODE_AUTH_3:
-                        errorTv.setText(getResources().getString(R.string.auth_3));
+                        errorTv.setText(getResources().getString(R.string.api_error_auth_3));
                         break;
+                    // Bad credential. The login don't match the password.
                     case QuickstartPreferences.TAG_ERROR_CODE_AUTH_4:
-                        errorTv.setText(getResources().getString(R.string.auth_4));
+                        errorTv.setText(getResources().getString(R.string.api_error_auth_4));
                         break;
                 }
 
@@ -414,7 +419,6 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
             headerList.put(QuickstartPreferences.TAG_PASSWD, passwordField.getText().toString());
             SharedPreferencesModule.initialise(activity);
             headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
-            headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
 
             jsonResultSignIn = new GetJsonResultSignIn();
             jsonResultSignIn.setParams(context, headerList, null);
@@ -434,7 +438,6 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
         headerList.put(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
         SharedPreferencesModule.initialise(activity);
         headerList.put(QuickstartPreferences.TAG_TOKENG, SharedPreferencesModule.getGCMToken());
-        headerList.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
 
         jsonResultSignIn = new GetJsonResultSignIn();
         jsonResultSignIn.setParams(context, headerList, null);
