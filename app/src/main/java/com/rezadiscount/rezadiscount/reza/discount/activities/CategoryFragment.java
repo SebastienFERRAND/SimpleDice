@@ -43,6 +43,15 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (!loc.checkLocationPermission()) {
+            Log.d("GPS", "You have the Permission");
+            this.requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            Log.d("GPS", "You don't have the Permission");
+            loc.connectMapAPI();
+        }
+
     }
 
     @Override
@@ -72,10 +81,7 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
 
     @Override
     public void getReturnCategory() {
-
-
         CategoryReturn categoryReturn = jsonResult.getReturnCategories();
-
 
         if (categoryReturn.getHTTPCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
             mAdapter = new CategoryAdapter(categoryReturn.getListCategories(), getActivity());
@@ -129,19 +135,6 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
         jsonResult.setParams(getActivity(), headerList, null);
         jsonResult.addListener(this);
         jsonResult.execute();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (!loc.checkLocationPermission()) {
-            Log.d("GPS", "You have the Permission");
-            this.requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        } else {
-            Log.d("GPS", "You don't have the Permission");
-            loc.connectMapAPI();
-        }
     }
 
     @Override
