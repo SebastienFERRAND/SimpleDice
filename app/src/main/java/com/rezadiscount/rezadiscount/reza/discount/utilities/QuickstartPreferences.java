@@ -84,6 +84,7 @@ public class QuickstartPreferences {
     public static final String URL_FORPSSWD = "password-recover";
     ///// HTTP CODES /////
     public static final String TAG_HTTP_SUCCESS = "200";
+    public static final String TAG_HTTP_FAIL = "40";
 
 
     ///// ERROR CODES /////

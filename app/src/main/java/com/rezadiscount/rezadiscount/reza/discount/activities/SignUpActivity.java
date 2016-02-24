@@ -174,12 +174,18 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
         // if HTTP code is ok
         if (signUpReturn.getHTTPCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
 
+            // Probably a useless check as http_code 200 will always have a code 0
+            // If signup was a sucess, then sign in
+            if (signUpReturn.getErrorCode().equals(QuickstartPreferences.TAG_NO_ERROR)) {
+                Log.d("HTTP", "Subscription success");
+                SignInUser();
+            }
+
+        } else if (signUpReturn.getHTTPCode().startsWith(QuickstartPreferences.TAG_HTTP_FAIL)) {
+
             //Checking custom error codes
-            switch (signUpReturn.getErrorCode()) {// If signup was a sucess, then sign in
-                case QuickstartPreferences.TAG_NO_ERROR:
-                    Log.d("HTTP", "Subscription success");
-                    SignInUser();
-                    break;
+            switch (signUpReturn.getErrorCode()) {
+
                 // An user is already present in database for this email adress.
                 case QuickstartPreferences.TAG_ERROR_CODE_REG_1:
                     errorTv.setText(getResources().getString(R.string.api_error_reg_1));
@@ -200,7 +206,6 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
                     errorTv.setText(getResources().getString(R.string.api_error_reg_4));
                     break;
             }
-
         } else {
             Log.d("HTTP", "Subscription problems");
         }

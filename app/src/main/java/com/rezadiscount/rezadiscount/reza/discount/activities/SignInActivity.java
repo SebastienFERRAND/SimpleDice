@@ -245,40 +245,72 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
             Log.d("HTTP", "Connexion Facebook");
             // if Success
             if (signInReturn.getHTTPCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
-                Log.d("HTTP", "Connexion Facebook success");
-                getTokenAndLogin();
 
-            } else { // Failure facebook connexion
-                Log.d("HTTP", "Connexion Facebook fail");
-
-                LoginManager.getInstance().logOut();
-                SharedPreferencesModule.setToken("");
-
-                if ((lastName == null) ||
-                        (firstName == null) ||
-                        (email == null) ||
-                        (birthday == null) ||
-                        (genderSelected == null)) { //if some info are missing then send him to Subscribe activity to complete it
-                    Log.d("Facebook", "Missing infos");
-
-                    facebookSignUpMissingInfo();
-                } else {
-                    //Subscribe with facebook
-                    facebookSignUp();
+                // Probably a useless check as http_code 200 will always have a code 0
+                if (signInReturn.getErrorCode().equals(QuickstartPreferences.TAG_NO_ERROR)) {
+                    Log.d("HTTP", "Connexion Facebook success");
+                    getTokenAndLogin();
                 }
+
+            } else if (signInReturn.getHTTPCode().startsWith(QuickstartPreferences.TAG_HTTP_FAIL)) {
+                //Checking custom error codes
+                switch (signInReturn.getErrorCode()) {
+                    //  At least one the these headers is missing : "fbuid", "tokenfb".
+                    // TODO this should never happen, if it does, think of a way to warn us
+                    case QuickstartPreferences.TAG_ERROR_CODE_AUTH_1:
+                        errorTv.setText(getResources().getString(R.string.api_error_auth_1));
+                        break;
+                    // At least one the these headers is missing : "login", "password", "devicemodel", "tokeng".
+                    // TODO this should never happen, if it does, think of a way to warn us
+                    case QuickstartPreferences.TAG_ERROR_CODE_AUTH_2:
+                        errorTv.setText(getResources().getString(R.string.api_error_auth_2));
+                        break;
+                    //Bad match between FBUI and FB Token.
+                    case QuickstartPreferences.TAG_ERROR_CODE_AUTH_3:
+                        errorTv.setText(getResources().getString(R.string.api_error_auth_3));
+                        break;
+                    // Bad credential. The login don't match the password. For facebook it means user need to be created
+                    case QuickstartPreferences.TAG_ERROR_CODE_AUTH_4:
+                        // Failure facebook connexion
+                        Log.d("HTTP", "Connexion Facebook fail");
+
+                        LoginManager.getInstance().logOut();
+                        SharedPreferencesModule.setToken("");
+
+                        if ((lastName == null) ||
+                                (firstName == null) ||
+                                (email == null) ||
+                                (birthday == null) ||
+                                (genderSelected == null)) { //if some info are missing then send him to Subscribe activity to complete it
+                            Log.d("Facebook", "Missing infos");
+
+                            facebookSignUpMissingInfo();
+                        } else {
+                            //Subscribe with facebook
+                            facebookSignUp();
+                        }
+                        break;
+                }
+            } else {
+                errorTv.setText(activity.getResources().getString(R.string.connexion_problem));
             }
+
         } else if (source.equals(QuickstartPreferences.normalConnexion)) {
             source = "";
             Log.d("HTTP", "Connexion Normale");
             // if HTTP Success
             if (signInReturn.getHTTPCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
 
+                // Probably a useless check as http_code 200 will always have a code 0
+                if (signInReturn.getErrorCode().equals(QuickstartPreferences.TAG_NO_ERROR)) {
+                    Log.d("HTTP", "Normal connexion success");
+                    getTokenAndLogin();
+                }
+
+            } else if (signInReturn.getHTTPCode().startsWith(QuickstartPreferences.TAG_HTTP_FAIL)) {
                 //Checking custom error codes
                 switch (signInReturn.getErrorCode()) {
-                    case QuickstartPreferences.TAG_NO_ERROR:
-                        Log.d("HTTP", "Normal connexion success");
-                        getTokenAndLogin();
-                        break;
+
                     //  At least one the these headers is missing : "fbuid", "tokenfb".
                     // TODO this should never happen, if it does, think of a way to warn us
                     case QuickstartPreferences.TAG_ERROR_CODE_AUTH_1:
