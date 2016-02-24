@@ -63,6 +63,10 @@ public class QuickstartPreferences {
     public static final String TAG_PASSWORD_RECOVER = "password-recover";
     public static final String TAG_REGISTER = "register";
     public static final String TAG_ERROR_CODE = "code";
+    public static final String TAG_DEVICE_ID = "deviceid";
+    public static final String TAG_CONTENT_TYPE = "Content-Type";
+    public static final String TAG_ACCEPT = "Accept";
+
 
 
     //////// METHODS ///////

@@ -50,7 +50,7 @@ public class GetJsonResultMerchant extends AsyncTask<String, String, JSONObject>
         listHeaders = listHeadersP;
         listHeaders.put("Accept", "application/json");
         listHeaders.put("Content-Type", "application/json");
-        listHeaders.put("deviceid", Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
+        listHeaders.put(QuickstartPreferences.TAG_DEVICE_ID, Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
         url = urlP;
         method = methodP;
         bodyJson = body;

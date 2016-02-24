@@ -3,6 +3,7 @@ package com.rezadiscount.rezadiscount.reza.discount.WebServices;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -45,9 +46,10 @@ public class GetJsonResultSignIn extends AsyncTask<String, String, JSONObject>
         Log.d("Password", "Password recovery starting");
         context = con;
         listHeaders = listHeadersP;
-        listHeaders.put("Accept", "application/json");
-        listHeaders.put("Content-Type", "application/json");
-        listHeaders.put("deviceid", Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
+        listHeaders.put(QuickstartPreferences.TAG_ACCEPT, "application/json");
+        listHeaders.put(QuickstartPreferences.TAG_CONTENT_TYPE, "application/json");
+        listHeaders.put(QuickstartPreferences.TAG_DEVICE_ID, Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
+        listHeaders.put(QuickstartPreferences.TAG_DEVICEMODEL, Build.MANUFACTURER + " " + Build.MODEL);
 
         for (Map.Entry<String, String> entry : listHeadersP.entrySet()) {
             String key = entry.getKey();

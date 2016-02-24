@@ -116,9 +116,9 @@ public class GetJsonResultPassword extends AsyncTask<String, String, JSONObject>
 
             // Setting headers
             HashMap<String, String> listHeaders = new HashMap<>();
-            listHeaders.put("Accept", "application/json");
-            listHeaders.put("Content-Type", "application/json");
-            listHeaders.put("deviceid", Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
+            listHeaders.put(QuickstartPreferences.TAG_ACCEPT, "application/json");
+            listHeaders.put(QuickstartPreferences.TAG_CONTENT_TYPE, "application/json");
+            listHeaders.put(QuickstartPreferences.TAG_DEVICE_ID, Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
             for (Map.Entry<String, String> entry : listHeaders.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
