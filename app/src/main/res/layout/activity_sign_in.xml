@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/passwd_field"
         android:layout_marginTop="10dp"
-        android:background="@color/red2"
+        android:background="@color/red4"
         android:text="@string/connexion_button"
         android:textColor="@color/white"/>
 
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/connexion"
         android:layout_marginTop="10dp"
-        android:background="@color/red2"
+        android:background="@color/red4"
         android:text="@string/subscribe_button"
         android:textColor="@color/white"/>
 
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/inscription"
         android:layout_marginTop="10dp"
-        android:background="@color/red2"
+        android:background="@color/red4"
         android:text="@string/password_forgotten"
         android:textColor="@color/white" />
 

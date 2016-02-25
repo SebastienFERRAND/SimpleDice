@@ -26,6 +26,7 @@
         </item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="android:colorAccent">@color/red7</item>
+        <item name="android:statusBarColor">@color/red8</item>
     </style>
 
     <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar.Solid">
