@@ -18,7 +18,6 @@ package com.rezadiscount.rezadiscount.reza.discount.utilities;
 
 import android.util.Patterns;
 
-import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -107,10 +106,12 @@ public class QuickstartPreferences {
     public static String normalConnexion = "Normal Connexion";
     public static String facebookConnexion = "Facebook Connexion";
 
-    public static String getMonth(int month) {
-        return new DateFormatSymbols().getMonths()[month];
-    }
-
+    /**
+     * @param dateP         the String date
+     * @param inputPattern  the pattern of the input String date
+     * @param outputPattern the pattern of the output desired date
+     * @return outputPattern date. if there's no date, return ""
+     */
     public static String convertToDateFormat(String dateP, String inputPattern, String outputPattern) {
 
         if (dateP!=null) {
