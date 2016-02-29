@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".reza.discount.activities.SignInActivity">
+    tools:context=".reza.discount.activities.ActivitySignIn">
 
 
     <com.facebook.login.widget.LoginButton

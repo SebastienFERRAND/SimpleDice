@@ -36,7 +36,7 @@
         <activity android:name=".reza.discount.activities.BusinessLocation" />
         <activity android:name=".reza.discount.components.BaseDrawerActivity" />
         <activity
-            android:name=".reza.discount.activities.SignInActivity"
+            android:name=".reza.discount.activities.ActivitySignIn"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".reza.discount.activities.SignUpActivity"
+            android:name=".reza.discount.activities.ActivitySignUp"
             android:theme="@style/AppTheme" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -100,16 +100,16 @@
             android:exported="false" />
 
         <activity
-            android:name=".reza.discount.activities.DealActivity"
+            android:name=".reza.discount.activities.ActivityDeal"
             android:label="@string/title_activity_deal" />
         <activity
-            android:name=".reza.discount.activities.FindActivity"
+            android:name=".reza.discount.activities.ActivityFind"
             android:label="@string/title_activity_find" />
         <activity
-            android:name=".reza.discount.activities.PasswordActivity"
+            android:name=".reza.discount.activities.ActivityPassword"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".reza.discount.activities.AgendaActivity"
+            android:name=".reza.discount.activities.ActivityAgenda"
             android:label="@string/title_activity_agenda" />
     </application>
 

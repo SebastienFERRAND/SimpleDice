@@ -47,7 +47,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SignInActivity extends AppCompatActivity implements GetJsonListenerSignIn, GetJsonListenerSignUp {
+public class ActivitySignIn extends AppCompatActivity implements GetJsonListenerSignIn, GetJsonListenerSignUp {
 
     private Button connexion;
     private Button register;
@@ -92,9 +92,9 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
         //if a token already exist, no need to sign in
         SharedPreferencesModule.initialise(this);
         if (!SharedPreferencesModule.getToken().equals("")) {
-            Intent myIntent = new Intent(SignInActivity.this, DealActivity.class);
+            Intent myIntent = new Intent(ActivitySignIn.this, ActivityDeal.class);
             myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            SignInActivity.this.startActivity(myIntent);
+            ActivitySignIn.this.startActivity(myIntent);
         }
 
         // Default server is preprod
@@ -368,8 +368,8 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
         passwordForgotten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(SignInActivity.this, PasswordActivity.class);
-                SignInActivity.this.startActivity(myIntent);
+                Intent myIntent = new Intent(ActivitySignIn.this, ActivityPassword.class);
+                ActivitySignIn.this.startActivity(myIntent);
             }
         });
 
@@ -390,8 +390,8 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
         subscribeAction = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(SignInActivity.this, SignUpActivity.class);
-                SignInActivity.this.startActivity(myIntent);
+                Intent myIntent = new Intent(ActivitySignIn.this, ActivitySignUp.class);
+                ActivitySignIn.this.startActivity(myIntent);
             }
         };
 
@@ -440,7 +440,7 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
 
         // Test email validity
         if (!QuickstartPreferences.isValidEmail(connexionField.getText().toString())) {
-            connexionField.setError(SignInActivity.this.getResources().getString(R.string.email_incorrect));
+            connexionField.setError(ActivitySignIn.this.getResources().getString(R.string.email_incorrect));
             missingArgument = true;
         }
 
@@ -513,7 +513,7 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
     }
 
     private void facebookSignUpMissingInfo() {
-        Intent myIntent = new Intent(SignInActivity.this, SignUpActivity.class);
+        Intent myIntent = new Intent(ActivitySignIn.this, ActivitySignUp.class);
 
         myIntent.putExtra(QuickstartPreferences.TAG_BIRTHDAY, QuickstartPreferences.convertToDateFormat(birthday, "MM/dd/yyyy", "yyyy-MM-dd hh:mm:ss"));
         myIntent.putExtra(QuickstartPreferences.TAG_LASTNAME, lastName);
@@ -524,7 +524,7 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
         myIntent.putExtra(QuickstartPreferences.TAG_TOKENFB, tokenF.getToken());
         myIntent.putExtra(QuickstartPreferences.TAG_ISFB, true);
 
-        SignInActivity.this.startActivity(myIntent);
+        ActivitySignIn.this.startActivity(myIntent);
     }
 
     private void getTokenAndLogin() {
@@ -537,9 +537,9 @@ public class SignInActivity extends AppCompatActivity implements GetJsonListener
         SharedPreferencesModule.setToken(signInReturn.getToken());
 
         // Start Home activity
-        Intent myIntent = new Intent(SignInActivity.this, DealActivity.class);
+        Intent myIntent = new Intent(ActivitySignIn.this, ActivityDeal.class);
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        SignInActivity.this.startActivity(myIntent);
+        ActivitySignIn.this.startActivity(myIntent);
     }
 
 

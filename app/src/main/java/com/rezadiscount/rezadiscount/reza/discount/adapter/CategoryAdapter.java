@@ -3,6 +3,7 @@ package com.rezadiscount.rezadiscount.reza.discount.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 /**
  * Adapter of finding a business by category
  */
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
     private ArrayList<Category> categoryList;
     private Context act;
 
@@ -32,23 +33,26 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     // Create new views (invoked by the layout manager)
     @Override
-    public CategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                         int viewType) {
+    public CategoryAdapter.CategoryViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                 int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_view, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
-
-        return new ViewHolder((LinearLayout) v);
+        return new CategoryViewHolder((LinearLayout) v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(CategoryViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mTextView.setText(categoryList.get(position).getName());
+        Log.d("CardView Text", "categoryList.get(position).getName() " + categoryList.get(position).getName());
+        Log.d("CardView Text", "categoryList.get(position) " + categoryList.get(position));
+        Log.d("CardView Text", "position " + position);
+
         int id = categoryList.get(position).getId();
         holder.setItem(id);
         //holder.currentItem = items.get(position);
@@ -61,17 +65,22 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         return categoryList.size();
     }
 
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class CategoryViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public ImageView imageView;
         public TextView mTextView;
 
         public int mId;
 
-        public ViewHolder(LinearLayout v) {
+        public CategoryViewHolder(LinearLayout v) {
             super(v);
             imageView = (ImageView) v.findViewById(R.id.image);
             mTextView = (TextView) v.findViewById(R.id.info_text);
@@ -86,8 +95,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 }
             });
         }
-
-
         public void setItem(int id) {
             mId = id;
         }

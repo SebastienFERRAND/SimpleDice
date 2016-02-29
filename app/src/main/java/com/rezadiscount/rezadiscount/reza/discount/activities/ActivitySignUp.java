@@ -28,7 +28,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class SignUpActivity extends AppCompatActivity implements GetJsonListenerSignUp, GetJsonListenerSignIn, GetDateSpinnerListener {
+public class ActivitySignUp extends AppCompatActivity implements GetJsonListenerSignUp, GetJsonListenerSignIn, GetDateSpinnerListener {
 
 
     public static final int MALE = 0;
@@ -121,26 +121,26 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
 
                 // Test if all fields are filled up
                 if (lastName.getText().toString().equals("")) {
-                    lastName.setError(SignUpActivity.this.getResources().getString(R.string.last_name_empty));
+                    lastName.setError(ActivitySignUp.this.getResources().getString(R.string.last_name_empty));
                     fieldError = true;
                 }
                 if (firstName.getText().toString().equals("")) {
-                    firstName.setError(SignUpActivity.this.getResources().getString(R.string.first_name_empty));
+                    firstName.setError(ActivitySignUp.this.getResources().getString(R.string.first_name_empty));
                     fieldError = true;
                 }
                 if (email.getText().toString().equals("")) {
-                    email.setError(SignUpActivity.this.getResources().getString(R.string.email_empty));
+                    email.setError(ActivitySignUp.this.getResources().getString(R.string.email_empty));
                     fieldError = true;
                 }
 
                 if (birthday.getText().toString().equals("")) {
-                    birthday.setError(SignUpActivity.this.getResources().getString(R.string.birthday_empty));
+                    birthday.setError(ActivitySignUp.this.getResources().getString(R.string.birthday_empty));
                     fieldError = true;
                 }
 
                 // Test email validity
                 if (!QuickstartPreferences.isValidEmail(email.getText().toString())) {
-                    email.setError(SignUpActivity.this.getResources().getString(R.string.email_incorrect));
+                    email.setError(ActivitySignUp.this.getResources().getString(R.string.email_incorrect));
                     fieldError = true;
                 }
 
@@ -148,12 +148,12 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
                 if (!intent.getBooleanExtra(QuickstartPreferences.TAG_ISFB, false)) {
                     // If password won't match
                     if (!password.getText().toString().equals(passwordRepeat.getText().toString())) {
-                        passwordRepeat.setError(SignUpActivity.this.getResources().getString(R.string.password_problem_match));
+                        passwordRepeat.setError(ActivitySignUp.this.getResources().getString(R.string.password_problem_match));
                         fieldError = true;
                     }
                     // If password empty
                     else if (password.getText().toString().isEmpty()) {
-                        password.setError(SignUpActivity.this.getResources().getString(R.string.password_problem_empty));
+                        password.setError(ActivitySignUp.this.getResources().getString(R.string.password_problem_empty));
                         fieldError = true;
                     }
                 }
@@ -345,8 +345,8 @@ public class SignUpActivity extends AppCompatActivity implements GetJsonListener
         SharedPreferencesModule.initialise(this);
         SharedPreferencesModule.setToken(jsonResultSignIn.getReturnSignIn().getToken());
 
-        Intent myIntent = new Intent(SignUpActivity.this, DealActivity.class);
+        Intent myIntent = new Intent(ActivitySignUp.this, ActivityDeal.class);
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        SignUpActivity.this.startActivity(myIntent);
+        ActivitySignUp.this.startActivity(myIntent);
     }
 }

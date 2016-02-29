@@ -15,7 +15,7 @@ import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferenc
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FavoriteShopsFragment extends Fragment {
+public class FragmentFavoriteShops extends Fragment {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -23,7 +23,7 @@ public class FavoriteShopsFragment extends Fragment {
 
     private ArrayList<HashMap<String, String>> dealList;
 
-    public FavoriteShopsFragment() {
+    public FragmentFavoriteShops() {
         // Required empty public constructor
     }
 

@@ -25,7 +25,7 @@ import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesMo
 
 import java.util.HashMap;
 
-public class CategoryFragment extends Fragment implements GetLocationListener, GetJsonListenerCategory {
+public class FragmentCategory extends Fragment implements GetLocationListener, GetJsonListenerCategory {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -35,22 +35,13 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
 
     private GetJsonResultCategory jsonResult;
 
-    public CategoryFragment() {
+    public FragmentCategory() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (!loc.checkLocationPermission()) {
-            Log.d("GPS", "You have the Permission");
-            this.requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        } else {
-            Log.d("GPS", "You don't have the Permission");
-            loc.connectMapAPI();
-        }
 
     }
 
@@ -142,5 +133,22 @@ public class CategoryFragment extends Fragment implements GetLocationListener, G
         // Disconnecting the client invalidates it.
         loc.disconnectMapAPI();
         super.onStop();
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!loc.checkLocationPermission()) {
+            Log.d("GPS", "You have the Permission");
+            this.requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            Log.d("GPS", "You don't have the Permission");
+            // If there's no item on the list then feed it
+            if (mAdapter == null) {
+                loc.connectMapAPI();
+            }
+        }
     }
 }

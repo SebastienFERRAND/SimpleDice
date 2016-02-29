@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.rezadiscount.rezadiscount.R;
 
-public class AgendaActivity extends Activity {
+public class ActivityAgenda extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -16,10 +16,10 @@ import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
 import com.rezadiscount.rezadiscount.R;
-import com.rezadiscount.rezadiscount.reza.discount.activities.AgendaActivity;
-import com.rezadiscount.rezadiscount.reza.discount.activities.DealActivity;
-import com.rezadiscount.rezadiscount.reza.discount.activities.FindActivity;
-import com.rezadiscount.rezadiscount.reza.discount.activities.SignInActivity;
+import com.rezadiscount.rezadiscount.reza.discount.activities.ActivityAgenda;
+import com.rezadiscount.rezadiscount.reza.discount.activities.ActivityDeal;
+import com.rezadiscount.rezadiscount.reza.discount.activities.ActivityFind;
+import com.rezadiscount.rezadiscount.reza.discount.activities.ActivitySignIn;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.SharedPreferencesModule;
 
 public class BaseDrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -76,21 +76,21 @@ public class BaseDrawerActivity extends AppCompatActivity implements NavigationV
         int id = item.getItemId();
 
         if (id == R.id.deal) {
-            Intent myIntent = new Intent(BaseDrawerActivity.this, DealActivity.class);
+            Intent myIntent = new Intent(BaseDrawerActivity.this, ActivityDeal.class);
             myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             BaseDrawerActivity.this.startActivity(myIntent);
         } else if (id == R.id.find) {
-            Intent myIntent = new Intent(BaseDrawerActivity.this, FindActivity.class);
+            Intent myIntent = new Intent(BaseDrawerActivity.this, ActivityFind.class);
             myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             BaseDrawerActivity.this.startActivity(myIntent);
         } else if (id == R.id.agenda) {
-            Intent myIntent = new Intent(BaseDrawerActivity.this, AgendaActivity.class);
+            Intent myIntent = new Intent(BaseDrawerActivity.this, ActivityAgenda.class);
             myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             BaseDrawerActivity.this.startActivity(myIntent);
         } else if (id == R.id.logout) {
             LoginManager.getInstance().logOut();
             SharedPreferencesModule.setToken("");
-            Intent myIntent = new Intent(this, SignInActivity.class);
+            Intent myIntent = new Intent(this, ActivitySignIn.class);
             this.startActivity(myIntent);
         }
 

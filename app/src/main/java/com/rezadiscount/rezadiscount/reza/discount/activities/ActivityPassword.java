@@ -17,7 +17,7 @@ import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferenc
 
 import org.json.JSONObject;
 
-public class PasswordActivity extends Activity implements GetJsonListenerPassword {
+public class ActivityPassword extends Activity implements GetJsonListenerPassword {
 
     private EditText emailText;
     private Button sendEmailButton;
@@ -43,10 +43,10 @@ public class PasswordActivity extends Activity implements GetJsonListenerPasswor
             public void onClick(View v) {
                 // if email field is empty
                 if (emailText.getText().toString().equals("")) {
-                    emailText.setError(PasswordActivity.this.getResources().getString(R.string.email_empty));
+                    emailText.setError(ActivityPassword.this.getResources().getString(R.string.email_empty));
 
                 } else if (!QuickstartPreferences.isValidEmail(emailText.getText().toString())) {
-                    emailText.setError(PasswordActivity.this.getResources().getString(R.string.email_incorrect));
+                    emailText.setError(ActivityPassword.this.getResources().getString(R.string.email_incorrect));
                 } else { // Email is valid
                     sendEmailHttp();
                 }
@@ -93,9 +93,9 @@ public class PasswordActivity extends Activity implements GetJsonListenerPasswor
                     // User clicked OK button
 
                     // Start Home activity
-                    Intent myIntent = new Intent(PasswordActivity.this, SignInActivity.class);
+                    Intent myIntent = new Intent(ActivityPassword.this, ActivitySignIn.class);
                     myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    PasswordActivity.this.startActivity(myIntent);
+                    ActivityPassword.this.startActivity(myIntent);
                 }
             });
             // 3. Get the AlertDialog from create()

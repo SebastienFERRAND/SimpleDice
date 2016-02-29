@@ -15,7 +15,7 @@ import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferenc
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class HelpMeFragment extends Fragment {
+public class FragmentHelpMe extends Fragment {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -23,7 +23,7 @@ public class HelpMeFragment extends Fragment {
 
     private ArrayList<HashMap<String, String>> dealList;
 
-    public HelpMeFragment() {
+    public FragmentHelpMe() {
         // Required empty public constructor
     }
 

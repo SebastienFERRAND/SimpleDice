@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 
 import com.rezadiscount.rezadiscount.R;
 
-public class CustomDealFragment extends Fragment{
+public class FragmentCustomDeal extends Fragment {
 
-    public CustomDealFragment() {
+    public FragmentCustomDeal() {
         // Required empty public constructor
     }
 

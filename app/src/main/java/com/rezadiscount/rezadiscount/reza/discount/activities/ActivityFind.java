@@ -1,5 +1,6 @@
 package com.rezadiscount.rezadiscount.reza.discount.activities;
 
+
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,8 +14,7 @@ import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity
 import java.util.ArrayList;
 import java.util.List;
 
-public class DealActivity extends BaseDrawerActivity {
-
+public class ActivityFind extends BaseDrawerActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
@@ -32,10 +32,9 @@ public class DealActivity extends BaseDrawerActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new BestDealFragment(), "Best Deal");
-        adapter.addFragment(new ClosestDealFragment(), "Closest Deal");
-        adapter.addFragment(new CustomDealFragment(), "Custom Deal");
-        adapter.addFragment(new LimitedDealFragment(), "Limited Deal");
+        adapter.addFragment(new FragmentCategory(), "Find");
+        adapter.addFragment(new FragmentFavoriteShops(), "Favorite shops");
+        adapter.addFragment(new FragmentHelpMe(), "Help me !");
         viewPager.setAdapter(adapter);
     }
 
