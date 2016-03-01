@@ -345,7 +345,7 @@ public class ActivitySignUp extends AppCompatActivity implements GetJsonListener
         SharedPreferencesModule.initialise(this);
         SharedPreferencesModule.setToken(jsonResultSignIn.getReturnSignIn().getToken());
 
-        Intent myIntent = new Intent(ActivitySignUp.this, ActivityDeal.class);
+        Intent myIntent = new Intent(ActivitySignUp.this, ActivityBaseDrawerDeal.class);
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         ActivitySignUp.this.startActivity(myIntent);
     }

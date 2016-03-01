@@ -10,9 +10,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rezadiscount.rezadiscount.R;
-import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
+import com.rezadiscount.rezadiscount.reza.discount.components.ActivityBaseDrawer;
 
-public class BusinessLocation extends BaseDrawerActivity implements OnMapReadyCallback {
+public class BusinessLocation extends ActivityBaseDrawer implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 

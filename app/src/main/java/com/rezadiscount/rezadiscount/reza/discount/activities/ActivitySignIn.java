@@ -92,7 +92,7 @@ public class ActivitySignIn extends AppCompatActivity implements GetJsonListener
         //if a token already exist, no need to sign in
         SharedPreferencesModule.initialise(this);
         if (!SharedPreferencesModule.getToken().equals("")) {
-            Intent myIntent = new Intent(ActivitySignIn.this, ActivityDeal.class);
+            Intent myIntent = new Intent(ActivitySignIn.this, ActivityBaseDrawerDeal.class);
             myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             ActivitySignIn.this.startActivity(myIntent);
         }
@@ -537,7 +537,7 @@ public class ActivitySignIn extends AppCompatActivity implements GetJsonListener
         SharedPreferencesModule.setToken(signInReturn.getToken());
 
         // Start Home activity
-        Intent myIntent = new Intent(ActivitySignIn.this, ActivityDeal.class);
+        Intent myIntent = new Intent(ActivitySignIn.this, ActivityBaseDrawerDeal.class);
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         ActivitySignIn.this.startActivity(myIntent);
     }

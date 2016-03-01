@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonListenerMerchant;
 import com.rezadiscount.rezadiscount.reza.discount.WebServices.GetJsonResultMerchant;
-import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
+import com.rezadiscount.rezadiscount.reza.discount.components.ActivityBaseDrawer;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.GetLocationListener;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.LocationUtility;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class BusinessResults extends BaseDrawerActivity implements GetLocationListener, GetJsonListenerMerchant {
+public class BusinessResults extends ActivityBaseDrawer implements GetLocationListener, GetJsonListenerMerchant {
 
     ArrayList<HashMap<String, String>> oslist = new ArrayList<>();
 

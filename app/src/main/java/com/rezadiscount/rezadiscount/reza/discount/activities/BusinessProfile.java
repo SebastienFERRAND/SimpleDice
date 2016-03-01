@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 
 import com.rezadiscount.rezadiscount.R;
-import com.rezadiscount.rezadiscount.reza.discount.components.BaseDrawerActivity;
+import com.rezadiscount.rezadiscount.reza.discount.components.ActivityBaseDrawer;
 import com.rezadiscount.rezadiscount.reza.discount.utilities.QuickstartPreferences;
 
-public class BusinessProfile extends BaseDrawerActivity  implements
+public class BusinessProfile extends ActivityBaseDrawer implements
         FragmentProfile.OnFragmentInteractionListener,
         FragmentReviews.OnFragmentInteractionListener,
         FragmentMap.OnFragmentInteractionListener {

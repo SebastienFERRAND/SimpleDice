@@ -89,7 +89,7 @@ public class GetJsonResultCategory extends AsyncTask<String, String, JSONObject>
     protected void onPostExecute(JSONObject jsonP) {
         pDialog.dismiss();
 
-        CategoryReturn categoryReturn = new CategoryReturn();
+        categoryReturn = new CategoryReturn();
 
         ArrayList<Category> categoryList = new ArrayList<>();
 

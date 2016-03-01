@@ -34,7 +34,7 @@
         <activity android:name=".reza.discount.activities.BusinessResults" />
         <activity android:name=".reza.discount.activities.BusinessProfile" />
         <activity android:name=".reza.discount.activities.BusinessLocation" />
-        <activity android:name=".reza.discount.components.BaseDrawerActivity" />
+        <activity android:name=".reza.discount.components.ActivityBaseDrawer" />
         <activity
             android:name=".reza.discount.activities.ActivitySignIn"
             android:theme="@style/AppTheme">
@@ -100,10 +100,10 @@
             android:exported="false" />
 
         <activity
-            android:name=".reza.discount.activities.ActivityDeal"
+            android:name=".reza.discount.activities.ActivityBaseDrawerDeal"
             android:label="@string/title_activity_deal" />
         <activity
-            android:name=".reza.discount.activities.ActivityFind"
+            android:name=".reza.discount.activities.ActivityBaseDrawerFind"
             android:label="@string/title_activity_find" />
         <activity
             android:name=".reza.discount.activities.ActivityPassword"

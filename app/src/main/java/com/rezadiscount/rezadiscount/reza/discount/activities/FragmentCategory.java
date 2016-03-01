@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.rezadiscount.rezadiscount.R;
 import com.rezadiscount.rezadiscount.reza.discount.HTTPObjects.CategoryReturn;
@@ -33,7 +32,8 @@ public class FragmentCategory extends Fragment implements GetLocationListener, G
 
     private LocationUtility loc;
 
-    private GetJsonResultCategory jsonResult;
+    private GetJsonResultCategory jsonResultCategory;
+    private GetJsonListenerCategory jsonListenerCategory;
 
     public FragmentCategory() {
         // Required empty public constructor
@@ -53,6 +53,8 @@ public class FragmentCategory extends Fragment implements GetLocationListener, G
         loc.initialise(getActivity());
         loc.addListener(this);
 
+        jsonListenerCategory = this;
+
         View rootView = inflater.inflate(R.layout.fragment_category, container, false);
 
         //Create the list of Deals
@@ -61,6 +63,7 @@ public class FragmentCategory extends Fragment implements GetLocationListener, G
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
+
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -72,14 +75,19 @@ public class FragmentCategory extends Fragment implements GetLocationListener, G
 
     @Override
     public void getReturnCategory() {
-        CategoryReturn categoryReturn = jsonResult.getReturnCategories();
+        CategoryReturn categoryReturn = jsonResultCategory.getReturnCategories();
 
-        if (categoryReturn.getHTTPCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
-            mAdapter = new CategoryAdapter(categoryReturn.getListCategories(), getActivity());
-            mRecyclerView.setAdapter(mAdapter);
-        } else { //TODO deal with custom error messages
-            Toast.makeText(getActivity(), "Can't get categories", Toast.LENGTH_LONG).show();
-        }
+//        if (categoryReturn.getHTTPCode().equals(QuickstartPreferences.TAG_HTTP_SUCCESS)) {
+
+        Log.d("List category", categoryReturn.getListCategories().get(0).getId() + "");
+        Log.d("List category", categoryReturn.getListCategories().get(0).getName());
+
+        mAdapter = new CategoryAdapter(categoryReturn.getListCategories(), getActivity());
+        mRecyclerView.setAdapter(mAdapter);
+
+//        } else { //TODO deal with custom error messages
+//            Toast.makeText(getActivity(), "Can't get categories", Toast.LENGTH_LONG).show();
+//        }
 
     }
 
@@ -122,10 +130,10 @@ public class FragmentCategory extends Fragment implements GetLocationListener, G
         SharedPreferencesModule.initialise(getActivity());
         headerList.put(QuickstartPreferences.TAG_TOKEN, SharedPreferencesModule.getToken());
 
-        jsonResult = new GetJsonResultCategory();
-        jsonResult.setParams(getActivity(), headerList, null);
-        jsonResult.addListener(this);
-        jsonResult.execute();
+        jsonResultCategory = new GetJsonResultCategory();
+        jsonResultCategory.setParams(getActivity(), headerList, null);
+        jsonResultCategory.addListener(jsonListenerCategory);
+        jsonResultCategory.execute();
     }
 
     @Override
