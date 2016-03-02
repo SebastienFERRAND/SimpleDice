@@ -5,7 +5,6 @@
     <string name="title_activity_location_business">Carte</string>
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
-    <string name="title_activity_item_list">ItemListActivity</string>
 
     <string name="navigation_drawer_open">Ouvrir le menu de navigation</string>
     <string name="navigation_drawer_close">Fermer le menu de navigation</string>
@@ -16,7 +15,7 @@
 
 
     <string name="connexion_button">Connexion</string>
-    <string name="subscribe_button">s\'inscrire</string>
+    <string name="subscribe_button">S\'inscrire</string>
     <string name="or_subscribe_with">Ou s\'inscrire avec :</string>
     <string name="search_button">Rechercher</string>
     <string name="activate_gps">L\'application nécessite l\'activation du GPS pour pouvoir trouver les commerces à proximité. L\'activer ?</string>
@@ -25,7 +24,6 @@
 
     <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
         send downstream messages to this app.</string>
-    <string name="registering_message">Generating InstanceID token...</string>
     <string name="token_error_message">An error occurred while either fetching the InstanceID token,
         sending the fetched token to the server or subscribing to the PubSub topic. Please try
         running the sample again.</string>
@@ -71,15 +69,20 @@
 
 
     <!--Sign in error-->
-    <string name="auth_1">Une erreur Facebook s\'est produite, veuillez réessayer plus tard</string>
-    <string name="auth_2">Une erreur interne s\'est produite, veuillez réessayer plus tard</string>
-    <string name="auth_3">Une erreur Facebook s\'est produite, veuillez réessayer plus tard</string>
-    <string name="auth_4">La combinaison identifiant/mot de passe n\'est pas valide</string>
+    <string name="api_error_auth_1">Une erreur Facebook s\'est produite, veuillez réessayer plus tard</string>
+    <string name="api_error_auth_2">Une erreur interne s\'est produite, veuillez réessayer plus tard</string>
+    <string name="api_error_auth_3">Une erreur Facebook s\'est produite, veuillez réessayer plus tard</string>
+    <string name="api_error_auth_4">La combinaison identifiant/mot de passe n\'est pas valide</string>
 
     <!--Sign up errors-->
-    <string name="reg_1">Il existe déjà un utilisateur associé à cet email</string>
-    <string name="reg_2">Le mot de passe ne peut pas être vide</string>
-    <string name="reg_3">La date de naissance renseignée n\'est pas valide</string>
-    <string name="reg_4">Le mot de passe doit contenir entre 6 et 30 caractères</string>
+    <string name="api_error_reg_1">Il existe déjà un utilisateur associé à cet email</string>
+    <string name="api_error_reg_2">Le mot de passe ne peut pas être vide</string>
+    <string name="api_error_reg_3">La date de naissance renseignée n\'est pas valide</string>
+    <string name="api_error_reg_4">Le mot de passe doit contenir entre 6 et 30 caractères</string>
+    <string name="action_sign_in">Connexion ou inscription</string>
+    <string name="action_sign_in_short">Connexion</string>
+    <string name="title_activity_login">Grenadeal</string>
+    <string name="title_activity_item_list_view">Commerces</string>
+    <string name="prompt_password">Mot de passe (optionnel)</string>
 
 </resources>

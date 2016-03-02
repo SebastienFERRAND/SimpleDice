@@ -25,7 +25,7 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".reza.discount.activities.BusinessLocation" />
+            tools:context="com.appology.grenadeal.activities.BusinessLocation" />
 
 
     </LinearLayout>

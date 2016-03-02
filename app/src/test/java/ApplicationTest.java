@@ -2,7 +2,7 @@ import android.content.pm.PackageInfo;
 import android.test.ApplicationTestCase;
 import android.test.MoreAsserts;
 
-import com.rezadiscount.rezadiscount.reza.discount.Grenadeal;
+import com.appology.grenadeal.Grenadeal;
 
 public class ApplicationTest extends ApplicationTestCase<Grenadeal> {
 

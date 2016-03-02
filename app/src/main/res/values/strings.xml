@@ -5,7 +5,7 @@
     <string name="title_activity_location_business">Map</string>
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
-    <string name="title_activity_item_list">ItemListActivity</string>
+    <string name="title_activity_item_list" translatable="false">ItemListActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -26,7 +26,7 @@
 
     <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
         send downstream messages to this app.</string>
-    <string name="registering_message">Generating InstanceID token...</string>
+    <string name="registering_message" translatable="false">Generating InstanceID token...</string>
     <string name="token_error_message">An error occurred while either fetching the InstanceID token,
         sending the fetched token to the server or subscribing to the PubSub topic. Please try
         running the sample again.</string>
@@ -37,7 +37,7 @@
     <!-- RezaDiscount -->
     <!--<string name="facebook_app_id">1518479935118372</string>-->
     <!-- Weal -->
-    <string name="facebook_app_id">934436326647123</string>
+    <string name="facebook_app_id" translatable="false">934436326647123</string>
 
 
     <string name="lastname">Last name</string>
@@ -57,13 +57,12 @@
     <string name="settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_deal">DealActivity</string>
+    <string name="title_activity_deal" translatable="false">DealActivity</string>
     <string name="limited_deal">Limited deal</string>
     <string name="custom_deal">Custom deal</string>
     <string name="closest_deal">Closest deal</string>
     <string name="best_deal">Best deal</string>
-    <string name="title_activity_find">FindActivity</string>
+    <string name="title_activity_find" translatable="false">FindActivity</string>
     <string name="password_repeat">Repeat password</string>
     <string name="password_problem_match">Login/password not matching</string>
     <string name="password_problem_empty">Password can\'t be empty</string>
@@ -79,8 +78,8 @@
     <string name="password_email_success">Password recover has been sent to your email adress</string>
     <string name="email_incorrect">Email is incorrect</string>
     <string name="waiting">Wait a minute :)</string>
-    <string name="title_activity_agenda">AgendaActivity</string>
-    <string name="ok">Ok</string>
+    <string name="title_activity_agenda" translatable="false">AgendaActivity</string>
+    <string name="ok" translatable="false">Ok</string>
 
     <!--Sign in error-->
     <string name="api_error_auth_1">There was a facebook error, Try again later</string>
