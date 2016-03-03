@@ -88,7 +88,7 @@ public class ActivityPassword extends Activity implements GetJsonListenerPasswor
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             // 2. Chain together various setter methods to set the dialog characteristics
             builder.setMessage(R.string.password_email_success);
-            builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+            builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User clicked OK button
 

@@ -49,6 +49,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mTextView.setText(categoryList.get(position).getName());
+        holder.imageView.setContentDescription(categoryList.get(position).getName() + " " + R.string.image);
         Log.d("CardView Text", "categoryList.get(position).getName() " + categoryList.get(position).getName());
         Log.d("CardView Text", "categoryList.get(position) " + categoryList.get(position));
         Log.d("CardView Text", "position " + position);
