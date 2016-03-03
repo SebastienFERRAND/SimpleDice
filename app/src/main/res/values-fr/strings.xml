@@ -41,7 +41,7 @@
     <string name="settings">Reglages</string>
     <string name="deal">Promotions</string>
     <string name="agenda">Agenda</string>
-    <string name="find">Chercher...</string>
+    <string name="find">Chercher&#8230;</string>
     <string name="profile">Profil</string>
     <string name="error_field_required">Ce champ est obligatoire</string>
     <string name="error_incorrect_password">Le mot de passe est incorrect</string>
@@ -84,5 +84,9 @@
     <string name="title_activity_login">Grenadeal</string>
     <string name="title_activity_item_list_view">Commerces</string>
     <string name="prompt_password">Mot de passe (optionnel)</string>
+
+
+    <!-- Accessibility -->
+    <string name="app_image">Logo de GrenaDeal</string>
 
 </resources>

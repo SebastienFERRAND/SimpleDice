@@ -36,8 +36,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-identity:8.3.0'
     compile 'com.google.android.gms:play-services-gcm:8.3.0'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
-    compile 'com.android.support:cardview-v7:23.0.+'
-    compile 'com.android.support:recyclerview-v7:23.0.+'
+    compile 'com.android.support:cardview-v7:23.1.+'
+    compile 'com.android.support:recyclerview-v7:23.1.+'
     // Required -- JUnit 4 framework
     testCompile 'junit:junit:4.12'
     // Optional -- Mockito framework
@@ -45,3 +45,4 @@ dependencies {
     // Hamcrest matcher library
     testCompile 'org.hamcrest:hamcrest-library:1.3'
 }
+

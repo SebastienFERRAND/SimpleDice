@@ -33,7 +33,7 @@ public final class SharedPreferencesModule {
     public static void setToken(String token) {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("token", token);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getGCMToken() {
@@ -52,7 +52,7 @@ public final class SharedPreferencesModule {
     public static void setGCMToken(String token) {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("tokenGCM", token);
-        editor.commit();
+        editor.apply();
     }
 
 

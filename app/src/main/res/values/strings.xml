@@ -26,7 +26,7 @@
 
     <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
         send downstream messages to this app.</string>
-    <string name="registering_message" translatable="false">Generating InstanceID token...</string>
+    <string name="registering_message" translatable="false">Generating InstanceID token&#8230;</string>
     <string name="token_error_message">An error occurred while either fetching the InstanceID token,
         sending the fetched token to the server or subscribing to the PubSub topic. Please try
         running the sample again.</string>
@@ -75,11 +75,10 @@
     <string name="first_name_empty">Please fill first name field</string>
     <string name="email_empty">Please fill email field</string>
     <string name="birthday_empty">Please fill birthday field</string>
-    <string name="password_email_success">Password recover has been sent to your email adress</string>
+    <string name="password_email_success">Password recover has been sent to your email address</string>
     <string name="email_incorrect">Email is incorrect</string>
     <string name="waiting">Wait a minute :)</string>
     <string name="title_activity_agenda" translatable="false">AgendaActivity</string>
-    <string name="ok" translatable="false">Ok</string>
 
     <!--Sign in error-->
     <string name="api_error_auth_1">There was a facebook error, Try again later</string>
@@ -88,10 +87,15 @@
     <string name="api_error_auth_4">Login/Password combination isn\'t valid</string>
 
     <!--Sign up errors-->
-    <string name="api_error_reg_1">There\'s already a user associated with this email adress</string>
+    <string name="api_error_reg_1">There\'s already a user associated with this email address</string>
     <string name="api_error_reg_2">Password cannot be empty</string>
     <string name="api_error_reg_3">Birthday provided is not valid</string>
     <string name="api_error_reg_4">Password must have between 6 and 30 characters</string>
+
+
+    <!-- Accessibility -->
+    <string name="image">image</string>
+    <string name="app_image">GrenaDeal Logo</string>
 
 
 </resources>
