@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Jeu de dé</string>
+    <string name="roll">Lancer</string>
+    <string name="dice_rolled">Lancer les dés</string>
+    <string name="dice_face">Choisissez le nombre de face sur le dé:</string>
+    <string name="throws_nb">Combien de fois voulez vous le lancer ?</string>
+    <string name="roll_dice">Lancer !</string>
+</resources>

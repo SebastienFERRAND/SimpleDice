@@ -7,11 +7,15 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.paradroid.simpledice.R
 import com.paradroid.simpledice.adapter.DiceResultAdapter
 import com.paradroid.simpledice.model.DiceGame
 
+
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
     private lateinit var seekBarNumberOfFaces: SeekBar
     private lateinit var seekBarNumberOfRoll: SeekBar
@@ -24,13 +28,16 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: DiceResultAdapter
 
-
-    private var dice = DiceGame()
+    private var diceGame = DiceGame()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        diceGame.addRound()
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         recyclerViewDiceResult = findViewById(R.id.recyclerViewListresult)
 
@@ -50,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 // Display the current progress of SeekBar
-                dice.numberOfFaces = i
+                diceGame.roundList.first().numberOfFaces = i
                 textviewValueFaces.text = i.toString()
             }
 
@@ -68,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 // Display the current progress of SeekBar
-                dice.numberOfRolls = i
+                diceGame.roundList.first().numberOfRolls = i
                 textviewValueRolls.text = i.toString()
             }
 
@@ -82,11 +89,19 @@ class MainActivity : AppCompatActivity() {
         })
 
         val rollButton: Button = findViewById(R.id.button_roll)
-        rollButton.text = "Let's Roll"
+        rollButton.text = getString(R.string.roll_dice)
         rollButton.setOnClickListener {
+
+            //CREATE DICE LIST
             textviewDiceResult.text = ""
-            adapter = DiceResultAdapter(dice.rollDice())
-            recyclerViewDiceResult.adapter = adapter
+            diceGame.roundList.first().rollOrReRollDices()
+            recyclerViewDiceResult.adapter = DiceResultAdapter(diceGame.roundList.first().diceList)
+
+
+            // FIREBASE ANALYTICS
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "dice_rolled")
+            mFirebaseAnalytics.logEvent("DiceRolled", bundle)
         }
     }
 }

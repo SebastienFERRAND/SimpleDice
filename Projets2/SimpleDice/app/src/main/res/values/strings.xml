@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Simple Dice</string>
     <string name="roll">Roll</string>
     <string name="dice_rolled">Roll the dice</string>
-    <string name="dice_face">Choose the number of face for your dice</string>
+    <string name="dice_face">Choose the number of face for your dice:</string>
     <string name="throws_nb">How many throws do you need ?</string>
+    <string name="roll_dice">Let\'s Roll</string>
 </resources>
